@@ -40,7 +40,7 @@ class ResultRepository {
         }, SetOptions(merge: true));
   }
 
-  Future<void> saveLRPracticeTestResult({
+  Future<void> savePracticeTestResult({
     required String testId,
     required int totalScore,
     required String testLevel,

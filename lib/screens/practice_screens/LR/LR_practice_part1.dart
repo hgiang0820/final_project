@@ -42,20 +42,24 @@ class LRPracticePart1State extends State<LRPracticePart1> {
 
   Future<void> _load() async {
     try {
-      final partMeta = await repo.getPartMeta(
+      final partMeta = await repo.getPracticePart(
         'practice_tests',
+        'LR_practice_tests',
         widget.testId,
         'part1',
       );
-      final qs = await repo.getQuestionsLR(
+      final qs = await repo.getPracticeQuestionsLR(
         'practice_tests',
+        'LR_practice_tests',
         widget.testId,
         'part1',
       );
 
       final audioPath = partMeta['audioPath'] as String?;
       print(audioPath);
-      final url = audioPath != null ? repo.getPublicUrl('practice_tests', audioPath) : null;
+      final url = audioPath != null
+          ? repo.getPublicUrl('practice_tests', audioPath)
+          : null;
 
       if (!mounted) return; // ✅ widget có thể đã dispose sau await
       setState(() {

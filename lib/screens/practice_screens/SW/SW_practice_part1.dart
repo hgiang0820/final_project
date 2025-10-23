@@ -14,16 +14,16 @@ import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class SWPart1Page extends StatefulWidget {
+class SWPracticePart1 extends StatefulWidget {
   final String testId;
   final VoidCallback? onTestStart;
-  const SWPart1Page({super.key, required this.testId, this.onTestStart});
+  const SWPracticePart1({super.key, required this.testId, this.onTestStart});
 
   @override
-  State<SWPart1Page> createState() => SWPart1PageState();
+  State<SWPracticePart1> createState() => SWPracticePart1State();
 }
 
-class SWPart1PageState extends State<SWPart1Page> {
+class SWPracticePart1State extends State<SWPracticePart1> {
   final testRepo = TestRepository();
   final resultRepo = ResultRepository();
 
@@ -66,7 +66,12 @@ class SWPart1PageState extends State<SWPart1Page> {
   }
 
   Future<void> _load() async {
-    final qs = await testRepo.getQuestionsSW(widget.testId, 'part1');
+    final qs = await testRepo.getPracticeQuestionsSW(
+      'practice_tests',
+      'SW_practice_tests',
+      widget.testId,
+      'speaking',
+    );
     if (qs.isNotEmpty) {
       setState(() {
         questions = qs;
@@ -144,7 +149,7 @@ class SWPart1PageState extends State<SWPart1Page> {
           q.type == "Respond to questions using information provided") {
         imageUrl =
             // "${q.imagePath}";
-            "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/toeic-assets/${q.imagePath}";
+            "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/practice_tests/${q.imagePath}";
       } else {
         imageUrl = '';
       }
@@ -362,14 +367,14 @@ class SWPart1PageState extends State<SWPart1Page> {
 
     final q = questions[currentIndex];
     final imageUrl = q.imagePath != null
-        ? testRepo.getPublicUrl('toeic-assets', q.imagePath!)
+        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
         : null;
 
     if (!isStarted) {
       return AlertDialog(
         title: const Text("Part 1 - Speaking"),
         content: const Text(
-          "The test includes 6 questions. You will have some time to prepare before recording your answer for each question. Once you click Start, the timer will count down the preparing time. Good luck!",
+          "The test includes 11 questions. You will have some time to prepare before recording your answer for each question. Once you click Start, the timer will count down the preparing time. Good luck!",
         ),
         actions: [
           TextButton(
@@ -464,7 +469,7 @@ class SWPart1PageState extends State<SWPart1Page> {
                 itemBuilder: (context, index) {
                   final q = questions[index];
                   final imageUrl = q.imagePath != null
-                      ? testRepo.getPublicUrl('toeic-assets', q.imagePath!)
+                      ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
                       : null;
                   final result =
                       evaluationResults[q.id] as Map<String, dynamic>?;

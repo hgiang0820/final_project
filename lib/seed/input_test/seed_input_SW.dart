@@ -117,7 +117,7 @@ Future<void> seedInputSW() async {
   // // === PART 2 === WRITING
   final part2Questions = [
     {
-      'type': 'Write a sentence based on picture',
+      'type': 'Write a sentence based on a picture',
       'text': "girl, posing",
       'sample_answer': "Sample answer 1",
       'directions':
@@ -158,7 +158,7 @@ Future<void> seedInputSW() async {
 
     final q = part2Questions[i - 1];
 
-    if (q['requirement'] == 'Write a Sentence based on a Picture') {
+    if (q['type'] == 'Write a sentence based on a picture') {
       imagePath = 'input_tests/testSW/part2/$id.jpg';
     }
 

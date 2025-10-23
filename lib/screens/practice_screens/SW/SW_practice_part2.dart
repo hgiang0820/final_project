@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:final_project/models/question_SW_model.dart';
 import 'package:final_project/repositories/test_repository.dart';
 
-class SWPart2Page extends StatefulWidget {
+class SWPracticePart2 extends StatefulWidget {
   final String testId;
   final VoidCallback? onTestStart;
-  const SWPart2Page({super.key, required this.testId, this.onTestStart});
+  const SWPracticePart2({super.key, required this.testId, this.onTestStart});
 
   @override
-  State<SWPart2Page> createState() => SWPart2PageState();
+  State<SWPracticePart2> createState() => SWPracticePart2State();
 }
 
-class SWPart2PageState extends State<SWPart2Page> {
+class SWPracticePart2State extends State<SWPracticePart2> {
   final repo = TestRepository();
 
   List<QuestionSW> questions = [];
@@ -38,7 +38,12 @@ class SWPart2PageState extends State<SWPart2Page> {
   }
 
   Future<void> _load() async {
-    final qs = await repo.getQuestionsSW(widget.testId, 'part2');
+    final qs = await repo.getPracticeQuestionsSW(
+      'practice_tests',
+      'SW_practice_tests',
+      widget.testId,
+      'writing',
+    );
     if (qs.isNotEmpty) {
       setState(() {
         questions = qs;
@@ -77,7 +82,7 @@ class SWPart2PageState extends State<SWPart2Page> {
       if (q.type == 'Write a sentence based on a picture') {
         imageUrl =
             // "${q.imagePath}";
-            "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/toeic-assets/${q.imagePath}";
+            "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/practice_tests/${q.imagePath}";
       } else {
         imageUrl = '';
       }
@@ -168,14 +173,14 @@ class SWPart2PageState extends State<SWPart2Page> {
 
     final q = questions[currentIndex];
     final imageUrl = q.imagePath != null
-        ? repo.getPublicUrl('toeic-assets', q.imagePath!)
+        ? repo.getPublicUrl('practice_tests', q.imagePath!)
         : null;
 
     // while running: show current question and if it already has a recorded file show player
     if (!isStarted) {
       return AlertDialog(
         title: const Text("Part 2 - Writing"),
-        content: const Text("The test includes 3 questions. Good luck!"),
+        content: const Text("The test includes 8 questions. Good luck!"),
         actions: [
           TextButton(
             onPressed: () {

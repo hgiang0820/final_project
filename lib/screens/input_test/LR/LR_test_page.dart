@@ -272,7 +272,7 @@ class _LRTestPage extends State<LRTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Quick Test L&R'),
+            const Text('TOEIC Listening & Reading Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),

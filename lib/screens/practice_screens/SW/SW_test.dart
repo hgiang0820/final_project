@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/repositories/test_repository.dart';
-import 'package:final_project/screens/input_test/SW/SW_part1_page.dart';
-import 'package:final_project/screens/input_test/SW/SW_part2_page.dart';
+import 'package:final_project/screens/practice_screens/SW/SW_practice_part1.dart';
+import 'package:final_project/screens/practice_screens/SW/SW_practice_part2.dart';
 import 'package:final_project/widgets/small_button.dart';
 // import 'package:final_project/services/writing_api_service.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,8 @@ class _SWTestPage extends State<SWTestPage> {
   final resultRepo = ResultRepository();
   final testRepo = TestRepository();
 
-  final part1Key = GlobalKey<SWPart1PageState>();
-  final part2Key = GlobalKey<SWPart2PageState>();
+  final part1Key = GlobalKey<SWPracticePart1State>();
+  final part2Key = GlobalKey<SWPracticePart2State>();
 
   Map<String, dynamic> partScores = {};
   Map<String, dynamic> answers = {};
@@ -254,7 +254,7 @@ class _SWTestPage extends State<SWTestPage> {
       testLevel = "TOEIC SW 200-250";
     }
 
-    await resultRepo.saveResult(
+    await resultRepo.savePracticeTestResult(
       testId: widget.testId,
       totalScore: totalScore,
       testLevel: testLevel,
@@ -266,27 +266,13 @@ class _SWTestPage extends State<SWTestPage> {
 
     countdownTimer?.cancel(); // stop the clock
 
-    final weakPointsStr = weakPoints
-        .where((e) => e.trim().isNotEmpty)
-        .toSet() // loại trùng
-        .join(', ');
-
-    final strongPointsStr = strongPoints
-        .where((e) => e.trim().isNotEmpty)
-        .toSet()
-        .join(', ');
-
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Your Result"),
         content: Text(
           "Total score: $totalScore\n"
-          "Your level: $testLevel\n"
-          "You did quite well on the following types of questions: "
-          "${strongPointsStr.isEmpty ? '—' : strongPointsStr} .\n"
-          "But you need to improve the following types of questions: "
-          "${weakPointsStr.isEmpty ? '—' : weakPointsStr}",
+          "Your level: $testLevel\n",
         ),
         actions: [
           TextButton(
@@ -316,7 +302,7 @@ class _SWTestPage extends State<SWTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Quick Test S&W'),
+            const Text('TOEIC Speaking & Writing Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),
@@ -376,12 +362,12 @@ class _SWTestPage extends State<SWTestPage> {
             child: IndexedStack(
               index: selectedPartIndex,
               children: [
-                SWPart1Page(
+                SWPracticePart1(
                   key: part1Key,
                   testId: widget.testId,
                   onTestStart: _handlePartStarted,
                 ),
-                SWPart2Page(
+                SWPracticePart2(
                   key: part2Key,
                   testId: widget.testId,
                   onTestStart: _handlePartStarted,

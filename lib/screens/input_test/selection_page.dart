@@ -1,3 +1,4 @@
+import 'package:final_project/seed/input_test/seed_input_SW.dart';
 import 'package:final_project/seed/study_materials/seed_LR_materials.dart';
 import 'package:final_project/seed/study_materials/seed_LR_practice_part1.dart';
 import 'package:final_project/seed/study_materials/seed_LR_practice_part2.dart';
@@ -100,10 +101,7 @@ class _SelectionState extends State<SelectionPage> {
             const SizedBox(height: 20),
             SmallButton(onPressed: seedLRMaterials, title: "SeedLRMaterials"),
             const SizedBox(height: 20),
-            SmallButton(
-              onPressed: seedLRPracticePart1,
-              title: "SeedLRPracticePart1",
-            ),
+            SmallButton(onPressed: seedInputSW, title: "Seed SW Input Test"),
             const SizedBox(height: 20),
             SmallButton(
               onPressed: seedLRPracticePart2,

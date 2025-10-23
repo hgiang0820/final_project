@@ -140,8 +140,8 @@ class FullSpeakPageState extends State<FullSpeakPage> {
       // final answer = answers[q.id] ?? '';
       final audioUrl = uploadedUrls[q.id];
       debugPrint('Audio URL for ${q.id}: $audioUrl');
-      if (q.requirement == 'Describe a Picture' ||
-          q.requirement == "Respond to Questions using Information Provided") {
+      if (q.type == 'Describe a Picture' ||
+          q.type == "Respond to Questions using Information Provided") {
         imageUrl =
             // "${q.imagePath}";
             "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/toeic-assets/${q.imagePath}";
@@ -160,7 +160,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
       try {
         final resp = await api.submitSpeaking(
           // requirement: "${q.requirement} ${q.directions}  ${q.text} ",
-          question: "${q.requirement} ${q.text} $imageUrl",
+          question: "${q.type} ${q.text} $imageUrl",
           audio_url: audioUrl,
           max_score: q.maxScore,
         );
@@ -412,7 +412,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
               ),
               const SizedBox(height: 12),
               Text(
-                "Question ${currentIndex + 1}/${questions.length}: ${q.requirement}",
+                "Question ${currentIndex + 1}/${questions.length}: ${q.type}",
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -474,7 +474,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
                       children: [
                         ListTile(
                           title: Text(
-                            "Question ${index + 1}: ${q.requirement}",
+                            "Question ${index + 1}: ${q.type}",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),

@@ -3,7 +3,7 @@ class QuestionSW {
   final String? text;
   final String? imagePath; // Supabase storage path
   final int order;
-  final String requirement; // optional
+  final String type; // optional
   final String sampleAnswer; // optional
   final int? prepareTime; // optional, in seconds
   final int? recordTime; // optional, in seconds
@@ -15,7 +15,7 @@ class QuestionSW {
     this.text,
     this.imagePath,
     required this.order,
-    required this.requirement,
+    required this.type,
     required this.sampleAnswer,
     this.prepareTime,
     this.recordTime,
@@ -29,7 +29,7 @@ class QuestionSW {
       text: m['text'] as String?,
       imagePath: m['imagePath'] as String?,
       order: (m['order'] ?? 0) as int,
-      requirement: m['requirement'] as String,
+      type: m['type'] as String,
       sampleAnswer: m['sample_answer'] as String,
       directions: m['directions'] as String,
       maxScore: m['max_score'] as int,
@@ -42,7 +42,7 @@ class QuestionSW {
     'text': text,
     'imagePath': imagePath,
     'order': order,
-    'requirement': requirement,
+    'type': type,
     'sample_answer': sampleAnswer,
     'prepare_time': prepareTime,
     'record_time': recordTime,

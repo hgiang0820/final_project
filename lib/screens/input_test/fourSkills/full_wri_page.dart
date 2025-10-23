@@ -74,7 +74,7 @@ class FullWriPageState extends State<FullWriPage> {
 
     for (var q in questions) {
       final answer = answers[q.id] ?? '';
-      if (q.requirement == 'Write a Sentence based on a Picture') {
+      if (q.type == 'Write a Sentence based on a Picture') {
         imageUrl =
             // "${q.imagePath}";
             "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/toeic-assets/${q.imagePath}";
@@ -84,7 +84,7 @@ class FullWriPageState extends State<FullWriPage> {
       try {
         final resp = await api.submitWriting(
           // requirement: "${q.requirement} ${q.directions}  ${q.text} ",
-          requirement: "${q.requirement} ${q.text} ${q.directions} $imageUrl",
+          requirement: "${q.type} ${q.text} ${q.directions} $imageUrl",
           answer: answer,
           max_score: q.maxScore,
         );
@@ -254,7 +254,7 @@ class FullWriPageState extends State<FullWriPage> {
                 ],
               ),
               Text(
-                "Question ${currentIndex + 1}/${questions.length}: ${q.requirement}",
+                "Question ${currentIndex + 1}/${questions.length}: ${q.type}",
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

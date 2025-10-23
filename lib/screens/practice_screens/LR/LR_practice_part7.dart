@@ -25,7 +25,12 @@ class LRPracticePart7State extends State<LRPracticePart7> {
   }
 
   Future<void> _load() async {
-    final qs = await repo.getQuestionsLR('practice_tests', widget.testId, 'part7');
+    final qs = await repo.getPracticeQuestionsLR(
+      'practice_tests',
+      'LR_practice_tests',
+      widget.testId,
+      'part7',
+    );
     setState(() {
       questions = qs;
       answers = List<int?>.filled(qs.length, null);

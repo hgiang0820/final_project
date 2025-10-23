@@ -6,14 +6,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class TestRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _supabase = Supabase.instance.client;
-  final String _bucket = 'toeic-assets'; // bucket bạn tạo
+  // final String _bucket = 'toeic-assets'; // bucket bạn tạo
 
   Future<Map<String, dynamic>> getTestMeta(String testId) async {
     final doc = await _firestore.collection('input_tests').doc(testId).get();
     return doc.data()!;
   }
 
-  Future<Map<String, dynamic>> getPartMeta(String collectionId, String testId, String partId) async {
+  Future<Map<String, dynamic>> getPartMeta(
+    String collectionId,
+    String testId,
+    String partId,
+  ) async {
     final doc = await _firestore
         .collection(collectionId)
         .doc(testId)
@@ -23,7 +27,11 @@ class TestRepository {
     return doc.data()!;
   }
 
-  Future<List<QuestionLR>> getQuestionsLR(String collectionId, String testId, String partId) async {
+  Future<List<QuestionLR>> getQuestionsLR(
+    String collectionId,
+    String testId,
+    String partId,
+  ) async {
     final qs = await _firestore
         .collection(collectionId)
         .doc(testId)
@@ -63,6 +71,28 @@ class TestRepository {
     if (doc.exists) {
       final data = doc.data();
       return data?['type'] as String?;
+    } else {
+      return null;
+    }
+  }
+
+  Future<String?> getQuestionType(
+    String testId,
+    String partId,
+    String quesId,
+  ) async {
+    final doc = await _firestore
+        .collection('input_tests')
+        .doc(testId)
+        .collection('parts')
+        .doc(partId)
+        .collection('questions')
+        .doc(quesId)
+        .get();
+
+    if (doc.exists) {
+      final data = doc.data();
+      return data?['requirement'] as String?;
     } else {
       return null;
     }
@@ -111,4 +141,58 @@ class TestRepository {
     return snap.docs.map((d) => QuestionLR.fromMap(d.id, d.data())).toList();
   }
 
+  Future<Map<String, dynamic>> getPracticePart(
+    String collectionId,
+    String practiceTestId,
+    String testId,
+    String partId,
+  ) async {
+    final doc = await _firestore
+        .collection(collectionId)
+        .doc(practiceTestId)
+        .collection('test_number')
+        .doc(testId)
+        .collection('parts')
+        .doc(partId)
+        .get();
+    return doc.data()!;
+  }
+
+  Future<List<QuestionLR>> getPracticeQuestionsLR(
+    String collectionId,
+    String practiceTestId,
+    String testId,
+    String partId,
+  ) async {
+    final qs = await _firestore
+        .collection(collectionId)
+        .doc(practiceTestId)
+        .collection('test_number')
+        .doc(testId)
+        .collection('parts')
+        .doc(partId)
+        .collection('questions')
+        .orderBy('order')
+        .get();
+    return qs.docs.map((d) => QuestionLR.fromMap(d.id, d.data())).toList();
+  }
+
+  Future<List<QuestionSW>> getPracticeQuestionsSW(
+    String collectionId,
+    String practiceTestId,
+    String testId,
+    String partId,
+  ) async {
+    final qs = await _firestore
+        .collection(collectionId)
+        .doc(practiceTestId)
+        .collection('test_number')
+        .doc(testId)
+        .collection('parts')
+        .doc(partId)
+        .collection('questions')
+        .orderBy('order')
+        .get();
+    return qs.docs.map((d) => QuestionSW.fromMap(d.id, d.data())).toList();
+  }
 }

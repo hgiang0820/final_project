@@ -1,15 +1,15 @@
-import 'package:final_project/screens/practice_screens/LR/LR_test.dart';
+import 'package:final_project/screens/practice_screens/SW/SW_test.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LrPracticeTestPage extends StatefulWidget {
-  const LrPracticeTestPage({super.key});
+class SwPracticeTestPage extends StatefulWidget {
+  const SwPracticeTestPage({super.key});
 
   @override
-  State<LrPracticeTestPage> createState() => _LrPracticeTestPageState();
+  State<SwPracticeTestPage> createState() => _SwPracticeTestPageState();
 }
 
-class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
+class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
   bool loading = true;
   List<_TestItem> tests = [];
 
@@ -25,7 +25,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
       final db = FirebaseFirestore.instance;
       final snap = await db
           .collection('practice_tests')
-          .doc('LR_practice_tests')
+          .doc('SW_practice_tests')
           .collection('test_number')
           .orderBy('order', descending: false)
           .get();
@@ -38,7 +38,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
         final parts = List<String>.from(data['parts'] ?? const []);
         final timeLimit = (data['timeLimitMinutes'] is num)
             ? (data['timeLimitMinutes'] as num).toInt()
-            : 120; // mặc định 120 phút nếu không có
+            : 80; // mặc định 120 phút nếu không có
         final createdAt = data['createdAt']; // có thể là Timestamp hoặc null
 
         items.add(
@@ -69,7 +69,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
   void _openTest(String testId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => LRTestPage(testId: testId)),
+      MaterialPageRoute(builder: (_) => SWTestPage(testId: testId)),
     );
   }
 
@@ -78,7 +78,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Listening & Reading Tests',
+          'Speaking & Writing Tests',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -136,12 +136,12 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
       itemBuilder: (context, index) {
         final it = tests[index];
 
-        // số thứ tự ổn định theo vị trí hiển thị
+        // số thứ tự ổn định theo vị trí hiddddển thị
         final orderLabel = (index + 1).toString().padLeft(2, '0');
 
         // hiển thị meta: thời gian & số part
         final partsLabel = it.parts.isEmpty
-            ? 'parts: 7 (TOEIC LR)'
+            ? 'parts: 2 (TOEIC SW)'
             : 'parts: ${it.parts.length}';
         final timeLabel = '${it.timeLimitMinutes} phút';
 
@@ -187,7 +187,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
   }
 }
 
-class LRTest {}
+class SWTest {}
 
 class _TestItem {
   final String id;

@@ -5,16 +5,30 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
 
-Future<void> seedLRTest() async {
+Future<void> seedLRTest01() async {
   final db = FirebaseFirestore.instance;
   final testId = 'testLR_full_01'; // Using a new ID for the full test
 
   // Firestore: Create test document
-  await db.collection('practice_tests').doc(testId).set({
-    'title': 'Full TOEIC Listening & Reading Practice Test 01',
-    'parts': ['part1', 'part2', 'part3', 'part4', 'part5', 'part6', 'part7'],
-    'createdAt': FieldValue.serverTimestamp(),
-  });
+  await db
+      .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
+      .doc(testId)
+      .set({
+        'title': 'Full TOEIC Listening & Reading Practice Test 01',
+        'parts': [
+          'part1',
+          'part2',
+          'part3',
+          'part4',
+          'part5',
+          'part6',
+          'part7',
+        ],
+        'createdAt': FieldValue.serverTimestamp(),
+        'order': 1,
+      });
 
   // =======================================================================
   // ========================== LISTENING SECTION ==========================
@@ -134,6 +148,8 @@ Future<void> seedLRTest() async {
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part1')
@@ -151,6 +167,8 @@ Future<void> seedLRTest() async {
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part1')
@@ -487,6 +505,8 @@ Future<void> seedLRTest() async {
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part2')
@@ -502,6 +522,8 @@ Future<void> seedLRTest() async {
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+      .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part2')
@@ -519,9 +541,6 @@ Future<void> seedLRTest() async {
 
   // // === PART 3 === LISTENING (Conversations)
   // Total 39 Questions (13 Conversations x 3 Questions)
-
-  // Note: The full transcript is included in the 'question' field for each question in a conversation group
-  // to ensure each question object is self-contained for your database seeding process.
 
   // --- Conversation 1: Questions 32-34 ---
   final transcript32_34 = """
@@ -1103,6 +1122,8 @@ Future<void> seedLRTest() async {
   // Example:
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part3')
@@ -1120,6 +1141,8 @@ Future<void> seedLRTest() async {
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part3')
@@ -1545,6 +1568,8 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part4')
@@ -1560,6 +1585,8 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part4')
@@ -1806,6 +1833,8 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part5')
@@ -1817,6 +1846,8 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+      .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part5')
@@ -2042,6 +2073,8 @@ ____(146)____. We apologize for any inconvenience and thank you for your patienc
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part6')
@@ -2053,6 +2086,8 @@ ____(146)____. We apologize for any inconvenience and thank you for your patienc
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+      .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part6')
@@ -2755,6 +2790,8 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
 
   await db
       .collection('practice_tests')
+      .doc('LR_practice_tests')
+      .collection('test_number')
       .doc(testId)
       .collection('parts')
       .doc('part7')
@@ -2766,6 +2803,8 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
 
     await db
         .collection('practice_tests')
+        .doc('LR_practice_tests')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part7')
