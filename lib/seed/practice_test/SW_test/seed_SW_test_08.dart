@@ -67,7 +67,7 @@ Future<void> seedSWTest08() async {
           'In this part of the test, you will describe the picture on your screen in as much detail as you can. You will have 45 seconds to prepare your response. Then you will have 30 seconds to speak about the picture.',
       'max_score': 3,
       'sample_answer':
-          "This picture shows a person sitting at a desk and writing in a notebook. There is an open laptop on the desk to their left, and a glass of water to their right. The person seems focused on their writing. The desk appears organized, and the setting looks like an office or a study area. It appears to be daytime.",
+          "This picture shows a person sitting at a desk with an open laptop on the desk to their left, and a glass of water to their right hand.",
     },
     // --- Q4-6: Respond to questions ---
     // Scenario: Imagine someone is asking you about watching sports.

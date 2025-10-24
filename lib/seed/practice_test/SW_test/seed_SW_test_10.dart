@@ -268,11 +268,10 @@ Future<void> seedSWTest10() async {
     {
       'type': 'Write a sentence based on a picture',
       'imagePath': 'SW_practice_tests/$testId/writing/q04.jpg',
-      // Image Description: Một người đang sắp xếp lại bàn làm việc.
+      // Image Description: Một người đang lau dọn bàn làm việc.
       'text': "person, desk",
       'record_time': 0,
-      'sample_answer':
-          "The person is organizing papers and items on their messy desk.",
+      'sample_answer': "The person is cleaning their messy desk.",
       'directions':
           'Use the given words to write one sentence about the picture.',
       'max_score': 3,

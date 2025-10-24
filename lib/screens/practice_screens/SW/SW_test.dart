@@ -29,7 +29,7 @@ class _SWTestPage extends State<SWTestPage> {
   List<String> strongPoints = [];
   List<String> weakPoints = [];
 
-  int remainingSeconds = 1000;
+  int remainingSeconds = 4800;
   Timer? countdownTimer;
   bool _countdownStarted = false;
 

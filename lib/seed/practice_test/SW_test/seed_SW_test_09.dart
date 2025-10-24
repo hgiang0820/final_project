@@ -59,7 +59,7 @@ Future<void> seedSWTest09() async {
     {
       'type': 'Describe a picture',
       'imagePath': 'SW_practice_tests/$testId/speaking/q03.jpg',
-      // Image Description for sample: Một người đang ngồi trên sàn nhà, sắp xếp lại các tài liệu từ một chiếc hộp.
+      // Image Description for sample: Một người đang ngồi trên sàn nhà, sắp xếp lại các tài liệu.
       'text': "",
       'prepare_time': 45,
       'record_time': 30,
@@ -67,7 +67,7 @@ Future<void> seedSWTest09() async {
           'In this part of the test, you will describe the picture on your screen in as much detail as you can. You will have 45 seconds to prepare your response. Then you will have 30 seconds to speak about the picture.',
       'max_score': 3,
       'sample_answer':
-          "This picture shows a person sitting cross-legged on a wooden floor, possibly in an office or home setting. They are surrounded by papers and files and appear to be sorting through documents taken from a cardboard box next to them. The person is focused on the task, looking down at the papers in their hands. The area looks a bit cluttered due to the sorting process.",
+          "This picture shows a person sitting cross-legged on a wooden floor, possibly in an office or home setting. They are surrounded by papers and files and appear to be sorting through documents. The person is focused on the task, looking down at the papers in their hands. The area looks a bit cluttered due to the sorting process.",
     },
     // --- Q4-6: Respond to questions ---
     // Scenario: Imagine someone is asking you about your preferences for news consumption.
