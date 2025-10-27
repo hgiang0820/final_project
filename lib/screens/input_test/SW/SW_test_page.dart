@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:final_project/repositories/result_repository.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:final_project/screens/input_test/SW/SW_part1_page.dart';
 import 'package:final_project/screens/input_test/SW/SW_part2_page.dart';
 import 'package:final_project/widgets/small_button.dart';
@@ -18,7 +18,7 @@ class SWTestPage extends StatefulWidget {
 
 class _SWTestPage extends State<SWTestPage> {
   final resultRepo = ResultRepository();
-  final testRepo = TestRepository();
+  final testRepo = InputTestRepository();
 
   final part1Key = GlobalKey<SWPart1PageState>();
   final part2Key = GlobalKey<SWPart2PageState>();

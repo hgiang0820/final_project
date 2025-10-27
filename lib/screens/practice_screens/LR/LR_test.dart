@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part1.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part2.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part3.dart';
@@ -21,7 +21,7 @@ class LRTestPage extends StatefulWidget {
 
 class _LRTestPage extends State<LRTestPage> {
   final resultRepo = ResultRepository();
-  final testRepo = TestRepository();
+  final testRepo = InputTestRepository();
 
   final part1Key = GlobalKey<LRPracticePart1State>();
   final part2Key = GlobalKey<LRPracticePart2State>();

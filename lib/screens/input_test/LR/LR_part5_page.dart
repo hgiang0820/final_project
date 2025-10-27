@@ -1,5 +1,5 @@
 import 'package:final_project/models/question_LR_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:flutter/material.dart';
 
 class LRPart5Page extends StatefulWidget {
@@ -11,7 +11,7 @@ class LRPart5Page extends StatefulWidget {
 }
 
 class LRPart5PageState extends State<LRPart5Page> {
-  final repo = TestRepository();
+  final repo = InputTestRepository();
   List<QuestionLR> questions = [];
   List<int?> answers = [];
 

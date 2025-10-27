@@ -3,7 +3,7 @@ import 'package:final_project/services/writing_api_service.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/models/question_SW_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 
 class FullWriPage extends StatefulWidget {
   final String testId;
@@ -15,7 +15,7 @@ class FullWriPage extends StatefulWidget {
 }
 
 class FullWriPageState extends State<FullWriPage> {
-  final repo = TestRepository();
+  final repo = InputTestRepository();
 
   List<QuestionSW> questions = [];
   int currentIndex = 0;

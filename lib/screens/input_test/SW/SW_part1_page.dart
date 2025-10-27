@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/models/question_SW_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,7 +24,7 @@ class SWPart1Page extends StatefulWidget {
 }
 
 class SWPart1PageState extends State<SWPart1Page> {
-  final testRepo = TestRepository();
+  final testRepo = InputTestRepository();
   final resultRepo = ResultRepository();
 
   final recorder = AudioRecorder();

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:final_project/models/question_LR_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -14,7 +14,7 @@ class FullLisPage extends StatefulWidget {
 }
 
 class FullLisPageState extends State<FullLisPage> {
-  final repo = TestRepository();
+  final repo = InputTestRepository();
   final player = AudioPlayer();
 
   List<QuestionLR> questions = [];

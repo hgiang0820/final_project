@@ -3,7 +3,7 @@ import 'package:final_project/models/question_LR_model.dart';
 import 'package:final_project/models/question_SW_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TestRepository {
+class InputTestRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _supabase = Supabase.instance.client;
   // final String _bucket = 'toeic-assets'; // bucket bạn tạo

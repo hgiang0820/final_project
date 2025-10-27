@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:final_project/models/question_LR_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -13,7 +13,7 @@ class LRPart2Page extends StatefulWidget {
 }
 
 class LRPart2PageState extends State<LRPart2Page> {
-  final repo = TestRepository();
+  final repo = InputTestRepository();
   final player = AudioPlayer();
 
   List<QuestionLR> questions = [];

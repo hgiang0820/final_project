@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/widgets/small_button.dart';
@@ -21,7 +21,7 @@ class LRTestPage extends StatefulWidget {
 
 class _LRTestPage extends State<LRTestPage> {
   final resultRepo = ResultRepository();
-  final testRepo = TestRepository();
+  final testRepo = InputTestRepository();
 
   final part1Key = GlobalKey<LRPart1PageState>();
   final part2Key = GlobalKey<LRPart2PageState>();

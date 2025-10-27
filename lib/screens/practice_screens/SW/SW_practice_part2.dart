@@ -3,7 +3,7 @@ import 'package:final_project/services/writing_api_service.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/models/question_SW_model.dart';
-import 'package:final_project/repositories/test_repository.dart';
+import 'package:final_project/repositories/input_test_repository.dart';
 
 class SWPracticePart2 extends StatefulWidget {
   final String testId;
@@ -15,7 +15,7 @@ class SWPracticePart2 extends StatefulWidget {
 }
 
 class SWPracticePart2State extends State<SWPracticePart2> {
-  final repo = TestRepository();
+  final repo = InputTestRepository();
 
   List<QuestionSW> questions = [];
   int currentIndex = 0;
