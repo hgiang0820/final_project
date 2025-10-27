@@ -104,29 +104,30 @@ Future<void> seedSWTest10() async {
           "The most challenging part was understanding the complex interface and all the different features, like transitions and effects. At first, it felt overwhelming. I overcame this by watching several online tutorial videos specifically for beginners. I practiced using one new feature at a time on short clips until I felt comfortable with the basics. Patient practice was key.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Hội thảo Quản lý Thời gian
-      // Time Management Workshop - Tuesday, August 13
-      // 1:00 PM - 1:15 PM: Welcome & Overview (Room 10)
-      // 1:15 PM - 2:15 PM: Identifying Time Wasters (Room 10) - Mark Davis
-      // 2:15 PM - 2:30 PM: Break
-      // 2:30 PM - 3:30 PM: Prioritization Techniques (Room 12) - Lisa Chen
-      // 3:30 PM - 4:15 PM: Using Scheduling Tools (Room 10) - Mark Davis
-      // 4:15 PM - 4:30 PM: Q&A / Closing (Room 10)
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Hội thảo Quản lý Thời gian
+    //   // Time Management Workshop - Tuesday, August 13
+    //   // 1:00 PM - 1:15 PM: Welcome & Overview (Room 10)
+    //   // 1:15 PM - 2:15 PM: Identifying Time Wasters (Room 10) - Mark Davis
+    //   // 2:15 PM - 2:30 PM: Break
+    //   // 2:30 PM - 3:30 PM: Prioritization Techniques (Room 12) - Lisa Chen
+    //   // 3:30 PM - 4:15 PM: Using Scheduling Tools (Room 10) - Mark Davis
+    //   // 4:15 PM - 4:30 PM: Q&A / Closing (Room 10)
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "What time does the workshop begin and end?",
       'prepare_time': 3,
       'record_time': 15,
@@ -138,6 +139,7 @@ Future<void> seedSWTest10() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "Which room is the session on Prioritization Techniques held in?",
       'prepare_time': 3,
       'record_time': 15,
@@ -149,6 +151,7 @@ Future<void> seedSWTest10() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Could you tell me the topics of all the sessions presented by Mark Davis?",
       'prepare_time': 3,

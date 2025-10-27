@@ -107,27 +107,17 @@ Future<void> seedSWTest01() async {
       'type': 'Respond to questions using information provided',
       'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+          "What time does the conference start, and where is the first event held?",
       'prepare_time': 45,
       'record_time': 0, // This is preparation time for the whole group.
       'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+          'You have 15 seconds to respond.',
       'max_score': 3,
-      'sample_answer': '',
+      'sample_answer': 'The conference starts at 9:00 AM with the Welcome Address, which is held in the Main Hall.',
     },
     {
       'type': 'Respond to questions using information provided',
-      'text':
-          "What time does the conference start, and where is the first event held?",
-      'prepare_time': 3,
-      'record_time': 15,
-      'directions': 'You have 15 seconds to respond.',
-      'max_score': 3,
-      'sample_answer':
-          "The conference starts at 9:00 AM with the Welcome Address, which is held in the Main Hall.",
-    },
-    {
-      'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "I'm interested in the Social Media Marketing session. Could you tell me what time that is?",
       'prepare_time': 3,
@@ -136,6 +126,18 @@ Future<void> seedSWTest01() async {
       'max_score': 3,
       'sample_answer':
           "Certainly. The Social Media Marketing session is scheduled for 1:30 PM, and it will be in Room B.",
+    },
+    {
+      'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+      'text':
+          "I was told that the session on SEO Strategies is at 10:00 in the morning. Is that correct?",
+      'prepare_time': 3,
+      'record_time': 15,
+      'directions': 'You have 30 seconds to respond.',
+      'max_score': 3,
+      'sample_answer':
+          "Actually, I'm seeing something different on the schedule. Session 1: SEO Strategies is listed for 10:00 PM, not AM, and it will be in Room A.",
     },
     // --- Q10: Propose a solution ---
     {

@@ -103,30 +103,31 @@ Future<void> seedSWTest08() async {
           "A memorable game I watched was the final match of the last World Cup. My favorite team was playing, and the game was incredibly tense, going into extra time. When my team scored the winning goal in the last few minutes, the atmosphere was electric, even just watching from home with my family. It was such an exciting and unforgettable moment.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Hội thảo Nhiếp ảnh (Khác đề 04)
-      // Photography Workshop Schedule - Saturday, April 6
-      // 10:00 AM - 10:15 AM: Welcome & Introduction (Studio 1)
-      // 10:15 AM - 11:30 AM: Session 1: Mastering Exposure (Studio 1) - Lisa Ray
-      // 11:30 AM - 11:45 AM: Break
-      // 11:45 AM - 1:00 PM: Session 2: Lighting Techniques (Studio 2) - Mark Chen
-      // 1:00 PM - 2:00 PM: Lunch (Provided)
-      // 2:00 PM - 3:30 PM: Session 3: Portrait Photography (Studio 1) - Lisa Ray
-      // 3:30 PM - 4:00 PM: Q&A and Closing
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Hội thảo Nhiếp ảnh (Khác đề 04)
+    //   // Photography Workshop Schedule - Saturday, April 6
+    //   // 10:00 AM - 10:15 AM: Welcome & Introduction (Studio 1)
+    //   // 10:15 AM - 11:30 AM: Session 1: Mastering Exposure (Studio 1) - Lisa Ray
+    //   // 11:30 AM - 11:45 AM: Break
+    //   // 11:45 AM - 1:00 PM: Session 2: Lighting Techniques (Studio 2) - Mark Chen
+    //   // 1:00 PM - 2:00 PM: Lunch (Provided)
+    //   // 2:00 PM - 3:30 PM: Session 3: Portrait Photography (Studio 1) - Lisa Ray
+    //   // 3:30 PM - 4:00 PM: Q&A and Closing
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "What time does the workshop end?",
       'prepare_time': 3,
       'record_time': 15,
@@ -138,6 +139,7 @@ Future<void> seedSWTest08() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "Who is presenting the session on Lighting Techniques?",
       'prepare_time': 3,
       'record_time': 15,
@@ -149,6 +151,7 @@ Future<void> seedSWTest08() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Could you tell me the topic and location of Lisa Ray's afternoon session?",
       'prepare_time': 3,

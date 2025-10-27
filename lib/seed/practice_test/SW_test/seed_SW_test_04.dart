@@ -104,30 +104,31 @@ Future<void> seedSWTest04() async {
           "A favorite science fiction movie I saw recently is called 'Dune'. It's based on a famous novel and has incredible world-building and stunning visuals. The story is complex, dealing with politics, ecology, and destiny on a desert planet. I really enjoyed the grand scale of the film and the intricate plot. The special effects were also amazing.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Hội thảo Nhiếp ảnh Kỹ thuật số
-      // Digital Photography Workshop - Saturday, Dec 14
-      // 9:00 AM - 9:30 AM: Check-in & Coffee
-      // 9:30 AM - 11:00 AM: Understanding Your Camera Settings (John Smith)
-      // 11:00 AM - 11:15 AM: Break
-      // 11:15 AM - 12:45 PM: Composition Techniques (Laura Chen)
-      // 12:45 PM - 1:45 PM: Lunch (On your own)
-      // 1:45 PM - 3:15 PM: Introduction to Photo Editing Software (John Smith)
-      // 3:15 PM - 4:00 PM: Q&A / Practice Session
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Hội thảo Nhiếp ảnh Kỹ thuật số
+    //   // Digital Photography Workshop - Saturday, Dec 14
+    //   // 9:00 AM - 9:30 AM: Check-in & Coffee
+    //   // 9:30 AM - 11:00 AM: Understanding Your Camera Settings (John Smith)
+    //   // 11:00 AM - 11:15 AM: Break
+    //   // 11:15 AM - 12:45 PM: Composition Techniques (Laura Chen)
+    //   // 12:45 PM - 1:45 PM: Lunch (On your own)
+    //   // 1:45 PM - 3:15 PM: Introduction to Photo Editing Software (John Smith)
+    //   // 3:15 PM - 4:00 PM: Q&A / Practice Session
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "What is the topic of the first session, and what time does it start?",
       'prepare_time': 3,
@@ -140,6 +141,7 @@ Future<void> seedSWTest04() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "Is lunch provided at the workshop?",
       'prepare_time': 3,
       'record_time': 15,
@@ -151,6 +153,7 @@ Future<void> seedSWTest04() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Will John Smith be presenting anything besides the session on camera settings?",
       'prepare_time': 3,

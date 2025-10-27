@@ -104,28 +104,29 @@ Future<void> seedSWTest03() async {
           "In software engineering, strong technical skills like coding and understanding algorithms are crucial. But equally important are problem-solving abilities, attention to detail, and good communication skills, especially when working in a team. Being able to adapt and learn new technologies quickly is also vital because the field is constantly changing.", // Hoặc tương tự cho Marketing.
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Hội thảo Sức khỏe & Sống khỏe
-      // Wellness Workshop Schedule - Saturday, Oct 26
-      // 10:00 AM - 10:45 AM: Morning Yoga (Studio A) - Jane Smith
-      // 11:00 AM - 12:00 PM: Healthy Cooking Demo (Kitchen Lab) - Chef David Lee
-      // 12:00 PM - 1:00 PM: Lunch Break
-      // 1:00 PM - 2:00 PM: Stress Management Techniques (Room 101) - Dr. Evans
-      // 2:15 PM - 3:00 PM: Introduction to Meditation (Studio A) - Jane Smith
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Hội thảo Sức khỏe & Sống khỏe
+    //   // Wellness Workshop Schedule - Saturday, Oct 26
+    //   // 10:00 AM - 10:45 AM: Morning Yoga (Studio A) - Jane Smith
+    //   // 11:00 AM - 12:00 PM: Healthy Cooking Demo (Kitchen Lab) - Chef David Lee
+    //   // 12:00 PM - 1:00 PM: Lunch Break
+    //   // 1:00 PM - 2:00 PM: Stress Management Techniques (Room 101) - Dr. Evans
+    //   // 2:15 PM - 3:00 PM: Introduction to Meditation (Studio A) - Jane Smith
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "What time does the Healthy Cooking demonstration start, and where is it?",
       'prepare_time': 3,
@@ -138,6 +139,7 @@ Future<void> seedSWTest03() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "Who is leading the session on Stress Management Techniques?",
       'prepare_time': 3,
       'record_time': 15,
@@ -149,6 +151,7 @@ Future<void> seedSWTest03() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Are there any activities scheduled in Studio A during the afternoon?",
       'prepare_time': 3,

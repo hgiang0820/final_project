@@ -104,30 +104,31 @@ Future<void> seedSWTest06() async {
           "One disadvantage is that you can't see or touch the product before buying, so sometimes the quality or fit might not be what you expect, especially with clothes. Another disadvantage is waiting for delivery; you don't get the item immediately like you do in a store. Also, returning items bought online can sometimes be more complicated than returning them to a physical store.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Hội thảo Quản lý Dự án
-      // Project Management Workshop - Friday, March 29
-      // 9:00 AM - 9:30 AM: Registration & Coffee
-      // 9:30 AM - 10:45 AM: Session 1: Project Planning Tools (Room A) - Kenji Tanaka
-      // 10:45 AM - 11:00 AM: Break
-      // 11:00 AM - 12:15 PM: Session 2: Risk Assessment (Room B) - Sarah Chen
-      // 12:15 PM - 1:15 PM: Lunch (Provided)
-      // 1:15 PM - 2:30 PM: Session 3: Team Communication (Room A) - Kenji Tanaka
-      // 2:30 PM - 3:00 PM: Closing Remarks & Networking
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Hội thảo Quản lý Dự án
+    //   // Project Management Workshop - Friday, March 29
+    //   // 9:00 AM - 9:30 AM: Registration & Coffee
+    //   // 9:30 AM - 10:45 AM: Session 1: Project Planning Tools (Room A) - Kenji Tanaka
+    //   // 10:45 AM - 11:00 AM: Break
+    //   // 11:00 AM - 12:15 PM: Session 2: Risk Assessment (Room B) - Sarah Chen
+    //   // 12:15 PM - 1:15 PM: Lunch (Provided)
+    //   // 1:15 PM - 2:30 PM: Session 3: Team Communication (Room A) - Kenji Tanaka
+    //   // 2:30 PM - 3:00 PM: Closing Remarks & Networking
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "What time does the workshop end?",
       'prepare_time': 3,
       'record_time': 15,
@@ -139,6 +140,7 @@ Future<void> seedSWTest06() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text': "Which session is being held in Room B?",
       'prepare_time': 3,
       'record_time': 15,
@@ -150,6 +152,7 @@ Future<void> seedSWTest06() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Could you tell me all the sessions that Kenji Tanaka is presenting?",
       'prepare_time': 3,

@@ -100,7 +100,12 @@ class _SWTestPage extends State<SWTestPage> {
   }
 
   Future<void> _submitAll() async {
-    // await ở đây
+    // Ngừng đồng hồ tổng
+    countdownTimer?.cancel();
+
+    // ✅ Ép dừng mọi thứ ở Speaking trước khi getResult()
+    await part1Key.currentState?.forceStopAll();
+
     final result1 = await part1Key.currentState?.getResult();
     final result2 = await part2Key.currentState?.getResult();
 

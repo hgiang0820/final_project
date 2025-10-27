@@ -104,34 +104,35 @@ Future<void> seedSWTest09() async {
           "Getting news from multiple sources provides a more balanced and comprehensive understanding of events. Different sources might have different perspectives or report on different aspects of a story. Comparing information from various outlets helps to identify potential bias and get a more complete picture. It prevents relying on a single viewpoint and encourages critical thinking about the information presented.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Xe buýt Đưa đón Hội nghị
-      // Conference Shuttle Bus Schedule - Hotel to Convention Center
-      // Departs Hotel Lobby:
-      // - 7:30 AM
-      // - 8:00 AM (Express)
-      // - 8:30 AM
-      // - 9:00 AM (Express)
-      // Departs Convention Center (Main Entrance):
-      // - 4:00 PM
-      // - 4:30 PM (Express)
-      // - 5:00 PM
-      // - 5:30 PM (Express)
-      // Note: Express buses run non-stop. Regular buses make one stop at City Hall. Journey time approx. 20 min (Express), 30 min (Regular).
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3,
-      'sample_answer': '',
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Xe buýt Đưa đón Hội nghị
+    //   // Conference Shuttle Bus Schedule - Hotel to Convention Center
+    //   // Departs Hotel Lobby:
+    //   // - 7:30 AM
+    //   // - 8:00 AM (Express)
+    //   // - 8:30 AM
+    //   // - 9:00 AM (Express)
+    //   // Departs Convention Center (Main Entrance):
+    //   // - 4:00 PM
+    //   // - 4:30 PM (Express)
+    //   // - 5:00 PM
+    //   // - 5:30 PM (Express)
+    //   // Note: Express buses run non-stop. Regular buses make one stop at City Hall. Journey time approx. 20 min (Express), 30 min (Regular).
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3,
+    //   'sample_answer': '',
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "What time does the first shuttle bus leave the hotel in the morning?",
       'prepare_time': 3,
@@ -144,6 +145,7 @@ Future<void> seedSWTest09() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "I need to get back to the hotel after 5 PM. What time is the last express bus from the convention center?",
       'prepare_time': 3,
@@ -156,6 +158,7 @@ Future<void> seedSWTest09() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "How long does the 8:30 AM bus from the hotel take to reach the convention center, and does it make any stops?",
       'prepare_time': 3,

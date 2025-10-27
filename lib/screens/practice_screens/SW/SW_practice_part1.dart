@@ -85,6 +85,7 @@ class SWPracticePart1State extends State<SWPracticePart1> {
 
   /// Bắt đầu ghi âm
   Future<void> _startRecording(String questionId, int recordTime) async {
+    if (isFinishedAll) return;
     final hasPermission = await _requestPermission();
     if (!hasPermission) {
       debugPrint("❌ Microphone permission not granted");
@@ -103,6 +104,11 @@ class SWPracticePart1State extends State<SWPracticePart1> {
 
     recordTimer?.cancel();
     recordTimer = Timer.periodic(const Duration(seconds: 1), (t) async {
+      if (!mounted || isFinishedAll) {
+        // ✅ guard
+        t.cancel();
+        return;
+      }
       if (remainingRecordSeconds <= 0) {
         await _stopRecording(questionId);
         t.cancel();
@@ -262,15 +268,16 @@ class SWPracticePart1State extends State<SWPracticePart1> {
     return remoteUrls;
   }
 
-  void showFeedbacksMode(Map<String, dynamic> results) {
+  void showFeedbacksMode(Map<String, dynamic> results) async {
+    await forceStopAll();
     setState(() {
-      isFinishedAll = true;
       evaluationResults = results;
     });
   }
 
   /// Bắt đầu 1 câu mới
   void _startQuestion(int index) {
+    if (isFinishedAll) return; // ✅ do not start if submitted
     final q = questions[index];
     setState(() {
       currentIndex = index;
@@ -285,6 +292,11 @@ class SWPracticePart1State extends State<SWPracticePart1> {
     // Nếu có thời gian chuẩn bị
     if (q.prepareTime! > 0) {
       prepareTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (!mounted || isFinishedAll) {
+          // ✅ guard
+          t.cancel();
+          return;
+        }
         if (remainingPrepareSeconds <= 0) {
           t.cancel();
           _startRecording(q.id, q.recordTime ?? 0);
@@ -330,6 +342,28 @@ class SWPracticePart1State extends State<SWPracticePart1> {
         }
       }
     }
+  }
+
+  Future<void> forceStopAll() async {
+    // Hủy mọi timer
+    try {
+      prepareTimer?.cancel();
+    } catch (_) {}
+    try {
+      recordTimer?.cancel();
+    } catch (_) {}
+
+    // Dừng recorder ngay lập tức nếu đang ghi
+    try {
+      if (isRecording) {
+        await recorder.stop();
+      }
+    } catch (_) {}
+
+    setState(() {
+      isRecording = false;
+      isFinishedAll = true; // khóa UI về chế độ xem lại
+    });
   }
 
   @override

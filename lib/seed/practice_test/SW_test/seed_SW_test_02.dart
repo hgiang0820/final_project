@@ -104,30 +104,31 @@ Future<void> seedSWTest02() async {
           "What I like most about taking the subway is that I can read or listen to music during my commute, which helps me relax. What I dislike most is probably how crowded it can get during rush hour; sometimes it's difficult to find a seat, and it can feel quite uncomfortable standing so close to many people.",
     },
     // --- Q7-9: Respond to questions using information provided ---
-    {
-      'type': 'Respond to questions using information provided',
-      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
-      // Image Content for sample: Lịch trình Workshop Kỹ năng Viết Báo cáo
-      // Report Writing Skills Workshop - Friday, Nov 8
-      // 9:00 AM - 9:30 AM: Registration & Coffee
-      // 9:30 AM - 11:00 AM: Session 1: Structuring Your Report (Dr. Allen)
-      // 11:00 AM - 11:15 AM: Break
-      // 11:15 AM - 12:30 PM: Session 2: Writing Clearly & Concisely (Ms. Baker)
-      // 12:30 PM - 1:30 PM: Lunch (Provided)
-      // 1:30 PM - 3:00 PM: Session 3: Editing & Proofreading (Dr. Allen)
-      // 3:00 PM - 3:30 PM: Q&A and Wrap-up
-      'text':
-          "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
-      'prepare_time': 45, // Time to read the schedule
-      'record_time': 0,
-      'directions':
-          'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
-      'max_score': 3, // Each question Q7, Q8, Q9 is scored out of 3.
-      'sample_answer': '', // No sample answer for the setup question itself.
-    },
+    // {
+    //   'type': 'Respond to questions using information provided',
+    //   'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
+    //   // Image Content for sample: Lịch trình Workshop Kỹ năng Viết Báo cáo
+    //   // Report Writing Skills Workshop - Friday, Nov 8
+    //   // 9:00 AM - 9:30 AM: Registration & Coffee
+    //   // 9:30 AM - 11:00 AM: Session 1: Structuring Your Report (Dr. Allen)
+    //   // 11:00 AM - 11:15 AM: Break
+    //   // 11:15 AM - 12:30 PM: Session 2: Writing Clearly & Concisely (Ms. Baker)
+    //   // 12:30 PM - 1:30 PM: Lunch (Provided)
+    //   // 1:30 PM - 3:00 PM: Session 3: Editing & Proofreading (Dr. Allen)
+    //   // 3:00 PM - 3:30 PM: Q&A and Wrap-up
+    //   'text':
+    //       "You will answer three questions based on the information provided. You will have 45 seconds to read the information before the questions begin.",
+    //   'prepare_time': 45, // Time to read the schedule
+    //   'record_time': 0,
+    //   'directions':
+    //       'You will have 3 seconds of preparation time before each question. You will have 15 seconds to respond to questions 7 and 8 and 30 seconds to respond to question 9.',
+    //   'max_score': 3, // Each question Q7, Q8, Q9 is scored out of 3.
+    //   'sample_answer': '', // No sample answer for the setup question itself.
+    // },
     {
       // Q7 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "What time does the first session start, and who is the presenter?",
       'prepare_time': 3,
@@ -140,6 +141,7 @@ Future<void> seedSWTest02() async {
     {
       // Q8 - Specific detail
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "I'm particularly interested in the session about writing clearly. Could you tell me when that is?",
       'prepare_time': 3,
@@ -152,6 +154,7 @@ Future<void> seedSWTest02() async {
     {
       // Q9 - Combining information
       'type': 'Respond to questions using information provided',
+      'imagePath': 'SW_practice_tests/$testId/speaking/q07-09.jpg',
       'text':
           "Will Dr. Allen be presenting anything in the afternoon? I missed his morning session.",
       'prepare_time': 3,

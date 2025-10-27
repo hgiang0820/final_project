@@ -80,6 +80,7 @@ class SWPart1PageState extends State<SWPart1Page> {
 
   /// Bắt đầu ghi âm
   Future<void> _startRecording(String questionId, int recordTime) async {
+    if (isFinishedAll) return; // ✅ đã submit thì không ghi nữa
     final hasPermission = await _requestPermission();
     if (!hasPermission) {
       debugPrint("❌ Microphone permission not granted");
@@ -98,6 +99,11 @@ class SWPart1PageState extends State<SWPart1Page> {
 
     recordTimer?.cancel();
     recordTimer = Timer.periodic(const Duration(seconds: 1), (t) async {
+      if (!mounted || isFinishedAll) { // ✅ guard
+        t.cancel();
+        return;
+      }
+
       if (remainingRecordSeconds <= 0) {
         await _stopRecording(questionId);
         t.cancel();
@@ -257,15 +263,16 @@ class SWPart1PageState extends State<SWPart1Page> {
     return remoteUrls;
   }
 
-  void showFeedbacksMode(Map<String, dynamic> results) {
+  void showFeedbacksMode(Map<String, dynamic> results) async {
+    await forceStopAll();
     setState(() {
-      isFinishedAll = true;
       evaluationResults = results;
     });
   }
 
   /// Bắt đầu 1 câu mới
   void _startQuestion(int index) {
+    if (isFinishedAll) return; // ✅ không start nếu đã submit
     final q = questions[index];
     setState(() {
       currentIndex = index;
@@ -280,6 +287,10 @@ class SWPart1PageState extends State<SWPart1Page> {
     // Nếu có thời gian chuẩn bị
     if (q.prepareTime! > 0) {
       prepareTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (!mounted || isFinishedAll) { // ✅ guard
+          t.cancel();
+          return;
+        }
         if (remainingPrepareSeconds <= 0) {
           t.cancel();
           _startRecording(q.id, q.recordTime ?? 0);
@@ -325,6 +336,24 @@ class SWPart1PageState extends State<SWPart1Page> {
         }
       }
     }
+  }
+
+  Future<void> forceStopAll() async {
+    // Hủy mọi timer
+    try { prepareTimer?.cancel(); } catch (_) {}
+    try { recordTimer?.cancel(); } catch (_) {}
+
+    // Stop recorder immediately if recording
+    try {
+      if (isRecording) {
+        await recorder.stop();
+      }
+    } catch (_) {}
+
+    setState(() {
+      isRecording = false;
+      isFinishedAll = true; // lock UI to finished state
+    });
   }
 
   @override
