@@ -10,7 +10,15 @@ import 'package:flutter/material.dart';
 
 class SWTestPage extends StatefulWidget {
   final String testId;
-  const SWTestPage({super.key, required this.testId});
+  final Future<void> Function()? onDone;
+  final int itemIndex;
+
+  const SWTestPage({
+    super.key,
+    required this.testId,
+    this.onDone,
+    required this.itemIndex,
+  });
 
   @override
   State<SWTestPage> createState() => _SWTestPage();
@@ -43,6 +51,7 @@ class _SWTestPage extends State<SWTestPage> {
 
   @override
   void initState() {
+    checkShowAnswersMode();
     super.initState();
   }
 
@@ -74,6 +83,52 @@ class _SWTestPage extends State<SWTestPage> {
   void _handlePartStarted() {
     _startCountdownIfNeeded();
   }
+
+  Future<void> checkShowAnswersMode() async {
+  try {
+    final status = await practiceRepo.getTestStatus(
+      itemIndex: widget.itemIndex,
+      testType: "SW_practice_tests",
+    );
+    if (status == 'done') {
+      final saved = await practiceRepo.getSavedResult(
+        itemIndex: widget.itemIndex,
+        testType: "SW_practice_tests",
+      );
+
+      final savedTotal   = (saved?['totalScore'] ?? 0) as int;
+      final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
+
+      setState(() {
+        showAnswers      = true;
+        totalScore       = savedTotal;
+        answers          = savedAnswers;
+        remainingSeconds = 0;
+      });
+
+      countdownTimer?.cancel();
+
+      // ✅ Để mỗi part tự "normalize" feedback (list -> map theo questionId)
+      part1Key.currentState?.showFeedbacksMode(savedAnswers['feedback_part1']);
+      part2Key.currentState?.showFeedbacksMode(savedAnswers['feedback_part2']);
+
+      // ✅ Load lại câu trả lời đã nộp
+      part1Key.currentState?.loadSavedAnswers(
+        savedAnswers['part1'] == null
+            ? null
+            : Map<String, dynamic>.from(savedAnswers['part1']),
+      );
+      part2Key.currentState?.loadSavedAnswers(
+        savedAnswers['part2'] == null
+            ? null
+            : Map<String, dynamic>.from(savedAnswers['part2']),
+      );
+    }
+  } catch (_) {
+    // ignore
+  }
+}
+
 
   // Đặt trong class _SWTestPage (ví dụ ngay dưới dispose)
   List<Map<String, dynamic>> _normalizeResults(dynamic results) {
@@ -191,15 +246,20 @@ class _SWTestPage extends State<SWTestPage> {
       testLevel = "TOEIC SW 200-250";
     }
 
-    // await practiceRepo.saveLRPracticeTestResult(
-    //   testId: widget.testId,
-    //   totalScore: totalScore,
-    //   testLevel: testLevel,
-    //   parts: partScores,
-    //   answers: answers,
-    // );
+    await practiceRepo.savePracticeTestResult(
+      testType: "SW_practice_tests",
+      testId: widget.testId,
+      itemIndex: widget.itemIndex,
+      totalScore: totalScore,
+      parts: partScores,
+      answers: answers,
+    );
 
     countdownTimer?.cancel(); // stop the clock
+
+    try {
+      await widget.onDone?.call();
+    } catch (_) {}
 
     showDialog(
       context: context,
@@ -310,15 +370,15 @@ class _SWTestPage extends State<SWTestPage> {
               ],
             ),
           ),
-          //   if (!showAnswers)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.check),
-              label: const Text('Submit All'),
-              onPressed: _submitAll,
+          if (!showAnswers)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check),
+                label: const Text('Submit All'),
+                onPressed: _submitAll,
+              ),
             ),
-          ),
         ],
       ),
     );

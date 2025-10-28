@@ -5,6 +5,7 @@ import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/services/speaking_api_service.dart';
 import 'package:final_project/services/supabase_service.dart';
 import 'package:final_project/widgets/audio_player_widget.dart';
+import 'package:final_project/widgets/network_audio_player_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class SWPracticePart1State extends State<SWPracticePart1> {
 
   final recorder = AudioRecorder();
   final player = AudioPlayer();
-  final _supabaseService = SupabaseService(bucket: "input_test_SW_recordings");
+  final _supabaseService = SupabaseService(
+    bucket: "practice_test_SW_recordings",
+  );
 
   final Map<String, String> _uploadedAudioUrls = {};
   final Map<String, String> _uploadedStoragePaths = {};
@@ -52,6 +55,15 @@ class SWPracticePart1State extends State<SWPracticePart1> {
   Map<String, GlobalKey<AudioPlayerWidgetState>> playerKeys = {};
   Map<String, String> requirements = {};
   Map<String, dynamic> evaluationResults = {};
+
+  // NEW: URL đã upload để phát lại khi review
+  final Map<String, String> remotePlayUrls = {};
+
+  // Player cho các file URL (đã upload)
+  final Map<String, AudioPlayer> _urlPlayers = {};
+
+  final Map<String, GlobalKey<NetworkAudioPlayerWidgetState>> netPlayerKeys =
+      {};
 
   // Public getters để SWTestPage có thể access
   Map<String, String> get getRecordings => recordings;
@@ -268,10 +280,28 @@ class SWPracticePart1State extends State<SWPracticePart1> {
     return remoteUrls;
   }
 
-  void showFeedbacksMode(Map<String, dynamic> results) async {
+  void showFeedbacksMode(dynamic results) async {
     await forceStopAll();
+
+    // results có thể là List (mỗi item có questionId) hoặc Map
+    final Map<String, dynamic> normalized = {};
+    if (results is List) {
+      for (final e in results) {
+        if (e is Map) {
+          final m = Map<String, dynamic>.from(e);
+          final qid = (m['questionId'] ?? m['id'] ?? m['qid'])?.toString();
+          if (qid != null) normalized[qid] = m;
+        }
+      }
+    } else if (results is Map) {
+      // Nếu là map đã có sẵn dạng {qid: {...}}
+      normalized.addAll(Map<String, dynamic>.from(results));
+    }
+
     setState(() {
-      evaluationResults = results;
+      evaluationResults = normalized;
+      isFinishedAll = true;
+      isStarted = true; // ✅ bỏ dialog Start khi review
     });
   }
 
@@ -334,12 +364,19 @@ class SWPracticePart1State extends State<SWPracticePart1> {
 
   /// Dừng tất cả audio players khác ngoại trừ currentQuestionId
   void _stopOtherAudios(String currentQuestionId) {
+    // Dừng local file players
     for (var entry in playerKeys.entries) {
       if (entry.key != currentQuestionId) {
-        final playerState = entry.value.currentState;
-        if (playerState != null) {
-          playerState.stopAudio();
-        }
+        final st = entry.value.currentState;
+        st?.stopAudio();
+      }
+    }
+
+    // Dừng network url players
+    for (var entry in netPlayerKeys.entries) {
+      if (entry.key != currentQuestionId) {
+        final st = entry.value.currentState;
+        st?.stopAudio();
       }
     }
   }
@@ -379,6 +416,11 @@ class SWPracticePart1State extends State<SWPracticePart1> {
     try {
       recorder.dispose();
     } catch (_) {}
+    for (final p in _urlPlayers.values) {
+      try {
+        p.dispose();
+      } catch (_) {}
+    }
     super.dispose();
   }
 
@@ -391,6 +433,42 @@ class SWPracticePart1State extends State<SWPracticePart1> {
       filePath: filePath,
       onStartPlaying: () => _stopOtherAudios(questionId),
     );
+  }
+
+  Widget _buildRecordedPlayer(String questionId) {
+    final url = remotePlayUrls[questionId];
+    if (url == null) return const SizedBox();
+
+    // Tạo key nếu chưa có
+    netPlayerKeys.putIfAbsent(
+      questionId,
+      () => GlobalKey<NetworkAudioPlayerWidgetState>(),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: NetworkAudioPlayerWidget(
+        key: netPlayerKeys[questionId],
+        url: url,
+        onStartPlaying: () => _stopOtherAudios(questionId),
+      ),
+    );
+  }
+
+  void loadSavedAnswers(Map<String, dynamic>? saved) {
+    if (saved == null || questions.isEmpty) return;
+
+    remotePlayUrls.clear();
+    saved.forEach((qid, v) {
+      if (v is String && v.startsWith('http')) {
+        remotePlayUrls[qid] = v; // URL đã upload lên Supabase
+      }
+    });
+
+    setState(() {
+      isFinishedAll = true; // review mode
+      isStarted = true; // ✅ bỏ dialog Start
+    });
   }
 
   @override
@@ -538,8 +616,10 @@ class SWPracticePart1State extends State<SWPracticePart1> {
                           ),
                         ),
                         if (recordings.containsKey(q.id))
-                          _buildRecordingPlayer(q.id),
-                        if (!recordings.containsKey(q.id))
+                          _buildRecordingPlayer(q.id)
+                        else if (remotePlayUrls.containsKey(q.id))
+                          _buildRecordedPlayer(q.id)
+                        else
                           const Padding(
                             padding: EdgeInsets.all(12.0),
                             child: Text(

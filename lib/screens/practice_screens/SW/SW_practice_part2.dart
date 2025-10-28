@@ -120,10 +120,24 @@ class SWPracticePart2State extends State<SWPracticePart2> {
     };
   }
 
-  void showFeedbacksMode(Map<String, dynamic> results) {
+  void showFeedbacksMode(dynamic results) {
+    final Map<String, dynamic> normalized = {};
+    if (results is List) {
+      for (final e in results) {
+        if (e is Map) {
+          final m = Map<String, dynamic>.from(e);
+          final qid = (m['questionId'] ?? m['id'] ?? m['qid'])?.toString();
+          if (qid != null) normalized[qid] = m;
+        }
+      }
+    } else if (results is Map) {
+      normalized.addAll(Map<String, dynamic>.from(results));
+    }
+
     setState(() {
       isFinishedAll = true;
-      evaluationResults = results;
+      isStarted = true; // ✅ bỏ dialog Start khi review
+      evaluationResults = normalized;
     });
   }
 
@@ -163,6 +177,25 @@ class SWPracticePart2State extends State<SWPracticePart2> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  void loadSavedAnswers(Map<String, dynamic>? saved) {
+    if (saved == null || saved.isEmpty || questions.isEmpty) return;
+
+    for (final q in questions) {
+      final txt = saved[q.id];
+      if (txt is String) {
+        final c = textControllers[q.id];
+        if (c != null) c.text = txt;
+        answers[q.id] = txt;
+      }
+    }
+
+    setState(() {
+      isStarted = true; // để hiện UI bài làm
+      isFinishedAll = true; // review mode
+      showAnswers = true;
+    });
   }
 
   @override

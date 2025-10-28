@@ -1,3 +1,4 @@
+import 'package:final_project/repositories/practice_test_repository.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_test.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,67 +11,196 @@ class SwPracticeTestPage extends StatefulWidget {
 }
 
 class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
+  final practiceRepo = PracticeTestRepository();
+
+  final db = FirebaseFirestore.instance;
+  String? practiceSetId;
+  List<Map<String, dynamic>> items = [];
+
   bool loading = true;
   List<_TestItem> tests = [];
+  List<Map<String, dynamic>> rawItems = [];
+
+  bool _resetting = false;
 
   @override
   void initState() {
     super.initState();
-    _loadAllTests();
+    _loadOrCreatePracticeSet();
   }
 
-  Future<void> _loadAllTests() async {
+  // Future<void> _loadAllTests() async {
+  //   setState(() => loading = true);
+  //   try {
+  //     final db = FirebaseFirestore.instance;
+  //     final snap = await db
+  //         .collection('practice_tests')
+  //         .doc('SW_practice_tests')
+  //         .collection('test_number')
+  //         .orderBy('order', descending: false)
+  //         .get();
+
+  //     // Giữ thứ tự ổn định theo createdAt (desc). Nếu thiếu createdAt, sẽ đứng cuối.
+  //     final items = <_TestItem>[];
+  //     for (final d in snap.docs) {
+  //       final data = d.data();
+  //       final title = (data['title'] ?? d.id).toString();
+  //       final parts = List<String>.from(data['parts'] ?? const []);
+  //       final timeLimit = (data['timeLimitMinutes'] is num)
+  //           ? (data['timeLimitMinutes'] as num).toInt()
+  //           : 80; // mặc định 120 phút nếu không có
+  //       final createdAt = data['createdAt']; // có thể là Timestamp hoặc null
+
+  //       items.add(
+  //         _TestItem(
+  //           id: d.id,
+  //           title: title,
+  //           parts: parts,
+  //           timeLimitMinutes: timeLimit,
+  //           createdAt: createdAt is Timestamp ? createdAt.toDate() : null,
+  //         ),
+  //       );
+  //     }
+
+  //     setState(() {
+  //       tests = items;
+  //       loading = false;
+  //     });
+  //   } catch (e) {
+  //     setState(() => loading = false);
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text('Lỗi tải danh sách đề: $e')));
+  //     }
+  //   }
+  // }
+
+  Future<void> _loadOrCreatePracticeSet() async {
     setState(() => loading = true);
     try {
-      final db = FirebaseFirestore.instance;
-      final snap = await db
-          .collection('practice_tests')
-          .doc('SW_practice_tests')
-          .collection('test_number')
-          .orderBy('order', descending: false)
-          .get();
+      final res = await practiceRepo.getLatestOrCreatePracticeSet(
+        'SW_practice_tests',
+      );
+      final data = res['data'] as Map<String, dynamic>;
+      final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
 
-      // Giữ thứ tự ổn định theo createdAt (desc). Nếu thiếu createdAt, sẽ đứng cuối.
-      final items = <_TestItem>[];
-      for (final d in snap.docs) {
-        final data = d.data();
-        final title = (data['title'] ?? d.id).toString();
-        final parts = List<String>.from(data['parts'] ?? const []);
-        final timeLimit = (data['timeLimitMinutes'] is num)
-            ? (data['timeLimitMinutes'] as num).toInt()
-            : 80; // mặc định 120 phút nếu không có
-        final createdAt = data['createdAt']; // có thể là Timestamp hoặc null
-
-        items.add(
-          _TestItem(
-            id: d.id,
-            title: title,
-            parts: parts,
-            timeLimitMinutes: timeLimit,
-            createdAt: createdAt is Timestamp ? createdAt.toDate() : null,
-          ),
+      // KHÔNG sort lại: thứ tự đã cố định khi tạo practice set
+      final mapped = raw.map((e) {
+        return _TestItem(
+          id: (e['testId'] ?? '').toString(),
+          title: (e['title'] ?? '').toString(),
+          parts: List<String>.from(e['parts'] ?? const []),
+          timeLimitMinutes: (e['timeLimitMinutes'] is num)
+              ? (e['timeLimitMinutes'] as num).toInt()
+              : 80,
+          createdAt: null, // không cần ở màn này
+          status: (e['status'] ?? 'todo').toString(),
         );
-      }
+      }).toList();
 
       setState(() {
-        tests = items;
+        practiceSetId = res['practiceSetId'] as String;
+        items = raw;
+        tests = mapped;
         loading = false;
       });
-    } catch (e) {
-      setState(() => loading = false);
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Lỗi tải danh sách đề: $e')));
-      }
+    } catch (_) {
+    } finally {
+      if (mounted) setState(() => loading = false);
     }
   }
 
-  void _openTest(String testId) {
+  Future<void> _markDone(int index) async {
+    if (practiceSetId == null) return;
+    await practiceRepo.markTestStatus(
+      testType: "SW_practice_tests",
+      practiceSetId: practiceSetId!,
+      itemIndex: index, // index theo thứ tự đã lưu → ổn định
+      status: 'done',
+    );
+    await _loadOrCreatePracticeSet(); // reload để cập nhật progress/status
+  }
+
+  void _openTest(String testId, int index) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => SWTestPage(testId: testId)),
+      MaterialPageRoute(
+        builder: (_) => SWTestPage(
+          testId: testId,
+          onDone: () async => _markDone(index),
+          itemIndex: index,
+        ),
+      ),
     );
+  }
+
+  Future<void> _confirmAndReset() async {
+    if (_resetting) return;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Reset practice tests?'),
+        content: const Text(
+          'Hành động này sẽ tạo một bộ đề luyện tập mới (practiceSetId mới). '
+          'Bộ cũ sẽ được giữ lại để xem lịch sử.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Create new set'),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+
+    setState(() => _resetting = true);
+    try {
+      final res = await practiceRepo.createFreshPracticeSet(
+        "SW_practice_tests",
+      );
+      final data = res['data'] as Map<String, dynamic>? ?? {};
+      final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
+
+      final mapped = raw.map((e) {
+        return _TestItem(
+          id: (e['testId'] ?? '').toString(),
+          title: (e['title'] ?? '').toString(),
+          parts: List<String>.from(e['parts'] ?? const []),
+          timeLimitMinutes: (e['timeLimitMinutes'] is num)
+              ? (e['timeLimitMinutes'] as num).toInt()
+              : 80,
+          createdAt: null,
+          status: (e['status'] ?? 'todo').toString(),
+        );
+      }).toList();
+
+      setState(() {
+        practiceSetId = res['practiceSetId'] as String;
+        items = raw;
+        tests = mapped;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã tạo bộ đề mới thành công')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Không tạo được bộ mới: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _resetting = false);
+    }
   }
 
   @override
@@ -84,10 +214,11 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
         backgroundColor: Colors.purple[50],
         elevation: 1,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadAllTests,
-            tooltip: 'Tải lại',
+          TextButton.icon(
+            onPressed: _confirmAndReset,
+            icon: const Icon(Icons.replay, color: Colors.white),
+            label: const Text('Reset', style: TextStyle(color: Colors.white)),
+            style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
           ),
         ],
       ),
@@ -144,6 +275,8 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
             ? 'parts: 2 (TOEIC SW)'
             : 'parts: ${it.parts.length}';
         final timeLabel = '${it.timeLimitMinutes} phút';
+        final status = (it.status);
+        final isDone = status == 'done';
 
         final created = it.createdAt != null
             ? ' • ${_formatDate(it.createdAt!)}'
@@ -167,12 +300,22 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
           subtitle: Text('$timeLabel • $partsLabel$created'),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: Colors.grey,
-          ),
-          onTap: () => _openTest(it.id),
+          trailing: isDone
+              ? const Text(
+                  'Done',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : const Text(
+                  'To-do',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+          onTap: () => _openTest(it.id, index),
         );
       },
     );
@@ -195,6 +338,7 @@ class _TestItem {
   final List<String> parts;
   final int timeLimitMinutes;
   final DateTime? createdAt;
+  final String status;
 
   _TestItem({
     required this.id,
@@ -202,5 +346,6 @@ class _TestItem {
     required this.parts,
     required this.timeLimitMinutes,
     required this.createdAt,
+    required this.status,
   });
 }

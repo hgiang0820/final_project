@@ -31,7 +31,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
     setState(() => loading = true);
 
     try {
-      final res = await practiceRepo.getLatestOrCreatePracticeSet();
+      final res = await practiceRepo.getLatestOrCreatePracticeSet("LR_practice_tests");
       final data = res['data'] as Map<String, dynamic>;
       final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
 
@@ -67,7 +67,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
 
   Future<void> _markDone(int index) async {
     if (practiceSetId == null) return;
-    await practiceRepo.markTestStatus(
+    await practiceRepo.markTestStatus(testType: "LR_practice_tests",
       practiceSetId: practiceSetId!,
       itemIndex: index, // index theo thứ tự đã lưu → ổn định
       status: 'done',
@@ -115,7 +115,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
 
     setState(() => _resetting = true);
     try {
-      final res = await practiceRepo.createFreshPracticeSet();
+      final res = await practiceRepo.createFreshPracticeSet("LR_practice_tests");
       final data = res['data'] as Map<String, dynamic>? ?? {};
       final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
 

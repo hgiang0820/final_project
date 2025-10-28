@@ -374,7 +374,8 @@ class FullSpeakPageState extends State<FullSpeakPage> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-            },            child: const Text("Cancel"),
+            },
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             onPressed: () {

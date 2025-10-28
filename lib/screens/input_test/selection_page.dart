@@ -1,6 +1,5 @@
 import 'package:final_project/seed/input_test/seed_input_SW.dart';
 import 'package:final_project/seed/study_materials/seed_LR_materials.dart';
-import 'package:final_project/seed/study_materials/seed_LR_practice_part1.dart';
 import 'package:final_project/seed/study_materials/seed_LR_practice_part2.dart';
 import 'package:flutter/material.dart';
 

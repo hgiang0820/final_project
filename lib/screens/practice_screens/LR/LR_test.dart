@@ -80,9 +80,9 @@ class _LRTestPage extends State<LRTestPage> {
 
   Future<void> checkShowAnswersMode() async {
   try {
-    final status = await practiceRepo.getTestStatus(itemIndex: widget.itemIndex);
+    final status = await practiceRepo.getTestStatus(itemIndex: widget.itemIndex, testType: "LR_practice_tests");
     if (status == 'done') {
-      final saved = await practiceRepo.getSavedResult(itemIndex: widget.itemIndex);
+      final saved = await practiceRepo.getSavedResult(itemIndex: widget.itemIndex, testType: "LR_practice_tests");
       final savedTotal = (saved?['totalScore'] ?? 0) as int;
       final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
 
@@ -276,7 +276,8 @@ class _LRTestPage extends State<LRTestPage> {
       testLevel = "TOEIC LR 600-650";
     }
 
-    await practiceRepo.saveLRPracticeTestResult(
+    await practiceRepo.savePracticeTestResult(
+      testType: "LR_practice_tests",
       testId: widget.testId,
       itemIndex: widget.itemIndex,
       totalScore: totalScore,
@@ -333,7 +334,7 @@ class _LRTestPage extends State<LRTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Quick Test L&R'),
+            const Text('TOEIC Listening & Reading Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),
