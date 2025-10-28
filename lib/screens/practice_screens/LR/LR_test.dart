@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:final_project/repositories/input_test_repository.dart';
+import 'package:final_project/repositories/practice_test_repository.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part1.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part2.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part3.dart';
@@ -8,19 +9,26 @@ import 'package:final_project/screens/practice_screens/LR/LR_practice_part5.dart
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part6.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part7.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/widgets/small_button.dart';
 
 class LRTestPage extends StatefulWidget {
   final String testId;
-  const LRTestPage({super.key, required this.testId});
+  final Future<void> Function()? onDone;
+  final int itemIndex;
+
+  const LRTestPage({
+    super.key,
+    required this.testId,
+    this.onDone,
+    required this.itemIndex,
+  });
 
   @override
   State<LRTestPage> createState() => _LRTestPage();
 }
 
 class _LRTestPage extends State<LRTestPage> {
-  final resultRepo = ResultRepository();
+  final practiceRepo = PracticeTestRepository();
   final testRepo = InputTestRepository();
 
   final part1Key = GlobalKey<LRPracticePart1State>();
@@ -50,6 +58,7 @@ class _LRTestPage extends State<LRTestPage> {
 
   @override
   void initState() {
+    checkShowAnswersMode();
     super.initState();
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds == 0) {
@@ -68,6 +77,63 @@ class _LRTestPage extends State<LRTestPage> {
     countdownTimer?.cancel();
     super.dispose();
   }
+
+  Future<void> checkShowAnswersMode() async {
+  try {
+    final status = await practiceRepo.getTestStatus(itemIndex: widget.itemIndex);
+    if (status == 'done') {
+      final saved = await practiceRepo.getSavedResult(itemIndex: widget.itemIndex);
+      final savedTotal = (saved?['totalScore'] ?? 0) as int;
+      final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
+
+      // Gán state tổng
+      setState(() {
+        showAnswers = true;
+        totalScore = savedTotal;
+        answers = savedAnswers; // có key part1..part7
+        remainingSeconds = 0;
+      });
+
+      // Dừng đồng hồ
+      countdownTimer?.cancel();
+
+      // Bật chế độ hiển thị đáp án
+      part1Key.currentState?.showAnswersMode();
+      part2Key.currentState?.showAnswersMode();
+      part3Key.currentState?.showAnswersMode();
+      part4Key.currentState?.showAnswersMode();
+      part5Key.currentState?.showAnswersMode();
+      part6Key.currentState?.showAnswersMode();
+      part7Key.currentState?.showAnswersMode();
+
+      // NẠP lại các lựa chọn đã chọn trước đó (map questionId -> selectedIndex)
+      part1Key.currentState?.loadSavedAnswers(
+        savedAnswers['part1'] == null ? null : Map<String, dynamic>.from(savedAnswers['part1']),
+      );
+      part2Key.currentState?.loadSavedAnswers(
+        savedAnswers['part2'] == null ? null : Map<String, dynamic>.from(savedAnswers['part2']),
+      );
+      part3Key.currentState?.loadSavedAnswers(
+        savedAnswers['part3'] == null ? null : Map<String, dynamic>.from(savedAnswers['part3']),
+      );
+      part4Key.currentState?.loadSavedAnswers(
+        savedAnswers['part4'] == null ? null : Map<String, dynamic>.from(savedAnswers['part4']),
+      );
+      part5Key.currentState?.loadSavedAnswers(
+        savedAnswers['part5'] == null ? null : Map<String, dynamic>.from(savedAnswers['part5']),
+      );
+      part6Key.currentState?.loadSavedAnswers(
+        savedAnswers['part6'] == null ? null : Map<String, dynamic>.from(savedAnswers['part6']),
+      );
+      part7Key.currentState?.loadSavedAnswers(
+        savedAnswers['part7'] == null ? null : Map<String, dynamic>.from(savedAnswers['part7']),
+      );
+    }
+  } catch (_) {
+    // ignore errors
+  }
+}
+
 
   Future<void> _submitAll() async {
     final result1 = part1Key.currentState?.getResult();
@@ -210,17 +276,19 @@ class _LRTestPage extends State<LRTestPage> {
       testLevel = "TOEIC LR 600-650";
     }
 
-    await resultRepo.savePracticeTestResult(
+    await practiceRepo.saveLRPracticeTestResult(
       testId: widget.testId,
+      itemIndex: widget.itemIndex,
       totalScore: totalScore,
-      testLevel: testLevel,
       parts: partScores,
       answers: answers,
-      strongPoints: strongPoints,
-      weakPoints: weakPoints,
     );
 
     countdownTimer?.cancel(); // stop the clock
+
+    try {
+      await widget.onDone?.call();
+    } catch (_) {}
 
     // final weakPointsStr = weakPoints
     //     .where((e) => e.trim().isNotEmpty)

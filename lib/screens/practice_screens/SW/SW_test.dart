@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:final_project/repositories/result_repository.dart';
+import 'package:final_project/repositories/practice_test_repository.dart';
 import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_practice_part1.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_practice_part2.dart';
@@ -17,7 +17,7 @@ class SWTestPage extends StatefulWidget {
 }
 
 class _SWTestPage extends State<SWTestPage> {
-  final resultRepo = ResultRepository();
+  final practiceRepo = PracticeTestRepository();
   final testRepo = InputTestRepository();
 
   final part1Key = GlobalKey<SWPracticePart1State>();
@@ -191,15 +191,13 @@ class _SWTestPage extends State<SWTestPage> {
       testLevel = "TOEIC SW 200-250";
     }
 
-    await resultRepo.savePracticeTestResult(
-      testId: widget.testId,
-      totalScore: totalScore,
-      testLevel: testLevel,
-      parts: partScores,
-      answers: answers,
-      strongPoints: strongPoints,
-      weakPoints: weakPoints,
-    );
+    // await practiceRepo.saveLRPracticeTestResult(
+    //   testId: widget.testId,
+    //   totalScore: totalScore,
+    //   testLevel: testLevel,
+    //   parts: partScores,
+    //   answers: answers,
+    // );
 
     countdownTimer?.cancel(); // stop the clock
 

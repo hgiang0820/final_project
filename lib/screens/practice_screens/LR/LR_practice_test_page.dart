@@ -1,3 +1,4 @@
+import 'package:final_project/repositories/practice_test_repository.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_test.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,50 +11,48 @@ class LrPracticeTestPage extends StatefulWidget {
 }
 
 class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
+  final practiceRepo = PracticeTestRepository();
+  final db = FirebaseFirestore.instance;
+
+  String? practiceSetId;
+  List<Map<String, dynamic>> items = [];
   bool loading = true;
   List<_TestItem> tests = [];
+
+  bool _resetting = false;
 
   @override
   void initState() {
     super.initState();
-    _loadAllTests();
+    _loadOrCreatePracticeSet();
   }
 
-  Future<void> _loadAllTests() async {
+  Future<void> _loadOrCreatePracticeSet() async {
     setState(() => loading = true);
+
     try {
-      final db = FirebaseFirestore.instance;
-      final snap = await db
-          .collection('practice_tests')
-          .doc('LR_practice_tests')
-          .collection('test_number')
-          .orderBy('order', descending: false)
-          .get();
+      final res = await practiceRepo.getLatestOrCreatePracticeSet();
+      final data = res['data'] as Map<String, dynamic>;
+      final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
 
-      // Giữ thứ tự ổn định theo createdAt (desc). Nếu thiếu createdAt, sẽ đứng cuối.
-      final items = <_TestItem>[];
-      for (final d in snap.docs) {
-        final data = d.data();
-        final title = (data['title'] ?? d.id).toString();
-        final parts = List<String>.from(data['parts'] ?? const []);
-        final timeLimit = (data['timeLimitMinutes'] is num)
-            ? (data['timeLimitMinutes'] as num).toInt()
-            : 120; // mặc định 120 phút nếu không có
-        final createdAt = data['createdAt']; // có thể là Timestamp hoặc null
-
-        items.add(
-          _TestItem(
-            id: d.id,
-            title: title,
-            parts: parts,
-            timeLimitMinutes: timeLimit,
-            createdAt: createdAt is Timestamp ? createdAt.toDate() : null,
-          ),
+      // KHÔNG sort lại: thứ tự đã cố định khi tạo practice set
+      final mapped = raw.map((e) {
+        return _TestItem(
+          id: (e['testId'] ?? '').toString(),
+          title: (e['title'] ?? '').toString(),
+          parts: List<String>.from(e['parts'] ?? const []),
+          timeLimitMinutes: (e['timeLimitMinutes'] is num)
+              ? (e['timeLimitMinutes'] as num).toInt()
+              : 120,
+          createdAt: null, // không cần ở màn này
+          status: (e['status'] ?? 'todo').toString(),
         );
-      }
+      }).toList();
 
       setState(() {
-        tests = items;
+        practiceSetId = res['practiceSetId'] as String;
+        items = raw;
+        tests = mapped;
         loading = false;
       });
     } catch (e) {
@@ -61,16 +60,98 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Lỗi tải danh sách đề: $e')));
+        ).showSnackBar(SnackBar(content: Text('Lỗi tải practice set: $e')));
       }
     }
   }
 
-  void _openTest(String testId) {
+  Future<void> _markDone(int index) async {
+    if (practiceSetId == null) return;
+    await practiceRepo.markTestStatus(
+      practiceSetId: practiceSetId!,
+      itemIndex: index, // index theo thứ tự đã lưu → ổn định
+      status: 'done',
+    );
+    await _loadOrCreatePracticeSet(); // reload để cập nhật progress/status
+  }
+
+  void _openTest(String testId, int index) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => LRTestPage(testId: testId)),
+      MaterialPageRoute(
+        builder: (_) => LRTestPage(
+          testId: testId,
+          onDone: () async => _markDone(index),
+          itemIndex: index,
+        ),
+      ),
     );
+  }
+
+  Future<void> _confirmAndReset() async {
+    if (_resetting) return;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Reset practice tests?'),
+        content: const Text(
+          'Hành động này sẽ tạo một bộ đề luyện tập mới (practiceSetId mới). '
+          'Bộ cũ sẽ được giữ lại để xem lịch sử.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Create new set'),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+
+    setState(() => _resetting = true);
+    try {
+      final res = await practiceRepo.createFreshPracticeSet();
+      final data = res['data'] as Map<String, dynamic>? ?? {};
+      final raw = List<Map<String, dynamic>>.from(data['items'] ?? []);
+
+      final mapped = raw.map((e) {
+        return _TestItem(
+          id: (e['testId'] ?? '').toString(),
+          title: (e['title'] ?? '').toString(),
+          parts: List<String>.from(e['parts'] ?? const []),
+          timeLimitMinutes: (e['timeLimitMinutes'] is num)
+              ? (e['timeLimitMinutes'] as num).toInt()
+              : 120,
+          createdAt: null,
+          status: (e['status'] ?? 'todo').toString(),
+        );
+      }).toList();
+
+      setState(() {
+        practiceSetId = res['practiceSetId'] as String;
+        items = raw;
+        tests = mapped;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã tạo bộ đề mới thành công')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Không tạo được bộ mới: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _resetting = false);
+    }
   }
 
   @override
@@ -84,10 +165,11 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
         backgroundColor: Colors.purple[50],
         elevation: 1,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadAllTests,
-            tooltip: 'Tải lại',
+          TextButton.icon(
+            onPressed: _confirmAndReset,
+            icon: const Icon(Icons.replay, color: Colors.white),
+            label: const Text('Reset', style: TextStyle(color: Colors.white)),
+            style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
           ),
         ],
       ),
@@ -136,18 +218,13 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
       itemBuilder: (context, index) {
         final it = tests[index];
 
-        // số thứ tự ổn định theo vị trí hiển thị
         final orderLabel = (index + 1).toString().padLeft(2, '0');
-
-        // hiển thị meta: thời gian & số part
         final partsLabel = it.parts.isEmpty
             ? 'parts: 7 (TOEIC LR)'
             : 'parts: ${it.parts.length}';
         final timeLabel = '${it.timeLimitMinutes} phút';
-
-        final created = it.createdAt != null
-            ? ' • ${_formatDate(it.createdAt!)}'
-            : '';
+        final status = (it.status);
+        final isDone = status == 'done';
 
         return ListTile(
           leading: CircleAvatar(
@@ -166,28 +243,30 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
             it.title,
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
-          subtitle: Text('$timeLabel • $partsLabel$created'),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: Colors.grey,
-          ),
-          onTap: () => _openTest(it.id),
+          subtitle: Text('$timeLabel • $partsLabel'),
+          trailing: isDone
+              ? const Text(
+                  'Done',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : const Text(
+                  'To-do',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+          onTap: () => _openTest(it.id, index),
+          // onLongPress: () =>
+          //     _markDone(index), // tiện đánh dấu done nhanh (tuỳ chọn)
         );
       },
     );
   }
-
-  String _formatDate(DateTime dt) {
-    // dd/MM/yyyy
-    final d = dt.day.toString().padLeft(2, '0');
-    final m = dt.month.toString().padLeft(2, '0');
-    final y = dt.year.toString();
-    return '$d/$m/$y';
-  }
 }
-
-class LRTest {}
 
 class _TestItem {
   final String id;
@@ -195,6 +274,7 @@ class _TestItem {
   final List<String> parts;
   final int timeLimitMinutes;
   final DateTime? createdAt;
+  final String status;
 
   _TestItem({
     required this.id,
@@ -202,5 +282,6 @@ class _TestItem {
     required this.parts,
     required this.timeLimitMinutes,
     required this.createdAt,
+    required this.status,
   });
 }

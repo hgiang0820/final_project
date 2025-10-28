@@ -65,6 +65,30 @@ class LRPracticePart5State extends State<LRPracticePart5> {
     });
   }
 
+  void loadSavedAnswers(Map<String, dynamic>? saved) {
+  if (saved == null || questions.isEmpty) return;
+
+  // saved: { "<questionId>": <selectedIndex>, ... }
+  final newAnswers = List<int?>.filled(questions.length, null);
+  for (int i = 0; i < questions.length; i++) {
+    final qid = questions[i].id;
+    final sel = saved[qid];
+    if (sel is int) {
+      newAnswers[i] = sel;
+    } else if (sel is num) {
+      newAnswers[i] = sel.toInt();
+    }
+  }
+
+  if (!mounted) return;
+  setState(() {
+    answers = newAnswers;     // gắn lại lựa chọn
+    showAnswers = true;       // đang ở chế độ xem đáp án
+    correctCount = _calculateScore(); // tính lại điểm của part để hiển thị
+  });
+}
+
+
   @override
   Widget build(BuildContext context) {
     if (questions.isEmpty) {
