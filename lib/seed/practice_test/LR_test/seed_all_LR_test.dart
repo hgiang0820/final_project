@@ -10,14 +10,14 @@ import 'package:final_project/seed/practice_test/LR_test/seed_LR_test_09.dart';
 import 'package:final_project/seed/practice_test/LR_test/seed_LR_test_10.dart';
 
 Future<void> seedAllLRTest() async {
-  seedLRTest01();
-  seedLRTest02();
-  seedLRTest03();
-  seedLRTest04();
-  seedLRTest05();
-  seedLRTest06();
-  seedLRTest07();
-  seedLRTest08();
-  seedLRTest09();
-  seedLRTest10();
+  await seedLRTest01();
+  await seedLRTest02();
+  await seedLRTest03();
+  await seedLRTest04();
+  await seedLRTest05();
+  await seedLRTest06();
+  await seedLRTest07();
+  await seedLRTest08();
+  await seedLRTest09();
+  await seedLRTest10();
 }

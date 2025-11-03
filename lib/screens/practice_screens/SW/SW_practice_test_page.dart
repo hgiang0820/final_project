@@ -29,53 +29,6 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
     _loadOrCreatePracticeSet();
   }
 
-  // Future<void> _loadAllTests() async {
-  //   setState(() => loading = true);
-  //   try {
-  //     final db = FirebaseFirestore.instance;
-  //     final snap = await db
-  //         .collection('practice_tests')
-  //         .doc('SW_practice_tests')
-  //         .collection('test_number')
-  //         .orderBy('order', descending: false)
-  //         .get();
-
-  //     // Giữ thứ tự ổn định theo createdAt (desc). Nếu thiếu createdAt, sẽ đứng cuối.
-  //     final items = <_TestItem>[];
-  //     for (final d in snap.docs) {
-  //       final data = d.data();
-  //       final title = (data['title'] ?? d.id).toString();
-  //       final parts = List<String>.from(data['parts'] ?? const []);
-  //       final timeLimit = (data['timeLimitMinutes'] is num)
-  //           ? (data['timeLimitMinutes'] as num).toInt()
-  //           : 80; // mặc định 120 phút nếu không có
-  //       final createdAt = data['createdAt']; // có thể là Timestamp hoặc null
-
-  //       items.add(
-  //         _TestItem(
-  //           id: d.id,
-  //           title: title,
-  //           parts: parts,
-  //           timeLimitMinutes: timeLimit,
-  //           createdAt: createdAt is Timestamp ? createdAt.toDate() : null,
-  //         ),
-  //       );
-  //     }
-
-  //     setState(() {
-  //       tests = items;
-  //       loading = false;
-  //     });
-  //   } catch (e) {
-  //     setState(() => loading = false);
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(
-  //         context,
-  //       ).showSnackBar(SnackBar(content: Text('Lỗi tải danh sách đề: $e')));
-  //     }
-  //   }
-  // }
-
   Future<void> _loadOrCreatePracticeSet() async {
     setState(() => loading = true);
     try {
