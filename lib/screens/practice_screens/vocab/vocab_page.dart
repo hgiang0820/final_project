@@ -1,4 +1,5 @@
 import 'package:final_project/repositories/vocab_repository.dart';
+import 'package:final_project/screens/practice_screens/vocab/vocab_flashcards_page.dart';
 import 'package:final_project/screens/practice_screens/vocab/vocab_practice_page.dart';
 import 'package:final_project/screens/study_screens/pdf_viewer_page.dart';
 import 'package:flutter/material.dart';
@@ -348,7 +349,16 @@ class _VocabPageState extends State<VocabPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () => _openPractice(it.id, index),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => VocabFlashcardsPage(
+                              levelId: widget.levelId,
+                              topicId: it.id,
+                              topicName: it.topicName,
+                            ),
+                          ),
+                        ),
                         icon: const Icon(Icons.flash_on),
                         label: const Text('Flashcards'),
                       ),

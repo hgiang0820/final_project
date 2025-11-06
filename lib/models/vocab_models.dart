@@ -39,3 +39,37 @@ class VocabQuestion {
     this.audioUrl,
   });
 }
+
+class VocabCard {
+  final String id;
+  final String word;
+  final String phonetic;
+  final String meaningVi;
+  final String exampleEn;
+  final String exampleVi;
+  final String status;
+
+  const VocabCard({
+    required this.id,
+    required this.word,
+    required this.phonetic,
+    required this.meaningVi,
+    required this.exampleEn,
+    required this.exampleVi,
+    this.status = 'todo',
+  });
+
+  bool get isLearned => status == 'learned';
+
+  VocabCard copyWith({String? statusOverride}) {
+    return VocabCard(
+      id: id,
+      word: word,
+      phonetic: phonetic,
+      meaningVi: meaningVi,
+      exampleEn: exampleEn,
+      exampleVi: exampleVi,
+      status: statusOverride ?? status,
+    );
+  }
+}

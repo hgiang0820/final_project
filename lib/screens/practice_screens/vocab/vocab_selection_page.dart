@@ -9,10 +9,7 @@ class VocabSelectionPage extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => VocabPage(
-          levelId: levelId,
-          levelLabel: label,
-        ),
+        builder: (_) => VocabPage(levelId: levelId, levelLabel: label),
       ),
     );
   }

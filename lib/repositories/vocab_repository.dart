@@ -9,36 +9,6 @@ class VocabRepository {
   final _auth = FirebaseAuth.instance;
   final String _bucket = 'vocab_practice';
 
-  // Future<List<VocabTopic>> getVocabTopics({required String levelId}) async {
-  //   final q = await _db
-  //       .collection('vocab_practice')
-  //       .doc(levelId)
-  //       .collection('vocab_topics')
-  //       .orderBy('order', descending: false) // bạn có thể bỏ nếu không dùng
-  //       .get();
-
-  //   return q.docs
-  //       .map(
-  //         (d) => _topicFromData(levelId: levelId, docId: d.id, data: d.data()),
-  //       )
-  //       .toList();
-  // }
-
-  // Future<VocabTopic?> getVocabTopic({
-  //   required String levelId,
-  //   required String topicId,
-  // }) async {
-  //   final doc = await _db
-  //       .collection('vocab_practice')
-  //       .doc(levelId)
-  //       .collection('vocab_topics')
-  //       .doc(topicId)
-  //       .get();
-  //   final data = doc.data();
-  //   if (!doc.exists || data == null) return null;
-  //   return _topicFromData(levelId: levelId, docId: doc.id, data: data);
-  // }
-
   Future<List<VocabQuestion>> getVocabQuestions({
     required String levelId,
     required String topicId,
@@ -52,7 +22,7 @@ class VocabRepository {
         .orderBy('order', descending: false)
         .get();
 
-    print(snap.docs.length);
+    // print(snap.docs.length);
 
     return snap.docs.map((doc) {
       final data = doc.data();
@@ -71,29 +41,34 @@ class VocabRepository {
     }).toList();
   }
 
+  Future<List<VocabCard>> getVocabCards({
+    required String levelId,
+    required String topicId,
+  }) async {
+    final snap = await _db
+        .collection('vocab_cards')
+        .doc(levelId)
+        .collection('vocab_topics')
+        .doc(topicId)
+        .collection('cards')
+        .orderBy(FieldPath.documentId)
+        .get();
+    return snap.docs.map((doc) {
+      final data = doc.data();
+      return VocabCard(
+        id: doc.id,
+        word: (data['word'] ?? '').toString(),
+        phonetic: (data['phonetic'] ?? '').toString(),
+        meaningVi: (data['meaningVi'] ?? '').toString(),
+        exampleEn: (data['exampleEn'] ?? '').toString(),
+        exampleVi: (data['exampleVi'] ?? '').toString(),
+      );
+    }).toList();
+  }
+
   String publicPdfUrl(String storagePath) {
     return _publicUrlOrNull(storagePath) ?? '';
   }
-
-  // VocabTopic _topicFromData({
-  //   required String levelId,
-  //   required String docId,
-  //   required Map<String, dynamic> data,
-  // }) {
-  //   final rawPdfPath = data['pdfPath'] as String? ?? '';
-  //   final pdfPath = rawPdfPath.isEmpty ? null : rawPdfPath;
-  //   return VocabTopic(
-  //     id: docId,
-  //     levelId: levelId,
-  //     topicName: (data['topicName'] ?? docId).toString(),
-  //     order: (data['order'] is num) ? (data['order'] as num).toInt() : 0,
-  //     questionCount: (data['questionCount'] is num)
-  //         ? (data['questionCount'] as num).toInt()
-  //         : 0,
-  //     pdfPath: pdfPath,
-  //     pdfUrl: _publicUrlOrNull(pdfPath),
-  //   );
-  // }
 
   String? _publicUrlOrNull(dynamic path) {
     if (path == null) return null;
