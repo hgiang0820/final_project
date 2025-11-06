@@ -62,7 +62,7 @@ class _VocabPracticePageState extends State<VocabPracticePage> {
         levelId: widget.levelId,
         topicId: widget.topicId,
       );
-      final statusFuture = vocabRepo.getStatus(
+      final statusFuture = vocabRepo.getVocabPracticeStatus(
         itemIndex: widget.itemIndex,
         levelId: widget.levelId,
       );
@@ -118,14 +118,6 @@ class _VocabPracticePageState extends State<VocabPracticePage> {
 
   Future<void> _submit() async {
     if (_submitted || _saving) return;
-    // if (_answers.any((element) => element == null)) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Vui lòng trả lời tất cả câu hỏi trước khi nộp bài.'),
-    //     ),
-    //   );
-    //   return;
-    // }
     var score = 0;
     for (var i = 0; i < _questions.length; i++) {
       if (_answers[i] == _questions[i].correctIndex) score++;

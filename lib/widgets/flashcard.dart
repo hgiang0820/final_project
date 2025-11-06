@@ -22,6 +22,14 @@ class Flashcard extends StatefulWidget {
 class _FlashcardState extends State<Flashcard> {
   bool _showFront = true;
 
+  @override
+  void didUpdateWidget(covariant Flashcard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.card.id != widget.card.id) {
+      _showFront = true; // reset về mặt trước khi đổi card mới
+    }
+  }
+
   void _toggleFace() => setState(() => _showFront = !_showFront);
 
   @override
@@ -52,8 +60,18 @@ class _FlashcardState extends State<Flashcard> {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 220),
               child: _showFront
-                  ? _Front(card: widget.card, width: widget.width, height: widget.height, key: const ValueKey('front'))
-                  : _Back(card: widget.card, width: widget.width, height: widget.height, key: const ValueKey('back')),
+                  ? _Front(
+                      card: widget.card,
+                      width: widget.width,
+                      height: widget.height,
+                      key: const ValueKey('front'),
+                    )
+                  : _Back(
+                      card: widget.card,
+                      width: widget.width,
+                      height: widget.height,
+                      key: const ValueKey('back'),
+                    ),
             ),
           ),
         ),
@@ -117,7 +135,8 @@ class _Front extends StatelessWidget {
             Text(
               card.word,
               textAlign: TextAlign.center,
-              style: theme.textTheme.headlineMedium?.copyWith(
+              style:
+                  theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.deepPurple.shade700,
                   ) ??
@@ -132,7 +151,8 @@ class _Front extends StatelessWidget {
               Text(
                 card.phonetic,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium?.copyWith(
+                style:
+                    theme.textTheme.titleMedium?.copyWith(
                       color: Colors.deepPurple.shade300,
                       fontStyle: FontStyle.italic,
                     ) ??
@@ -179,7 +199,8 @@ class _Back extends StatelessWidget {
           children: [
             Text(
               'Nghĩa tiếng Việt',
-              style: theme.textTheme.titleMedium?.copyWith(
+              style:
+                  theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.deepPurple.shade700,
                   ) ??
@@ -193,7 +214,8 @@ class _Back extends StatelessWidget {
             Text(
               card.meaningVi,
               textAlign: TextAlign.center,
-              style: theme.textTheme.headlineSmall?.copyWith(
+              style:
+                  theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.deepPurple.shade900,
                   ) ??
@@ -206,7 +228,8 @@ class _Back extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Ví dụ',
-              style: theme.textTheme.titleMedium?.copyWith(
+              style:
+                  theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.deepPurple.shade700,
                   ) ??
@@ -220,7 +243,8 @@ class _Back extends StatelessWidget {
             Text(
               card.exampleEn,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
+              style:
+                  theme.textTheme.bodyLarge?.copyWith(
                     fontSize: 16,
                     height: 1.4,
                   ) ??
@@ -230,7 +254,8 @@ class _Back extends StatelessWidget {
             Text(
               card.exampleVi,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
+              style:
+                  theme.textTheme.bodyLarge?.copyWith(
                     fontSize: 16,
                     color: Colors.deepPurple.shade500,
                     height: 1.4,

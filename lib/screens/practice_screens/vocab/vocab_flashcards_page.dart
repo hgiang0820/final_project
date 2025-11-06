@@ -7,12 +7,16 @@ class VocabFlashcardsPage extends StatefulWidget {
   final String levelId;
   final String topicId;
   final String topicName;
+  final Future<void> Function()? onDone;
+  final int cardIndex;
 
   const VocabFlashcardsPage({
     super.key,
     required this.levelId,
     required this.topicId,
     required this.topicName,
+    this.onDone,
+    required this.cardIndex,
   });
 
   @override
@@ -28,6 +32,8 @@ class _VocabFlashcardsPageState extends State<VocabFlashcardsPage> {
 
   bool _loading = true;
   String? _error;
+
+  bool _markedDone = false;
 
   VocabCard? get _currentCard => _queue.isEmpty ? null : _cards[_queue.first];
 
@@ -78,7 +84,7 @@ class _VocabFlashcardsPageState extends State<VocabFlashcardsPage> {
       builder: (context) => AlertDialog(
         title: const Text('Hướng dẫn'),
         content: const Text(
-          '• Nhấn để lật thẻ\n• Vuốt phải: đã thuộc\n• Vuốt trái: cần học lại\n• Reset: học lại toàn bộ từ vựng',
+          '• Nhấn để lật thẻ\n• Vuốt phải: đã thuộc\n• Vuốt trái: cần học lại\n• Reset: học lại toàn bộ từ vựng\n*** LƯU Ý: Chỉ khi bạn học hết tất cả thẻ thì chủ đề mới được đánh dấu là hoàn thành',
         ),
         actions: [
           TextButton(
@@ -169,6 +175,22 @@ class _VocabFlashcardsPageState extends State<VocabFlashcardsPage> {
       );
     }
     if (current == null) {
+      // Mark DONE 1 lần khi hoàn thành
+      if (!_markedDone) {
+        _markedDone = true;
+        // Gọi repo để set status='done' cho cardIndex hiện tại, dựa trên practice set mới nhất
+        _vocabRepo
+            .markVocabCardStatusLatest(
+              levelId: widget.levelId,
+              cardIndex: widget.cardIndex,
+              status: 'done',
+            )
+            .then((_) async {
+              try {
+                await widget.onDone?.call(); // cho VocabPage reload
+              } catch (_) {}
+            });
+      }
       return _buildCompletedView();
     }
 

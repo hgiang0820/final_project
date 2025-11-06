@@ -80,6 +80,7 @@ class VocabRepository {
 
   Future<String> createNewVocabPracticeSetId({
     required List<Map<String, dynamic>> items,
+    required List<Map<String, dynamic>> cards,
     required String levelId, // 'easy' | 'medium' | 'hard'
   }) async {
     final uid = _auth.currentUser!.uid;
@@ -93,8 +94,10 @@ class VocabRepository {
 
     await vocabPracticeSetId.set({
       'items': items, // mảng câu / đề
+      'cards': cards,
       'createdAt': FieldValue.serverTimestamp(),
-      'progress': {'done': 0, 'total': items.length},
+      'progress_items': {'done': 0, 'total': items.length},
+      'progress_cards': {'done': 0, 'total': cards.length},
     }, SetOptions(merge: true));
 
     return vocabPracticeSetId.id;
@@ -104,8 +107,10 @@ class VocabRepository {
     String levelId,
   ) async {
     final items = await _fetchVocabPracticeItems(levelId);
+    final cards = await _fetchVocabCards(levelId);
     final newId = await createNewVocabPracticeSetId(
       items: items,
+      cards: cards,
       levelId: levelId,
     );
 
@@ -182,7 +187,7 @@ class VocabRepository {
   }
 
   /// Đánh dấu 1 đề thành done/todo bằng index trong mảng items.
-  Future<void> markStatus({
+  Future<void> markVocabPracticeStatus({
     required String levelId,
     required String vocabPracticeSetId,
     required int itemIndex,
@@ -211,12 +216,12 @@ class VocabRepository {
 
     await docRef.set({
       'items': items,
-      'progress': {'done': done, 'total': total},
+      'progress_items': {'done': done, 'total': total},
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
 
-  Future<String?> getStatus({
+  Future<String?> getVocabPracticeStatus({
     required int itemIndex,
     required String levelId,
   }) async {
@@ -240,6 +245,81 @@ class VocabRepository {
     if (itemIndex < 0 || itemIndex >= items.length) return null;
 
     return (items[itemIndex]['status'] as String?) ?? 'todo';
+  }
+
+  Future<void> markVocabCardStatus({
+    required String levelId,
+    required String vocabPracticeSetId,
+    required int cardIndex,
+    required String status, // 'done' | 'todo'
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final docRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('vocab_practice_results')
+        .doc(levelId)
+        .collection('vocab_practice_sets')
+        .doc(vocabPracticeSetId);
+    final snap = await docRef.get();
+    if (!snap.exists) return;
+
+    final data = snap.data() ?? <String, dynamic>{};
+    final cards = List<Map<String, dynamic>>.from(data['cards'] ?? []);
+    if (cardIndex < 0 || cardIndex >= cards.length) return;
+
+    cards[cardIndex]['status'] = status;
+
+    // cập nhật progress
+    final done = cards.where((e) => e['status'] == 'done').length;
+    final total = cards.length;
+
+    await docRef.set({
+      'cards': cards,
+      'progress_cards': {'done': done, 'total': total},
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> markVocabCardStatusLatest({
+    required String levelId,
+    required int cardIndex,
+    required String status, // 'done' | 'todo'
+  }) async {
+    final latest = await getLatestOrCreateVocabPracticeSet(levelId);
+    final vocabPracticeSetId = latest['vocabPracticeSetId'] as String;
+    await markVocabCardStatus(
+      levelId: levelId,
+      vocabPracticeSetId: vocabPracticeSetId,
+      cardIndex: cardIndex,
+      status: status,
+    );
+  }
+
+  Future<String?> getVocabCardStatus({
+    required int cardIndex,
+    required String levelId,
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final vocabPracticeSet = await getLatestOrCreateVocabPracticeSet(levelId);
+    final vocabPracticeSetId = vocabPracticeSet['vocabPracticeSetId'] as String;
+
+    final docRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('vocab_practice_results')
+        .doc(levelId)
+        .collection('vocab_practice_sets')
+        .doc(vocabPracticeSetId);
+
+    final snap = await docRef.get();
+    if (!snap.exists) return null;
+
+    final data = snap.data() ?? <String, dynamic>{};
+    final cards = List<Map<String, dynamic>>.from(data['cards'] ?? []);
+    if (cardIndex < 0 || cardIndex >= cards.length) return null;
+
+    return (cards[cardIndex]['status'] as String?) ?? 'todo';
   }
 
   Future<Map<String, dynamic>?> getSavedResult({
@@ -303,6 +383,34 @@ class VocabRepository {
     return items;
   }
 
+  Future<List<Map<String, dynamic>>> _fetchVocabCards(String levelId) async {
+    final snap = await _db
+        .collection('vocab_practice')
+        .doc(levelId)
+        .collection('vocab_topics')
+        .orderBy('order', descending: false)
+        .get();
+
+    final List<Map<String, dynamic>> cards = [];
+    for (int i = 0; i < snap.docs.length; i++) {
+      final d = snap.docs[i];
+      final data = d.data();
+      cards.add({
+        'topicId': d.id,
+        'levelId': levelId,
+        'topicName': (data['topicName'] ?? d.id).toString(),
+        'order': data['order'] ?? i, // đảm bảo thứ tự ổn định
+        // 'questionCount': (data['questionCount'] is num)
+        //     ? (data['questionCount'] as num).toInt()
+        //     : 0,
+        // 'pdfPath': (data['pdfPath'] ?? '').toString(),
+        // 'pdfUrl': _publicUrlOrNull(data['pdfPath']),
+        'status': 'todo', // mặc định
+      });
+    }
+    return cards;
+  }
+
   // === NEW 2: Lấy practice set mới nhất; nếu không có thì tạo mới và trả về ===
   Future<Map<String, dynamic>> getLatestOrCreateVocabPracticeSet(
     String levelId,
@@ -312,8 +420,10 @@ class VocabRepository {
 
     // Chưa có → tạo mới từ bộ LR
     final items = await _fetchVocabPracticeItems(levelId);
+    final cards = await _fetchVocabCards(levelId);
     final newId = await createNewVocabPracticeSetId(
       items: items,
+      cards: cards,
       levelId: levelId,
     );
 
