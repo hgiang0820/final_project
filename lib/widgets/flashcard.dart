@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:final_project/models/vocab_models.dart';
 
 class Flashcard extends StatefulWidget {
@@ -120,6 +123,7 @@ class _Front extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final hasAudio = card.audioUrl.trim().isNotEmpty;
     return Card(
       color: Colors.white,
       elevation: 8,
@@ -129,42 +133,189 @@ class _Front extends StatelessWidget {
         width: width,
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Text(
-              card.word,
-              textAlign: TextAlign.center,
-              style:
-                  theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple.shade700,
-                  ) ??
-                  TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple.shade700,
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    card.word,
+                    textAlign: TextAlign.center,
+                    style:
+                        theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple.shade700,
+                        ) ??
+                        TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple.shade700,
+                        ),
                   ),
-            ),
-            if (card.phonetic.trim().isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Text(
-                card.phonetic,
-                textAlign: TextAlign.center,
-                style:
-                    theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.deepPurple.shade300,
-                      fontStyle: FontStyle.italic,
-                    ) ??
-                    TextStyle(
-                      fontSize: 20,
-                      color: Colors.deepPurple.shade300,
-                      fontStyle: FontStyle.italic,
+                  if (card.phonetic.trim().isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      card.phonetic,
+                      textAlign: TextAlign.center,
+                      style:
+                          theme.textTheme.titleMedium?.copyWith(
+                            color: Colors.deepPurple.shade300,
+                            fontStyle: FontStyle.italic,
+                          ) ??
+                          TextStyle(
+                            fontSize: 20,
+                            color: Colors.deepPurple.shade300,
+                            fontStyle: FontStyle.italic,
+                          ),
                     ),
+                  ],
+                ],
               ),
-            ],
+            ),
+            if (hasAudio)
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4, right: 4),
+                  child: _FlashcardAudioButton(audioPath: card.audioUrl),
+                ),
+              ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FlashcardAudioButton extends StatefulWidget {
+  const _FlashcardAudioButton({required this.audioPath});
+
+  final String audioPath;
+
+  @override
+  State<_FlashcardAudioButton> createState() => _FlashcardAudioButtonState();
+}
+
+class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
+  static const _vocabBucket = 'vocab_flashcard_audio';
+
+  late final AudioPlayer _player;
+  bool _isPlaying = false;
+  bool _isLoading = false;
+  late String? _resolvedUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _player = AudioPlayer();
+    _resolvedUrl = _buildPublicUrl(widget.audioPath);
+
+    _player.playerStateStream.listen((state) {
+      if (!mounted) return;
+      final playing =
+          state.playing && state.processingState != ProcessingState.completed;
+      setState(() => _isPlaying = playing);
+
+      if (state.processingState == ProcessingState.completed) {
+        _player.seek(Duration.zero);
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant _FlashcardAudioButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.audioPath != widget.audioPath) {
+      _resolvedUrl = _buildPublicUrl(widget.audioPath);
+      _player.stop();
+      _player.seek(Duration.zero);
+      if (mounted) {
+        setState(() {
+          _isPlaying = false;
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  String? _buildPublicUrl(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return null;
+    if (trimmed.startsWith('http')) return trimmed;
+    try {
+      return Supabase.instance.client.storage
+          .from(_vocabBucket)
+          .getPublicUrl(trimmed);
+    } catch (e) {
+      debugPrint('FlashcardAudioButton: failed to resolve url $e');
+      return null;
+    }
+  }
+
+  Future<void> _togglePlayback() async {
+    if (_resolvedUrl == null) return;
+
+    if (_isPlaying) {
+      await _player.stop();
+      await _player.seek(Duration.zero);
+      if (mounted) setState(() => _isPlaying = false);
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await _player.stop();
+      await _player.setUrl(_resolvedUrl!);
+      await _player.play();
+    } catch (e) {
+      debugPrint('FlashcardAudioButton: play error $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final iconColor = theme.colorScheme.primary;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withOpacity(0.08),
+        shape: BoxShape.circle,
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+        ],
+      ),
+      child: IconButton(
+        tooltip: 'Nghe phát âm',
+        iconSize: 24,
+        visualDensity: VisualDensity.compact,
+        onPressed: (_resolvedUrl == null || _isLoading)
+            ? null
+            : _togglePlayback,
+        icon: _isLoading
+            ? SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(iconColor),
+                ),
+              )
+            : Icon(
+                _isPlaying ? Icons.volume_up : Icons.volume_down,
+                color: iconColor,
+              ),
       ),
     );
   }
