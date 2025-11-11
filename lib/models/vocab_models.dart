@@ -47,6 +47,7 @@ class VocabCard {
   final String meaningVi;
   final String exampleEn;
   final String exampleVi;
+  final String audioUrl;
   final String status;
 
   const VocabCard({
@@ -56,6 +57,7 @@ class VocabCard {
     required this.meaningVi,
     required this.exampleEn,
     required this.exampleVi,
+    required this.audioUrl,
     this.status = 'todo',
   });
 
@@ -69,6 +71,7 @@ class VocabCard {
       meaningVi: meaningVi,
       exampleEn: exampleEn,
       exampleVi: exampleVi,
+      audioUrl: audioUrl,
       status: statusOverride ?? status,
     );
   }

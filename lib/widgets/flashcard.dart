@@ -203,7 +203,9 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
   late final AudioPlayer _player;
   bool _isPlaying = false;
   bool _isLoading = false;
+
   late String? _resolvedUrl;
+  bool _isPrepared = false; // đã setUrl cho _resolvedUrl hiện tại chưa
 
   @override
   void initState() {
@@ -211,14 +213,18 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
     _player = AudioPlayer();
     _resolvedUrl = _buildPublicUrl(widget.audioPath);
 
+    // ✅ tắt loop rõ ràng
+    _player.setLoopMode(LoopMode.off);
+
     _player.playerStateStream.listen((state) {
       if (!mounted) return;
-      final playing =
-          state.playing && state.processingState != ProcessingState.completed;
-      setState(() => _isPlaying = playing);
+      setState(() => _isPlaying = state.playing);
 
+      // ❌ KHÔNG seek về 0 ở đây nữa
+      // Nếu muốn reset vị trí ngay khi phát xong (không auto phát lại), ta chỉ pause.
       if (state.processingState == ProcessingState.completed) {
-        _player.seek(Duration.zero);
+        _player.pause(); // đảm bảo không loop
+        // Không seek ở đây; sẽ seek(0) khi user bấm nút lần sau
       }
     });
   }
@@ -228,6 +234,7 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.audioPath != widget.audioPath) {
       _resolvedUrl = _buildPublicUrl(widget.audioPath);
+      _isPrepared = false; // ❗ vì URL đã đổi
       _player.stop();
       _player.seek(Duration.zero);
       if (mounted) {
@@ -256,8 +263,9 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
   Future<void> _togglePlayback() async {
     if (_resolvedUrl == null) return;
 
+    // Đang phát -> dừng, KHÔNG phát lại
     if (_isPlaying) {
-      await _player.stop();
+      await _player.pause();
       await _player.seek(Duration.zero);
       if (mounted) setState(() => _isPlaying = false);
       return;
@@ -265,15 +273,18 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
 
     setState(() => _isLoading = true);
     try {
-      await _player.stop();
-      await _player.setUrl(_resolvedUrl!);
-      await _player.play();
+      // Chỉ setUrl lần đầu cho URL hiện tại; lần sau chỉ seek(0)
+      if (!_isPrepared) {
+        await _player.setUrl(_resolvedUrl!);
+        _isPrepared = true;
+      } else {
+        await _player.seek(Duration.zero);
+      }
+      await _player.play(); // ✅ play đúng 1 lần, không loop
     } catch (e) {
       debugPrint('FlashcardAudioButton: play error $e');
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -303,19 +314,10 @@ class _FlashcardAudioButtonState extends State<_FlashcardAudioButton> {
         onPressed: (_resolvedUrl == null || _isLoading)
             ? null
             : _togglePlayback,
-        icon: _isLoading
-            ? SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(iconColor),
-                ),
-              )
-            : Icon(
-                _isPlaying ? Icons.volume_up : Icons.volume_down,
-                color: iconColor,
-              ),
+        icon: Icon(
+          _isPlaying ? Icons.volume_up : Icons.volume_down,
+          color: iconColor,
+        ),
       ),
     );
   }

@@ -92,7 +92,8 @@ class InputTestRepository {
 
     if (doc.exists) {
       final data = doc.data();
-      return data?['requirement'] as String?;
+      return data?['type'] as String?;
+      // return data?['requirement'] as String?;
     } else {
       return null;
     }

@@ -117,75 +117,6 @@ class _SWTestPage extends State<SWTestPage> {
       part2Key.currentState?.showFeedbacksMode(result2['results']);
     }
 
-    // if (result1 != null) {
-    //   partScores['part1'] = {
-    //     'score': result1['score'],
-    //     'total': result1['total'],
-    //   };
-    //   answers['part1'] = result1['answers'];
-    //   // có thêm feedback
-    //   answers['feedback_part1'] = result1['results'];
-    //   // get weak and strong points
-    //   for (var q in answers['feedback_part1']) {
-    //     if (q['score'] / q['max_score'] >= 0.5) {
-    //       final questionType = await testRepo.getQuestionType(
-    //         "testSW",
-    //         'part1',
-    //         q['questionId'],
-    //       );
-    //       if (questionType != null) strongPoints.add(questionType);
-    //     } else {
-    //       final questionType = await testRepo.getQuestionType(
-    //         "testSW",
-    //         'part1',
-    //         q['questionId'],
-    //       );
-    //       if (questionType != null) weakPoints.add(questionType);
-    //     }
-    //   }
-    //   // final partType = await testRepo.getQuestionType("testSW", 'part1');
-    //   // if (partScores['part1']?['correctPercent'] <= 0.6) {
-    //   //   if (partType != null) weakPoints.add(partType);
-    //   // } else {
-    //   //   if (partType != null) strongPoints.add(partType);
-    //   // }
-    // }
-
-    // if (result2 != null) {
-    //   partScores['part2'] = {
-    //     'score': result2['score'],
-    //     'total': result2['total'],
-    //     'correctPercent': result2['score'] / result2['total'],
-    //   };
-    //   answers['part2'] = result2['answers'];
-    //   // có thêm feedback
-    //   answers['feedback_part2'] = result2['results'];
-    //   // get weak and strong points
-    //   for (var q in answers['feedback_part2']) {
-    //     if (q['score'] / q['max_score'] >= 0.5) {
-    //       final questionType = await testRepo.getQuestionType(
-    //         "testSW",
-    //         'part2',
-    //         q['questionId'],
-    //       );
-    //       if (questionType != null) strongPoints.add(questionType);
-    //     } else {
-    //       final questionType = await testRepo.getQuestionType(
-    //         "testSW",
-    //         'part2',
-    //         q['questionId'],
-    //       );
-    //       if (questionType != null) weakPoints.add(questionType);
-    //     }
-    //     // final partType = await testRepo.getPartType("testSW", 'part2');
-    //     // if (partScores['part2']?['correctPercent'] <= 0.6) {
-    //     //   if (partType != null) weakPoints.add(partType);
-    //     // } else {
-    //     //   if (partType != null) strongPoints.add(partType);
-    //     // }
-    //   }
-    // }
-
     // ----- PART 1 -----
     if (result1 != null) {
       final fb1 = _normalizeResults(result1['results']);
@@ -291,7 +222,7 @@ class _SWTestPage extends State<SWTestPage> {
           "You did quite well on the following types of questions: "
           "${strongPointsStr.isEmpty ? '—' : strongPointsStr} .\n"
           "But you need to improve the following types of questions: "
-          "${weakPointsStr.isEmpty ? '—' : weakPointsStr}",
+          "${weakPointsStr.isEmpty ? '—' : weakPointsStr}.",
         ),
         actions: [
           TextButton(

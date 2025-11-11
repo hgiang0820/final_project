@@ -4,6 +4,19 @@ Future<void> seedVocabMedium() async {
   final db = FirebaseFirestore.instance;
   const levelId = 'medium';
 
+  // Helper: chuyển "Put on" -> "put_on.mp3"
+  String _toFileName(String word) {
+    final lower = word.toLowerCase();
+    final snake = lower
+        .replaceAll(
+          RegExp(r'[^a-z0-9]+'),
+          '_',
+        ) // mọi ký tự không phải a-z0-9 -> _
+        .replaceAll(RegExp(r'_+'), '_') // gộp nhiều _ liên tiếp
+        .replaceAll(RegExp(r'^_+|_+$'), ''); // bỏ _ ở đầu/cuối
+    return '$snake.mp3';
+  }
+
   Future<void> _seedTopic({
     required String topicId,
     required String topicName,
@@ -19,8 +32,14 @@ Future<void> seedVocabMedium() async {
           'createdAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
-    for (int i = 0; i < cards.length; i++) {
-      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+    for (int i = 1; i < cards.length; i++) {
+      final id = 'q${i.toString().padLeft(2, '0')}';
+      final q = cards[i - 1];
+
+      final word = (q['word'] as String);
+      final audioUrl =
+          'medium/${topicId}/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
       await db
           .collection('vocab_cards')
           .doc(levelId)
@@ -28,7 +47,14 @@ Future<void> seedVocabMedium() async {
           .doc(topicId)
           .collection('cards')
           .doc(id)
-          .set(cards[i], SetOptions(merge: true));
+          .set({
+            'word': q['word'],
+            'phonetic': q['phonetic'],
+            'meaningVi': q['meaningVi'],
+            'exampleEn': q['exampleEn'],
+            'exampleVi': q['exampleVi'],
+            'audioUrl': audioUrl,
+          }, SetOptions(merge: true));
     }
   }
 

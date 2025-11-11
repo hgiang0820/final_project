@@ -4,6 +4,19 @@ Future<void> seedVocabEasy() async {
   final db = FirebaseFirestore.instance;
   const levelId = 'easy';
 
+  // Helper: chuyển "Put on" -> "put_on.mp3"
+  String _toFileName(String word) {
+    final lower = word.toLowerCase();
+    final snake = lower
+        .replaceAll(
+          RegExp(r'[^a-z0-9]+'),
+          '_',
+        ) // mọi ký tự không phải a-z0-9 -> _
+        .replaceAll(RegExp(r'_+'), '_') // gộp nhiều _ liên tiếp
+        .replaceAll(RegExp(r'^_+|_+$'), ''); // bỏ _ ở đầu/cuối
+    return '$snake.mp3';
+  }
+
   await db.collection('vocab_cards').doc(levelId).set({
     'title': 'Vocabulary Level Easy',
     'vocabTopicId': [
@@ -252,6 +265,9 @@ Future<void> seedVocabEasy() async {
     final id = 'q${i.toString().padLeft(2, '0')}';
     final q = vocab1[i - 1];
 
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab1/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
@@ -265,6 +281,7 @@ Future<void> seedVocabEasy() async {
           'meaningVi': q['meaningVi'],
           'exampleEn': q['exampleEn'],
           'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
         }, SetOptions(merge: true));
   }
 
@@ -498,6 +515,9 @@ Future<void> seedVocabEasy() async {
     final id = 'q${i.toString().padLeft(2, '0')}';
     final q = vocab2[i - 1];
 
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab2/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
@@ -511,6 +531,7 @@ Future<void> seedVocabEasy() async {
           'meaningVi': q['meaningVi'],
           'exampleEn': q['exampleEn'],
           'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
         }, SetOptions(merge: true));
   }
 
@@ -744,6 +765,10 @@ Future<void> seedVocabEasy() async {
   for (int i = 1; i < vocab3.length; i++) {
     final id = 'q${(i).toString().padLeft(2, '0')}';
     final q = vocab3[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab3/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
@@ -757,6 +782,7 @@ Future<void> seedVocabEasy() async {
           'meaningVi': q['meaningVi'],
           'exampleEn': q['exampleEn'],
           'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
         }, SetOptions(merge: true));
   }
 
@@ -987,16 +1013,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab4.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab4.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab4[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab4/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab4')
+        .doc("vocab4")
         .collection('cards')
         .doc(id)
-        .set(vocab4[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -1226,16 +1264,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab5.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab5.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab5[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab5/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab5')
+        .doc("vocab5")
         .collection('cards')
         .doc(id)
-        .set(vocab5[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -1465,16 +1515,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab6.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab6.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab6[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab6/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab6')
+        .doc("vocab6")
         .collection('cards')
         .doc(id)
-        .set(vocab6[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -1704,16 +1766,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab7.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab7.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab7[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab7/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab7')
+        .doc("vocab7")
         .collection('cards')
         .doc(id)
-        .set(vocab7[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -1943,16 +2017,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab8.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab8.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab8[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab8/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab8')
+        .doc("vocab8")
         .collection('cards')
         .doc(id)
-        .set(vocab8[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -2182,16 +2268,28 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab9.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab9.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab9[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab9/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab9')
+        .doc("vocab9")
         .collection('cards')
         .doc(id)
-        .set(vocab9[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 
   // =========================
@@ -2421,15 +2519,27 @@ Future<void> seedVocabEasy() async {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-  for (int i = 0; i < vocab10.length; i++) {
-    final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+  for (int i = 1; i < vocab10.length; i++) {
+    final id = 'q${i.toString().padLeft(2, '0')}';
+    final q = vocab10[i - 1];
+
+    final word = (q['word'] as String);
+    final audioUrl = 'easy/vocab10/${_toFileName(word)}'; // ví dụ: "put_on.mp3"
+
     await db
         .collection('vocab_cards')
         .doc(levelId)
         .collection('vocab_topics')
-        .doc('vocab10')
+        .doc("vocab10")
         .collection('cards')
         .doc(id)
-        .set(vocab10[i], SetOptions(merge: true));
+        .set({
+          'word': q['word'],
+          'phonetic': q['phonetic'],
+          'meaningVi': q['meaningVi'],
+          'exampleEn': q['exampleEn'],
+          'exampleVi': q['exampleVi'],
+          'audioUrl': audioUrl,
+        }, SetOptions(merge: true));
   }
 }

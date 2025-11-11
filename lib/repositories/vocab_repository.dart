@@ -62,6 +62,7 @@ class VocabRepository {
         meaningVi: (data['meaningVi'] ?? '').toString(),
         exampleEn: (data['exampleEn'] ?? '').toString(),
         exampleVi: (data['exampleVi'] ?? '').toString(),
+        audioUrl: (data['audioUrl'] ?? '').toString(),
       );
     }).toList();
   }
