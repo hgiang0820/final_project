@@ -77,6 +77,7 @@ class PracticeTestRepository {
 
     items[itemIndex]['totalScore'] = totalScore;
     items[itemIndex]['answers'] = answers;
+    items[itemIndex]['submittedAt'] = FieldValue.serverTimestamp();
 
     await docRef.set({
       'items': items,

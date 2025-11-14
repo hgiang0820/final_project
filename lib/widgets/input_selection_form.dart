@@ -119,7 +119,7 @@ class _SelectionFormState extends State<SelectionForm> {
         child: Column(
           children: [
             Text(
-              "My level",
+              "Trình độ của tôi",
               style: TextStyle(
                 color: Colors.purple,
                 fontSize: 22,
@@ -143,7 +143,7 @@ class _SelectionFormState extends State<SelectionForm> {
             const SizedBox(height: 20),
             Text("---------------------------------"),
             Text(
-              "My goal",
+              "Mục tiêu của tôi",
               style: TextStyle(
                 color: Colors.purple,
                 fontSize: 22,
@@ -171,12 +171,12 @@ class _SelectionFormState extends State<SelectionForm> {
 
   Widget _testText(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            "Don't know your level?",
+            "Bạn không biết trình độ của mình?",
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
           ),
           TextButton(
@@ -186,7 +186,7 @@ class _SelectionFormState extends State<SelectionForm> {
                 MaterialPageRoute(builder: (_) => _getTestPage()),
               );
             },
-            child: const Text('Test now!'),
+            child: const Text('Kiểm tra ngay!'),
           ),
         ],
       ),

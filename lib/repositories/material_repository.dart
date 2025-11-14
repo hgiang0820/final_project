@@ -50,6 +50,26 @@ class MaterialRepository {
     }).toList();
   }
 
+  Future<String> getLessonName({
+    required String materialId,
+    required String levelId,
+    required String partId,
+    required String lessonId,
+  }) async {
+    final q = await _firestore
+        .collection('study_materials')
+        .doc(materialId)
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc(partId)
+        .collection('lessons')
+        .doc(lessonId)
+        .get();
+
+    return q['lessonName'];
+  }
+
   /// Public URL của file PDF trong Supabase Storage
   String publicPdfUrl(String storagePath) {
     return _supabase.storage.from(_bucket).getPublicUrl(storagePath);

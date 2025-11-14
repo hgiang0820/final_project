@@ -1,3 +1,4 @@
+import 'package:final_project/screens/main_screens/study_page.dart';
 import 'package:final_project/seed/input_test/seed_input_SW.dart';
 import 'package:final_project/seed/study_materials/seed_LR_materials.dart';
 import 'package:final_project/seed/study_materials/seed_LR_practice_part2.dart';
@@ -52,6 +53,14 @@ class _SelectionState extends State<SelectionPage> {
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
         child: Column(
           children: [
+            Text(
+              '• Hãy lựa chọn bài test kĩ năng bạn muốn để kiểm tra trình độ hiện tại và chọn mục tiêu của bạn.\n• Nếu bạn đã biết chính xác trình độ của mình thì hãy điền form dưới đây',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red[500],
+              ),
+            ),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -90,21 +99,7 @@ class _SelectionState extends State<SelectionPage> {
             const SizedBox(height: 20),
             SmallButton(
               onPressed: _handleShowStudyRoadmap,
-              title: "See Study Roadmap",
-            ),
-            const SizedBox(height: 20),
-            SmallButton(
-              onPressed: _showLatestWeakPointsDialog,
-              title: "Show Weak Points (Latest)",
-            ),
-            const SizedBox(height: 20),
-            SmallButton(onPressed: seedLRMaterials, title: "SeedLRMaterials"),
-            const SizedBox(height: 20),
-            SmallButton(onPressed: seedInputSW, title: "Seed SW Input Test"),
-            const SizedBox(height: 20),
-            SmallButton(
-              onPressed: seedLRPracticePart2,
-              title: "SeedLRPracticePart2",
+              title: "Xem lộ trình học",
             ),
           ],
         ),
@@ -131,51 +126,6 @@ class _SelectionState extends State<SelectionPage> {
     }
     if (raw is Map) return raw.keys.toList();
     return [raw.toString()];
-  }
-
-  // ---------- Actions ----------
-  Future<void> _showLatestWeakPointsDialog() async {
-    final latest = await _resultRepo.getLatestResult(
-      testId: _testIdFor(_selectedIndex),
-    );
-    final data = (latest?['data'] as Map<String, dynamic>?) ?? {};
-    final raw = data['weakPoints'];
-
-    // hiển thị dạng chuỗi gọn
-    String weakPointsText;
-    if (raw == null) {
-      weakPointsText = '—';
-    } else if (raw is String) {
-      weakPointsText = raw;
-    } else if (raw is List) {
-      weakPointsText = raw
-          .map(
-            (e) => e is Map
-                ? (e['name'] ?? e['topic'] ?? e['key'] ?? e.toString())
-                : e.toString(),
-          )
-          .join(', ');
-    } else if (raw is Map) {
-      final keys = raw.keys.toList();
-      weakPointsText = keys.join(', ');
-    } else {
-      weakPointsText = raw.toString();
-    }
-
-    if (!mounted) return;
-    await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Weak Points (latest)'),
-        content: Text(weakPointsText),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> _handleShowStudyRoadmap() async {
@@ -237,7 +187,11 @@ class _SelectionState extends State<SelectionPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            // onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => StudyPage()),
+            ),
             child: const Text('OK'),
           ),
         ],

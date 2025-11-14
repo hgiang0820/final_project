@@ -126,11 +126,25 @@ class ResultRepository {
       lessonId: lessonId,
     );
     await _db.collection(path).add({
+      'materialId': materialId,
+      'levelId': levelId,
+      'partId': partId,
+      'lessonId': lessonId,
       'score': score,
       'total': total,
       'answers': answersByQuestionId,
       'createdAt': FieldValue.serverTimestamp(),
     });
+
+    final uid = _auth.currentUser!.uid;
+    final key = '${materialId}_${levelId}_${partId}_$lessonId';
+    await _db
+        .collection('users')
+        .doc(uid)
+        .collection('practice_results')
+        .doc(key)
+        // .collection('attempts')
+        .set({'createdAt': FieldValue.serverTimestamp()});
   }
 
   Future<Map<String, dynamic>?> getLatestPracticeAttempt({
