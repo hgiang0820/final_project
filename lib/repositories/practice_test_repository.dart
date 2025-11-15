@@ -77,11 +77,12 @@ class PracticeTestRepository {
 
     items[itemIndex]['totalScore'] = totalScore;
     items[itemIndex]['answers'] = answers;
-    items[itemIndex]['submittedAt'] = FieldValue.serverTimestamp();
+    // items[itemIndex]['submittedAt'] = FieldValue.serverTimestamp();
 
     await docRef.set({
       'items': items,
       'updatedAt': FieldValue.serverTimestamp(),
+      'lastestTest': testId, // lưu ý check testId là gì
     }, SetOptions(merge: true));
   }
 
@@ -248,5 +249,19 @@ class PracticeTestRepository {
 
     final newSnap = await docRef.get();
     return {'practiceSetId': newId, 'data': newSnap.data()};
+  }
+
+  Future<String> getTestName({
+    required String testType,
+    required String testId,
+  }) async {
+    final q = await _db
+        .collection('practice_tests')
+        .doc(testType)
+        .collection('test_number')
+        .doc(testId)
+        .get();
+
+    return q['title'];
   }
 }

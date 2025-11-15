@@ -79,61 +79,80 @@ class _LRTestPage extends State<LRTestPage> {
   }
 
   Future<void> checkShowAnswersMode() async {
-  try {
-    final status = await practiceRepo.getTestStatus(itemIndex: widget.itemIndex, testType: "LR_practice_tests");
-    if (status == 'done') {
-      final saved = await practiceRepo.getSavedResult(itemIndex: widget.itemIndex, testType: "LR_practice_tests");
-      final savedTotal = (saved?['totalScore'] ?? 0) as int;
-      final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
+    try {
+      final status = await practiceRepo.getTestStatus(
+        itemIndex: widget.itemIndex,
+        testType: "LR_practice_tests",
+      );
+      if (status == 'done') {
+        final saved = await practiceRepo.getSavedResult(
+          itemIndex: widget.itemIndex,
+          testType: "LR_practice_tests",
+        );
+        final savedTotal = (saved?['totalScore'] ?? 0) as int;
+        final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
 
-      // Gán state tổng
-      setState(() {
-        showAnswers = true;
-        totalScore = savedTotal;
-        answers = savedAnswers; // có key part1..part7
-        remainingSeconds = 0;
-      });
+        // Gán state tổng
+        setState(() {
+          showAnswers = true;
+          totalScore = savedTotal;
+          answers = savedAnswers; // có key part1..part7
+          remainingSeconds = 0;
+        });
 
-      // Dừng đồng hồ
-      countdownTimer?.cancel();
+        // Dừng đồng hồ
+        countdownTimer?.cancel();
 
-      // Bật chế độ hiển thị đáp án
-      part1Key.currentState?.showAnswersMode();
-      part2Key.currentState?.showAnswersMode();
-      part3Key.currentState?.showAnswersMode();
-      part4Key.currentState?.showAnswersMode();
-      part5Key.currentState?.showAnswersMode();
-      part6Key.currentState?.showAnswersMode();
-      part7Key.currentState?.showAnswersMode();
+        // Bật chế độ hiển thị đáp án
+        part1Key.currentState?.showAnswersMode();
+        part2Key.currentState?.showAnswersMode();
+        part3Key.currentState?.showAnswersMode();
+        part4Key.currentState?.showAnswersMode();
+        part5Key.currentState?.showAnswersMode();
+        part6Key.currentState?.showAnswersMode();
+        part7Key.currentState?.showAnswersMode();
 
-      // NẠP lại các lựa chọn đã chọn trước đó (map questionId -> selectedIndex)
-      part1Key.currentState?.loadSavedAnswers(
-        savedAnswers['part1'] == null ? null : Map<String, dynamic>.from(savedAnswers['part1']),
-      );
-      part2Key.currentState?.loadSavedAnswers(
-        savedAnswers['part2'] == null ? null : Map<String, dynamic>.from(savedAnswers['part2']),
-      );
-      part3Key.currentState?.loadSavedAnswers(
-        savedAnswers['part3'] == null ? null : Map<String, dynamic>.from(savedAnswers['part3']),
-      );
-      part4Key.currentState?.loadSavedAnswers(
-        savedAnswers['part4'] == null ? null : Map<String, dynamic>.from(savedAnswers['part4']),
-      );
-      part5Key.currentState?.loadSavedAnswers(
-        savedAnswers['part5'] == null ? null : Map<String, dynamic>.from(savedAnswers['part5']),
-      );
-      part6Key.currentState?.loadSavedAnswers(
-        savedAnswers['part6'] == null ? null : Map<String, dynamic>.from(savedAnswers['part6']),
-      );
-      part7Key.currentState?.loadSavedAnswers(
-        savedAnswers['part7'] == null ? null : Map<String, dynamic>.from(savedAnswers['part7']),
-      );
+        // NẠP lại các lựa chọn đã chọn trước đó (map questionId -> selectedIndex)
+        part1Key.currentState?.loadSavedAnswers(
+          savedAnswers['part1'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part1']),
+        );
+        part2Key.currentState?.loadSavedAnswers(
+          savedAnswers['part2'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part2']),
+        );
+        part3Key.currentState?.loadSavedAnswers(
+          savedAnswers['part3'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part3']),
+        );
+        part4Key.currentState?.loadSavedAnswers(
+          savedAnswers['part4'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part4']),
+        );
+        part5Key.currentState?.loadSavedAnswers(
+          savedAnswers['part5'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part5']),
+        );
+        part6Key.currentState?.loadSavedAnswers(
+          savedAnswers['part6'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part6']),
+        );
+        part7Key.currentState?.loadSavedAnswers(
+          savedAnswers['part7'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part7']),
+        );
+      }
+    } catch (_) {
+      // ignore errors
     }
-  } catch (_) {
-    // ignore errors
   }
-}
-
 
   Future<void> _submitAll() async {
     final result1 = part1Key.currentState?.getResult();
