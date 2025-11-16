@@ -264,4 +264,52 @@ class PracticeTestRepository {
 
     return q['title'];
   }
+
+  Future<Map<String, int>> getPracticedTestPerSet(String testType) async {
+    final user = _auth.currentUser;
+    if (user == null) return {};
+
+    final snap = await _db
+        .collection('users')
+        .doc(user.uid)
+        .collection('practice_test_results')
+        .doc(testType)
+        .collection('practice_sets')
+        .get();
+
+    final Map<String, int> result = {};
+
+    for (final doc in snap.docs) {
+      final practiceSetId = doc.id;
+      final data = doc.data();
+
+      final progress = data['progress'];
+      if (progress is Map) {
+        final doneVal = progress['done'];
+
+        int done = 0;
+        if (doneVal is int) {
+          done = doneVal;
+        } else if (doneVal is num)
+          // ignore: curly_braces_in_flow_control_structures
+          done = doneVal.toInt();
+
+        result[practiceSetId] = done;
+      } else {
+        result[practiceSetId] = 0;
+      }
+    }
+
+    return result;
+  }
+
+  /// Tính tổng 'done' trên tất cả practiceSet
+  Future<int> getTotalPracticedTest(String testType) async {
+    final perPracticeSet = await getPracticedTestPerSet(testType);
+    var total = 0;
+    for (final v in perPracticeSet.values) {
+      total += v;
+    }
+    return total;
+  }
 }

@@ -4,7 +4,10 @@ import 'package:final_project/repositories/practice_test_repository.dart';
 import 'package:final_project/screens/input_test/selection_page.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_test.dart';
 import 'package:final_project/screens/study_screens/practice_LR_page.dart';
-import 'package:final_project/widgets/icon_and_button.dart';
+import 'package:final_project/widgets/card/card_widget.dart';
+import 'package:final_project/widgets/card/empty_card.dart';
+import 'package:final_project/widgets/card/loading_card.dart';
+import 'package:final_project/widgets/card/summary_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +17,12 @@ class HomeContent extends StatelessWidget {
   final materialRepo = MaterialRepository();
   final practiceRepo = PracticeTestRepository();
 
-  /// Lấy latest attempt (subcollection 'attempts') của latest lesson (practice_results)
-  /// Trả về Map chứa: { 'lessonDocId': ..., 'attemptDocId': ..., 'data': { ... } }
   Future<Map<String, dynamic>?> getLatestLesson() async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return null;
 
     final db = FirebaseFirestore.instance;
 
-    // 1) Lấy latest lesson doc trong practice_results
     final latestLessonSnap = await db
         .collection('users')
         .doc(uid)
@@ -34,7 +34,6 @@ class HomeContent extends StatelessWidget {
     if (latestLessonSnap.docs.isEmpty) return null;
     final latestLessonDoc = latestLessonSnap.docs.first;
 
-    // 2) Lấy latest attempt trong subcollection attempts (nếu có)
     final attemptsSnap = await db
         .collection('users')
         .doc(uid)
@@ -52,12 +51,10 @@ class HomeContent extends StatelessWidget {
       attemptId = attemptsSnap.docs.first.id;
       data = attemptsSnap.docs.first.data();
     } else {
-      // không có attempt -> lấy dữ liệu lesson doc chính
       attemptId = null;
       data = latestLessonDoc.data();
     }
 
-    // 3) Thử resolve lesson name từ materialRepo nếu dữ liệu có đủ identifiers
     String? lessonName;
     try {
       final materialId = data['materialId'] as String?;
@@ -69,7 +66,6 @@ class HomeContent extends StatelessWidget {
           levelId != null &&
           partId != null &&
           lessonId != null) {
-        // materialRepo.getLessonName trả về Future<String>
         lessonName = await materialRepo.getLessonName(
           materialId: materialId,
           levelId: levelId,
@@ -78,7 +74,6 @@ class HomeContent extends StatelessWidget {
         );
       }
     } catch (e) {
-      // nếu có lỗi khi lấy lessonName -> fallback (không crash)
       print('Error resolving lessonName: $e');
     }
 
@@ -96,7 +91,6 @@ class HomeContent extends StatelessWidget {
 
     final db = FirebaseFirestore.instance;
 
-    // 1) Lấy latest test doc trong practice_test_results
     final latestPracticeSet = await db
         .collection('users')
         .doc(uid)
@@ -114,19 +108,14 @@ class HomeContent extends StatelessWidget {
       practiceSetId = latestPracticeSet.docs.first.id;
       data = latestPracticeSet.docs.first.data();
     } else {
-      // không có attempt -> lấy dữ liệu lesson doc chính
       practiceSetId = null;
       data = latestPracticeSet.docs.first.data();
     }
 
-    // 2) Thử resolve lesson name từ materialRepo nếu dữ liệu có đủ identifiers
     String? testName;
-
     try {
       final testId = data['lastestTest'] as String?;
-
       if (testId != null) {
-        // materialRepo.getLessonName trả về Future<String>
         testName = await practiceRepo.getTestName(
           testType: 'LR_practice_tests',
           testId: testId,
@@ -136,12 +125,7 @@ class HomeContent extends StatelessWidget {
       print('Error resolving testName: $e');
     }
 
-    return {
-      // 'lessonDocId': latestPracticeTestDoc.id,
-      'practiceSetId': practiceSetId,
-      'data': data,
-      'testName': testName,
-    };
+    return {'practiceSetId': practiceSetId, 'data': data, 'testName': testName};
   }
 
   Future<Map<String, dynamic>?> getLatestSWTest() async {
@@ -150,7 +134,6 @@ class HomeContent extends StatelessWidget {
 
     final db = FirebaseFirestore.instance;
 
-    // 1) Lấy latest test doc trong practice_test_results
     final latestPracticeSet = await db
         .collection('users')
         .doc(uid)
@@ -168,19 +151,14 @@ class HomeContent extends StatelessWidget {
       practiceSetId = latestPracticeSet.docs.first.id;
       data = latestPracticeSet.docs.first.data();
     } else {
-      // không có attempt -> lấy dữ liệu lesson doc chính
       practiceSetId = null;
       data = latestPracticeSet.docs.first.data();
     }
 
-    // 2) Thử resolve lesson name từ materialRepo nếu dữ liệu có đủ identifiers
     String? testName;
-
     try {
       final testId = data['lastestTest'] as String?;
-
       if (testId != null) {
-        // materialRepo.getLessonName trả về Future<String>
         testName = await practiceRepo.getTestName(
           testType: 'SW_practice_tests',
           testId: testId,
@@ -190,17 +168,15 @@ class HomeContent extends StatelessWidget {
       print('Error resolving testName: $e');
     }
 
-    return {
-      // 'lessonDocId': latestPracticeTestDoc.id,
-      'practiceSetId': practiceSetId,
-      'data': data,
-      'testName': testName,
-    };
+    return {'practiceSetId': practiceSetId, 'data': data, 'testName': testName};
   }
 
   String _formatTimestamp(dynamic ts) {
     if (ts == null) return '';
-    if (ts is Timestamp) return ts.toDate().toString();
+    if (ts is Timestamp) {
+      final date = ts.toDate();
+      return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    }
     return ts.toString();
   }
 
@@ -215,6 +191,7 @@ class HomeContent extends StatelessWidget {
     }
 
     return Scaffold(
+      // backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
           'HOME',
@@ -224,268 +201,279 @@ class HomeContent extends StatelessWidget {
         elevation: 1,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 8),
-
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     final lesson = await getLatestLRTest();
-            //     print("=== TEST BUTTON ===");
-
-            //     if (lesson == null) {
-            //       print("❌ No lesson found");
-            //     } else {
-            //       print("🔥 Latest lesson: ${lesson}");
-            //     }
-            //   },
-            //   child: Text("Test getLatestLRTest"),
-            // ),
-            const Text(
-              'Gần đây',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Hoạt động gần đây',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 16),
+
+            // Latest Lesson
+            _buildSectionTitle('Bài luyện tập kĩ năng'),
             const SizedBox(height: 12),
-
-            // Recent Lessons (use getLatestLesson)
-            const Text(
-              'Bài luyện tập kĩ năng đã học gần nhất',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
             FutureBuilder<Map<String, dynamic>?>(
               future: getLatestLesson(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 80,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text('Lỗi load latest lesson: ${snapshot.error}');
+                  return LoadingCard();
                 }
 
                 final item = snapshot.data;
                 if (item == null) {
-                  return const Text('Chưa có bài học nào.');
+                  return EmptyCard(
+                    message: 'Chưa có bài học nào',
+                    icon: Icons.school,
+                  );
                 }
 
                 final data = item['data'] as Map<String, dynamic>? ?? {};
                 final lessonName =
                     item['lessonName'] as String? ?? 'Bài học gần nhất';
-                // final title = lessonName ?? data['title'] ?? data['lessonId'] ?? 'Bài học gần nhất';
-
                 final submittedAt = _formatTimestamp(data['createdAt']);
                 final score = data['score'] != null
-                    ? ' - Điểm: ${data['score']}/${data['total']}'
-                    : '';
+                    ? '${data['score']}/${data['total']}'
+                    : null;
 
-                return Card(
-                  elevation: 2,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.purple[100],
-                      child: Icon(Icons.school, color: Colors.purple[600]),
-                    ),
-                    title: Text(lessonName),
-                    subtitle: Text('$submittedAt$score'),
-                    onTap: () {
-                      final materialId = data['materialId'];
-                      final levelId = data['levelId'];
-                      final partId = data['partId'];
-                      final lessonId = data['lessonId'];
+                return CardWidget(
+                  icon: Icons.school,
+                  iconColor: Colors.blue,
+                  title: lessonName,
+                  subtitle: submittedAt,
+                  score: score,
+                  onTap: () {
+                    final materialId = data['materialId'];
+                    final levelId = data['levelId'];
+                    final partId = data['partId'];
+                    final lessonId = data['lessonId'];
 
-                      if ([
-                        materialId,
-                        levelId,
-                        partId,
-                        lessonId,
-                      ].any((e) => e.isEmpty)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Thiếu khóa Practice (material/level/part/lesson).',
-                            ),
-                          ),
-                        );
-                        return;
-                      }
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PracticeLRPage(
-                            practiceId:
-                                '$materialId|$levelId|$partId|$lessonId',
-                          ),
+                    if ([
+                      materialId,
+                      levelId,
+                      partId,
+                      lessonId,
+                    ].any((e) => e.isEmpty)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Thiếu thông tin bài học'),
+                          backgroundColor: Colors.red,
                         ),
                       );
-                    },
-                  ),
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PracticeLRPage(
+                          practiceId: '$materialId|$levelId|$partId|$lessonId',
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            // Recent Tests
-            const Text(
-              'Bài test đã làm gần nhất',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
+            // Practice Tests
+            _buildSectionTitle('Bài kiểm tra thực hành'),
+            const SizedBox(height: 12),
 
-            const Text(
-              'Listening & Reading Practice Test',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-
+            // LR Test
             FutureBuilder<Map<String, dynamic>?>(
               future: getLatestLRTest(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 80,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text('Lỗi load latest LR test: ${snapshot.error}');
+                  return LoadingCard();
                 }
 
                 final item = snapshot.data;
                 if (item == null) {
-                  return const Text('Chưa có lịch sử làm bài nào.');
+                  return EmptyCard(
+                    message: 'Chưa có lịch sử làm bài',
+                    icon: Icons.headphones,
+                  );
                 }
 
                 final data = item['data'] as Map<String, dynamic>? ?? {};
                 final testName =
-                    item['testName'] as String? ?? 'Bài học gần nhất';
-                // item['lessonName'] as String? ?? 'Bài học gần nhất';
-                // final title = lessonName ?? data['title'] ?? data['lessonId'] ?? 'Bài học gần nhất';
-
+                    item['testName'] as String? ?? 'Listening & Reading Test';
                 final submittedAt = _formatTimestamp(data['updatedAt']);
 
-                // final score = data['items'] != null
-                //     ? ' - Điểm: ${data['items']}'
-                //     : '';
                 String? score;
                 int index = -1;
-
                 final items = data['items'];
                 for (var i = 0; i < items.length; i++) {
                   final picked = items[i];
                   if (picked['title'] == testName) {
-                    score = ' - Điểm: ${picked['totalScore']}/990';
+                    score = '${picked['totalScore']}/990';
                     index = i;
+                    break;
                   }
                 }
 
-                return Card(
-                  elevation: 2,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.purple[100],
-                      child: Icon(Icons.mic, color: Colors.purple[600]),
-                    ),
-                    title: Text(testName),
-                    subtitle: Text('$submittedAt$score'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LRTestPage(
-                            testId: data['lastestTest'],
-                            itemIndex: index,
-                          ),
+                return CardWidget(
+                  icon: Icons.headphones,
+                  iconColor: Colors.orange,
+                  title: testName,
+                  subtitle: submittedAt,
+                  score: score,
+                  badgeText: 'L&R',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => LRTestPage(
+                          testId: data['lastestTest'],
+                          itemIndex: index,
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
-            const Text(
-              'Speaking & Writing Practice Test',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-
+            // SW Test
             FutureBuilder<Map<String, dynamic>?>(
               future: getLatestSWTest(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    height: 80,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text('Lỗi load latest SW test: ${snapshot.error}');
+                  return LoadingCard();
                 }
 
                 final item = snapshot.data;
                 if (item == null) {
-                  return const Text('Chưa có lịch sử làm bài nào.');
+                  return EmptyCard(
+                    message: 'Chưa có lịch sử làm bài',
+                    icon: Icons.edit,
+                  );
                 }
 
                 final data = item['data'] as Map<String, dynamic>? ?? {};
                 final testName =
-                    item['testName'] as String? ?? 'Bài học gần nhất';
-                // item['lessonName'] as String? ?? 'Bài học gần nhất';
-                // final title = lessonName ?? data['title'] ?? data['lessonId'] ?? 'Bài học gần nhất';
-
+                    item['testName'] as String? ?? 'Speaking & Writing Test';
                 final submittedAt = _formatTimestamp(data['updatedAt']);
 
-                // final score = data['items'] != null
-                //     ? ' - Điểm: ${data['items']}'
-                //     : '';
                 String? score;
-
                 final items = data['items'];
                 for (var i = 0; i < items.length; i++) {
                   final picked = items[i];
                   if (picked['title'] == testName) {
-                    score = ' - Điểm: ${picked['totalScore']}/990';
+                    score = '${picked['totalScore']}/990';
+                    break;
                   }
                 }
 
-                return Card(
-                  elevation: 2,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.purple[100],
-                      child: Icon(Icons.edit, color: Colors.purple[600]),
-                    ),
-                    title: Text(testName),
-                    subtitle: Text('$submittedAt$score'),
-                    onTap: () {
-                      // TODO: điều hướng tới màn lesson/attempt detail theo item['lessonDocId'] / item['attemptDocId']
-                      // ex: Navigator.push(..., arguments: {...})
-                    },
-                  ),
+                return CardWidget(
+                  icon: Icons.edit,
+                  iconColor: Colors.green,
+                  title: testName,
+                  subtitle: submittedAt,
+                  score: score,
+                  badgeText: 'S&W',
+                  onTap: () {
+                    // TODO: Navigate to SW test
+                  },
                 );
               },
             ),
+
+            const SizedBox(height: 24),
+
+            // Summary Section
+            Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Thống kê',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SummaryCard(),
+
+            const SizedBox(height: 100),
           ],
         ),
       ),
-      floatingActionButton: IconAndButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => SelectionPage()),
-          );
-        },
-        title: "Test",
-        icon: const Icon(Icons.scoreboard),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            colors: [Colors.deepPurple[400]!, Colors.purple[300]!],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withOpacity(0.4),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => SelectionPage()),
+            );
+          },
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          icon: const Icon(Icons.add_circle_outline, size: 28),
+          label: const Text(
+            'Làm bài test',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Colors.black54,
+        letterSpacing: 0.5,
       ),
     );
   }
