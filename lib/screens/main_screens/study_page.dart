@@ -1,4 +1,6 @@
 import 'package:final_project/screens/study_screens/practice_LR_page.dart';
+import 'package:final_project/widgets/card/card_widget.dart';
+import 'package:final_project/widgets/card/lesson_card.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/repositories/roadmap_repository.dart';
 import 'package:final_project/screens/study_screens/pdf_viewer_page.dart';
@@ -49,9 +51,6 @@ class _StudyPageState extends State<StudyPage> {
     final data = latest['data'] as Map<String, dynamic>;
     final list = List<Map<String, dynamic>>.from(data['items'] ?? []);
 
-    // ĐẢM BẢO THỨ TỰ ỔN ĐỊNH:
-    // - Nếu mỗi item đã có 'order' thì sắp theo 'order' tăng dần.
-    // - Nếu chưa có 'order' thì giữ nguyên thứ tự trong mảng (không sort).
     final hasOrder = list.isNotEmpty && list.first.containsKey('order');
     final stable = [...list];
     if (hasOrder) {
@@ -128,12 +127,12 @@ class _StudyPageState extends State<StudyPage> {
             Text(
               'Chưa có lộ trình học',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey[800],
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               'Hãy tạo Study Roadmap ở trang Selection trước.',
               style: TextStyle(color: Colors.grey[600]),
@@ -191,21 +190,25 @@ class _StudyPageState extends State<StudyPage> {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        // Search and Filter Bar
+        Container(
+          padding: const EdgeInsets.all(16),
           child: TextField(
             controller: _searchController,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: Colors.deepPurple[400]),
               hintText: 'Tìm kiếm bài học...',
+              filled: true,
+              fillColor: Colors.grey[50],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.deepPurple),
               ),
               suffixIcon: IconButton(
                 icon: Icon(
                   Icons.filter_alt,
                   color: _hasActiveFilters()
-                      ? Theme.of(context).colorScheme.primary
+                      ? Colors.deepPurple[600]
                       : Colors.grey,
                 ),
                 tooltip: 'Bộ lọc',
@@ -222,10 +225,9 @@ class _StudyPageState extends State<StudyPage> {
         Expanded(
           child: filteredEntries.isEmpty
               ? _emptySearchResult()
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
                   itemCount: filteredEntries.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final entry = filteredEntries[index];
                     final it = entry.value;
@@ -234,7 +236,7 @@ class _StudyPageState extends State<StudyPage> {
                     final status = (it['status'] ?? 'todo') as String;
                     final isDone = status == 'done';
                     final lessonName = (it['lessonName'] ?? 'Lesson') as String;
-                    // final part = (it['partId'] ?? '') as String;
+
                     String part;
                     if (it['part'] == 'part1') {
                       part = 'Part 1';
@@ -253,7 +255,7 @@ class _StudyPageState extends State<StudyPage> {
                     } else {
                       part = 'Part 8';
                     }
-                    // final level = (it['levelId'] ?? '') as String;
+
                     String level;
                     if (it['level'] == 'lv100') {
                       level = 'Level 100+';
@@ -266,141 +268,97 @@ class _StudyPageState extends State<StudyPage> {
                     } else {
                       level = 'Level 800+';
                     }
-                    // final material = (it['materialId'] ?? '') as String;
+
                     String material;
                     if (it['materialId'] == 'LRMaterials') {
                       material = 'Listening & Reading';
                     } else {
                       material = 'Speaking & Writing';
                     }
-                    // final pdfUrl = (it['pdfUrl'] ?? '') as String;
 
-                    // SỐ THỨ TỰ ỔN ĐỊNH:
-                    // - Nếu item có 'order' -> dùng order (1-based)
-                    // - Nếu không -> dùng (index + 1) dựa trên vị trí lọc
                     final intNumber = (it['order'] is num)
                         ? (it['order'] as num).toInt()
                         : (originalIndex + 1);
                     final orderLabel = intNumber.toString().padLeft(2, '0');
                     final kind = (it['type'] ?? 'theory') as String;
 
-                    return ListTile(
-                      leading: CircleAvatar(
-                        radius: 16,
-                        backgroundColor: isDone
-                            ? Colors.green[100]
-                            : Colors.grey[300],
-                        child: Text(
-                          orderLabel,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isDone
-                                ? Colors.green[800]
-                                : Colors.grey[800],
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      title: Row(
-                        children: [
-                          Icon(
-                            isDone
-                                ? Icons.check_circle
-                                : Icons.radio_button_unchecked,
-                            color: isDone ? Colors.green : Colors.grey,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              lessonName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle: Text(
-                        '$material • $level • $part',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      trailing: isDone
-                          ? const Text(
-                              'Done',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          : const Text(
-                              'To-do',
-                              style: TextStyle(
-                                color: Colors.orange,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                      onTap: () {
-                        if (kind == 'theory') {
-                          final pdfUrl = (it['pdfUrl'] ?? '') as String;
-                          if (pdfUrl.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Không có PDF cho bài học này.'),
-                              ),
-                            );
-                            return;
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PdfViewerPage(
-                                pdfUrl: pdfUrl,
-                                onDone: () async => _markDone(originalIndex),
-                              ),
-                            ),
-                          );
-                        } else {
-                          final materialId = (it['materialId'] ?? '') as String;
-                          final levelId = (it['levelId'] ?? '') as String;
-                          final partId = (it['partId'] ?? '') as String;
-                          final lessonId = (it['lessonId'] ?? '') as String;
+                    // Determine badge text and color based on type
+                    final badgeText = kind == 'theory'
+                        ? 'Lý thuyết'
+                        : 'Thực hành';
+                    final badgeColor = kind == 'theory'
+                        ? Colors.blue
+                        : Colors.orange;
 
-                          if ([
-                            materialId,
-                            levelId,
-                            partId,
-                            lessonId,
-                          ].any((e) => e.isEmpty)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Thiếu khóa Practice (material/level/part/lesson).',
-                                ),
-                              ),
-                            );
-                            return;
-                          }
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PracticeLRPage(
-                                practiceId:
-                                    '$materialId|$levelId|$partId|$lessonId',
-                                onDone: () async => _markDone(originalIndex),
-                              ),
-                            ),
-                          );
-                        }
-                      },
+                    return LessonCard(
+                      orderLabel: orderLabel,
+                      lessonName: lessonName,
+                      subtitle: '$material • $level • $part',
+                      isDone: isDone,
+                      badgeText: badgeText,
+                      badgeColor: badgeColor,
+                      onTap: () =>
+                          _handleLessonTap(context, it, kind, originalIndex),
                     );
                   },
                 ),
         ),
       ],
     );
+  }
+
+  void _handleLessonTap(
+    BuildContext context,
+    Map<String, dynamic> it,
+    String kind,
+    int originalIndex,
+  ) {
+    if (kind == 'theory') {
+      final pdfUrl = (it['pdfUrl'] ?? '') as String;
+      if (pdfUrl.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Không có PDF cho bài học này.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PdfViewerPage(
+            pdfUrl: pdfUrl,
+            onDone: () async => _markDone(originalIndex),
+          ),
+        ),
+      );
+    } else {
+      final materialId = (it['materialId'] ?? '') as String;
+      final levelId = (it['levelId'] ?? '') as String;
+      final partId = (it['partId'] ?? '') as String;
+      final lessonId = (it['lessonId'] ?? '') as String;
+
+      if ([materialId, levelId, partId, lessonId].any((e) => e.isEmpty)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Thiếu khóa Practice (material/level/part/lesson).'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PracticeLRPage(
+            practiceId: '$materialId|$levelId|$partId|$lessonId',
+            onDone: () async => _markDone(originalIndex),
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> _showFilterDialog({
@@ -437,7 +395,16 @@ class _StudyPageState extends State<StudyPage> {
             }
 
             return AlertDialog(
-              title: const Text('Bộ lọc bài học'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Row(
+                children: [
+                  Icon(Icons.filter_alt, color: Colors.deepPurple[600]),
+                  const SizedBox(width: 12),
+                  const Text('Bộ lọc bài học'),
+                ],
+              ),
               content: hasAnyFilter
                   ? SingleChildScrollView(
                       child: Column(
@@ -490,6 +457,13 @@ class _StudyPageState extends State<StudyPage> {
                     });
                     Navigator.of(dialogContext).pop();
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   child: const Text('Áp dụng'),
                 ),
               ],
@@ -537,16 +511,24 @@ class _StudyPageState extends State<StudyPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.search_off, size: 48, color: Colors.grey[500]),
-            const SizedBox(height: 12),
-            const Text(
-              'Không tìm thấy bài học phù hợp.',
-              style: TextStyle(fontWeight: FontWeight.w600),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 16),
+            const Text(
+              'Không tìm thấy bài học phù hợp',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
             Text(
-              'Hãy thử từ khóa khác.',
+              'Hãy thử từ khóa khác hoặc điều chỉnh bộ lọc',
               style: TextStyle(color: Colors.grey[600]),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
