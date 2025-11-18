@@ -16,7 +16,7 @@ Future<void> seedLRPracticePart4() async {
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> _pushLesson({
+  Future<void> pushLesson({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -1197,23 +1197,23 @@ Future<void> seedLRPracticePart4() async {
   // ========== PUSH ALL LESSONS ==========
 
   // lv300
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Thông báo tại nơi công cộng – Public Announcement', questions: p4Lv300L1);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Giới thiệu dịch vụ – Service Information', questions: p4Lv300L2);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Hướng dẫn cơ bản – Directions', questions: p4Lv300L3);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Giới thiệu sự kiện – Event Info', questions: p4Lv300L4);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv300L5);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Thông báo tại nơi công cộng – Public Announcement', questions: p4Lv300L1);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Giới thiệu dịch vụ – Service Information', questions: p4Lv300L2);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Hướng dẫn cơ bản – Directions', questions: p4Lv300L3);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Giới thiệu sự kiện – Event Info', questions: p4Lv300L4);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv300L5);
 
   // lv600
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Bản tin ngắn – News Report', questions: p4Lv600L1);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Thuyết trình sản phẩm – Product Presentation', questions: p4Lv600L2);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Lịch trình sự kiện – Schedules & Plans', questions: p4Lv600L3);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Hướng dẫn chi tiết – Instructions', questions: p4Lv600L4);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv600L5);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Bản tin ngắn – News Report', questions: p4Lv600L1);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Thuyết trình sản phẩm – Product Presentation', questions: p4Lv600L2);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Lịch trình sự kiện – Schedules & Plans', questions: p4Lv600L3);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Hướng dẫn chi tiết – Instructions', questions: p4Lv600L4);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv600L5);
 
   // lv800
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Bài phát biểu dài – Speech', questions: p4Lv800L1);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Báo cáo tài chính / công ty – Business Report', questions: p4Lv800L2);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Thông báo khẩn cấp / xử lý sự cố', questions: p4Lv800L3);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Bài diễn thuyết truyền cảm hứng – Motivational Talk', questions: p4Lv800L4);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv800L5);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Bài phát biểu dài – Speech', questions: p4Lv800L1);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Báo cáo tài chính / công ty – Business Report', questions: p4Lv800L2);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Thông báo khẩn cấp / xử lý sự cố', questions: p4Lv800L3);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Bài diễn thuyết truyền cảm hứng – Motivational Talk', questions: p4Lv800L4);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p4Lv800L5);
 }

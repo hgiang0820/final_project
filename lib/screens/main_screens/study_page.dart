@@ -234,9 +234,45 @@ class _StudyPageState extends State<StudyPage> {
                     final status = (it['status'] ?? 'todo') as String;
                     final isDone = status == 'done';
                     final lessonName = (it['lessonName'] ?? 'Lesson') as String;
-                    final part = (it['partId'] ?? '') as String;
-                    final level = (it['levelId'] ?? '') as String;
-                    final material = (it['materialId'] ?? '') as String;
+                    // final part = (it['partId'] ?? '') as String;
+                    String part;
+                    if (it['part'] == 'part1') {
+                      part = 'Part 1';
+                    } else if (it['part'] == 'part2') {
+                      part = 'Part 2';
+                    } else if (it['part'] == 'part3') {
+                      part = 'Part 3';
+                    } else if (it['part'] == 'part4') {
+                      part = 'Part 4';
+                    } else if (it['part'] == 'part5') {
+                      part = 'Part 5';
+                    } else if (it['part'] == 'part6') {
+                      part = 'Part 6';
+                    } else if (it['part'] == 'part7') {
+                      part = 'Part 7';
+                    } else {
+                      part = 'Part 8';
+                    }
+                    // final level = (it['levelId'] ?? '') as String;
+                    String level;
+                    if (it['level'] == 'lv100') {
+                      level = 'Level 100+';
+                    } else if (it['level'] == 'lv200') {
+                      level = 'Level 200+';
+                    } else if (it['level'] == 'lv300') {
+                      level = 'Level 300+';
+                    } else if (it['level'] == 'lv600') {
+                      level = 'Level 600+';
+                    } else {
+                      level = 'Level 800+';
+                    }
+                    // final material = (it['materialId'] ?? '') as String;
+                    String material;
+                    if (it['materialId'] == 'LRMaterials') {
+                      material = 'Listening & Reading';
+                    } else {
+                      material = 'Speaking & Writing';
+                    }
                     // final pdfUrl = (it['pdfUrl'] ?? '') as String;
 
                     // SỐ THỨ TỰ ỔN ĐỊNH:
@@ -286,7 +322,10 @@ class _StudyPageState extends State<StudyPage> {
                           ),
                         ],
                       ),
-                      subtitle: Text('$material • $level • $part'),
+                      subtitle: Text(
+                        '$material • $level • $part',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       trailing: isDone
                           ? const Text(
                               'Done',

@@ -15,7 +15,7 @@ Future<void> seedLRPracticePart5() async {
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> _pushLesson({
+  Future<void> pushLesson({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -1031,23 +1031,23 @@ Future<void> seedLRPracticePart5() async {
   // ========== PUSH ALL LESSONS ==========
 
   // lv300
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Thì hiện tại', questions: p5Lv300L1);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Danh từ & Mạo từ', questions: p5Lv300L2);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Giới từ cơ bản', questions: p5Lv300L3);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Đại từ', questions: p5Lv300L4);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv300L5);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Thì hiện tại', questions: p5Lv300L1);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Danh từ & Mạo từ', questions: p5Lv300L2);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Giới từ cơ bản', questions: p5Lv300L3);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Đại từ', questions: p5Lv300L4);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv300L5);
 
   // lv600
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Thì quá khứ & tương lai', questions: p5Lv600L1);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: So sánh', questions: p5Lv600L2);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Câu điều kiện loại 1', questions: p5Lv600L3);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Câu bị động', questions: p5Lv600L4);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv600L5);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Thì quá khứ & tương lai', questions: p5Lv600L1);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: So sánh', questions: p5Lv600L2);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Câu điều kiện loại 1', questions: p5Lv600L3);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Câu bị động', questions: p5Lv600L4);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv600L5);
 
   // lv800
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Mệnh đề quan hệ', questions: p5Lv800L1);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Điều kiện loại 2 & 3', questions: p5Lv800L2);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Đảo ngữ', questions: p5Lv800L3);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Cấu trúc nâng cao', questions: p5Lv800L4);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv800L5);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Mệnh đề quan hệ', questions: p5Lv800L1);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Điều kiện loại 2 & 3', questions: p5Lv800L2);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Đảo ngữ', questions: p5Lv800L3);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Cấu trúc nâng cao', questions: p5Lv800L4);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv800L5);
 }

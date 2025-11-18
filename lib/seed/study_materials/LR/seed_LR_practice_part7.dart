@@ -15,7 +15,7 @@ Future<void> seedLRPracticePart7() async {
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> _pushLesson({
+  Future<void> pushLesson({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -1713,31 +1713,31 @@ Future<void> seedLRPracticePart7() async {
   // ========== PUSH ALL LESSONS ==========
 
   // lv300
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Đọc hiểu đoạn văn ngắn',
     questions: p7Lv300L1,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Quảng cáo & Thông báo',
     questions: p7Lv300L2,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv300',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Email đơn giản',
     questions: p7Lv300L3,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv300',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Bảng biểu & thời gian biểu',
     questions: p7Lv300L4,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv300',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
@@ -1745,31 +1745,31 @@ Future<void> seedLRPracticePart7() async {
   );
 
   // lv600
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv600',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Email công việc',
     questions: p7Lv600L1,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv600',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Bài báo & tin tức',
     questions: p7Lv600L2,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv600',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Thư từ công việc',
     questions: p7Lv600L3,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv600',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Double passage',
     questions: p7Lv600L4,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv600',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
@@ -1777,31 +1777,31 @@ Future<void> seedLRPracticePart7() async {
   );
 
   // lv800
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv800',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Double passage nâng cao',
     questions: p7Lv800L1,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv800',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Triple passage',
     questions: p7Lv800L2,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv800',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Văn bản học thuật & báo cáo',
     questions: p7Lv800L3,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv800',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Phân tích suy luận',
     questions: p7Lv800L4,
   );
-  await _pushLesson(
+  await pushLesson(
     levelId: 'lv800',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',

@@ -13,7 +13,7 @@ Future<void> seedLRMaterials() async {
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
-  });
+  }, SetOptions(merge: true));
 
   // === LEVEL 300 ===
   // === PART 1 PICTURE DESCRIPTION ===
@@ -24,7 +24,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part1')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -40,7 +40,7 @@ Future<void> seedLRMaterials() async {
         .doc('part1')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 2
@@ -51,7 +51,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part2')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -67,7 +67,7 @@ Future<void> seedLRMaterials() async {
         .doc('part2')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 3
@@ -78,7 +78,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part3')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -94,7 +94,7 @@ Future<void> seedLRMaterials() async {
         .doc('part3')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 4
@@ -105,7 +105,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part4')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -121,7 +121,7 @@ Future<void> seedLRMaterials() async {
         .doc('part4')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 5
@@ -132,7 +132,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part5')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -148,7 +148,7 @@ Future<void> seedLRMaterials() async {
         .doc('part5')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 6
@@ -159,7 +159,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part6')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -175,7 +175,7 @@ Future<void> seedLRMaterials() async {
         .doc('part6')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath,'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 7
@@ -186,7 +186,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv300')
       .collection('parts')
       .doc('part7')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -202,7 +202,7 @@ Future<void> seedLRMaterials() async {
         .doc('part7')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // === LEVEL 600 ===
@@ -214,7 +214,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part1')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -230,7 +230,7 @@ Future<void> seedLRMaterials() async {
         .doc('part1')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath,'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 2
@@ -241,7 +241,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part2')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -257,7 +257,7 @@ Future<void> seedLRMaterials() async {
         .doc('part2')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 3
@@ -268,7 +268,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part3')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -284,7 +284,7 @@ Future<void> seedLRMaterials() async {
         .doc('part3')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath,'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 4
@@ -295,7 +295,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part4')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -311,7 +311,7 @@ Future<void> seedLRMaterials() async {
         .doc('part4')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath,'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 5
@@ -322,7 +322,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part5')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -338,7 +338,7 @@ Future<void> seedLRMaterials() async {
         .doc('part5')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 6
@@ -349,7 +349,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part6')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -365,7 +365,7 @@ Future<void> seedLRMaterials() async {
         .doc('part6')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 7
@@ -376,7 +376,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv600')
       .collection('parts')
       .doc('part7')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -392,7 +392,7 @@ Future<void> seedLRMaterials() async {
         .doc('part7')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // === LEVEL 800 ===
@@ -404,7 +404,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part1')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -420,7 +420,7 @@ Future<void> seedLRMaterials() async {
         .doc('part1')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 2
@@ -431,7 +431,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part2')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -447,7 +447,7 @@ Future<void> seedLRMaterials() async {
         .doc('part2')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 3
@@ -458,7 +458,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part3')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -474,7 +474,7 @@ Future<void> seedLRMaterials() async {
         .doc('part3')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 4
@@ -485,7 +485,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part4')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -501,7 +501,7 @@ Future<void> seedLRMaterials() async {
         .doc('part4')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 5
@@ -512,7 +512,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part5')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -528,7 +528,7 @@ Future<void> seedLRMaterials() async {
         .doc('part5')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   //part 6
@@ -539,7 +539,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part6')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -555,7 +555,7 @@ Future<void> seedLRMaterials() async {
         .doc('part6')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 
   // part 7
@@ -566,7 +566,7 @@ Future<void> seedLRMaterials() async {
       .doc('lv800')
       .collection('parts')
       .doc('part7')
-      .set({'lessonCount': 5});
+      .set({'lessonCount': 5}, SetOptions(merge: true));
 
   for (int i = 1; i <= 5; i++) {
     // final id = 'q${i.toString().padLeft(2, '0')}';
@@ -582,6 +582,6 @@ Future<void> seedLRMaterials() async {
         .doc('part7')
         .collection('lessons')
         .doc('lesson$i')
-        .set({'pdfPath': pdfPath, 'order': i});
+        .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
   }
 }

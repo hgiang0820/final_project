@@ -13,7 +13,7 @@ Future<void> seedSWMaterials() async {
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
-  });
+  }, SetOptions(merge: true));
 
   Future<void> pushPdf({
     required String levelId,
@@ -26,15 +26,15 @@ Future<void> seedSWMaterials() async {
         .doc(levelId)
         .collection('parts')
         .doc(partId)
-        .set({'lessonCount': 3});
+        .set({'lessonCount': 3}, SetOptions(merge: true));
 
     for (int i = 1; i <= 3; i++) {
       // final id = 'q${i.toString().padLeft(2, '0')}';
       // final pdfPath = 'part1/lv300/lesson$i/theory.pdf';
-      final pdfPath = 'SW/lv100/part1/lesson$i/theory.pdf';
+      final pdfPath = 'SW/$levelId/$partId/lesson$i/theory.pdf';
 
       await db
-          .collection('questions')
+          .collection('study_materials')
           .doc(materialId)
           .collection('levels')
           .doc(levelId)
@@ -42,7 +42,7 @@ Future<void> seedSWMaterials() async {
           .doc(partId)
           .collection('lessons')
           .doc('lesson$i')
-          .set({'pdfPath': pdfPath, 'order': i});
+          .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
     }
   }
 

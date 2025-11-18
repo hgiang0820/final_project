@@ -18,7 +18,7 @@ Future<void> seedLRPracticePart2() async {
   }, SetOptions(merge: true));
 
   // Helper to push 1 lesson
-  Future<void> _pushLesson({
+  Future<void> pushLesson({
     required String levelId,
     required String lessonId, // lesson1..lesson5
     required String lessonName,
@@ -1030,23 +1030,23 @@ Future<void> seedLRPracticePart2() async {
   // ========== PUSH ALL LESSONS ==========
 
   // lv300
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Wh-questions cơ bản — Time/Place/People', questions: p2Lv300L1);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Yes/No questions — Basic confirmations', questions: p2Lv300L2);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Lựa chọn (A or B) — This or that', questions: p2Lv300L3);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Keyword mapping — Spot the cue', questions: p2Lv300L4);
-  await _pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập hỗn hợp — Mixed practice', questions: p2Lv300L5);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Wh-questions cơ bản — Time/Place/People', questions: p2Lv300L1);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Yes/No questions — Basic confirmations', questions: p2Lv300L2);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Lựa chọn (A or B) — This or that', questions: p2Lv300L3);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Keyword mapping — Spot the cue', questions: p2Lv300L4);
+  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập hỗn hợp — Mixed practice', questions: p2Lv300L5);
 
   // lv600
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & lịch sự — Polite requests', questions: p2Lv600L1);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi lựa chọn phức tạp — Multiple-options', questions: p2Lv600L2);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Bẫy từ vựng — False friends & distractors', questions: p2Lv600L3);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Shadowing phản xạ — Speed & fluency', questions: p2Lv600L4);
-  await _pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập nâng cao — Mixed medium', questions: p2Lv600L5);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & lịch sự — Polite requests', questions: p2Lv600L1);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi lựa chọn phức tạp — Multiple-options', questions: p2Lv600L2);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Bẫy từ vựng — False friends & distractors', questions: p2Lv600L3);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Shadowing phản xạ — Speed & fluency', questions: p2Lv600L4);
+  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập nâng cao — Mixed medium', questions: p2Lv600L5);
 
   // lv800
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & bẫy ngữ nghĩa', questions: p2Lv800L1);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi suy luận & hàm ý (Inference/Implication)', questions: p2Lv800L2);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Nghe chi tiết & con số', questions: p2Lv800L3);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Câu hỏi bẫy nhiều tầng (Double distractors)', questions: p2Lv800L4);
-  await _pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp – Mini Test nâng cao', questions: p2Lv800L5);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & bẫy ngữ nghĩa', questions: p2Lv800L1);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi suy luận & hàm ý (Inference/Implication)', questions: p2Lv800L2);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Nghe chi tiết & con số', questions: p2Lv800L3);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Câu hỏi bẫy nhiều tầng (Double distractors)', questions: p2Lv800L4);
+  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp – Mini Test nâng cao', questions: p2Lv800L5);
 }

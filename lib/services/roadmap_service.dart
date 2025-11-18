@@ -24,12 +24,17 @@ class RoadmapService {
     final levelId = _pickLevel(goalText);
     final parts = _pickParts(selectedIndex, weakPoints);
 
+    print(levelId);
+    print(parts);
+
     // Chọn nguồn materials theo tab
     final materialIds = switch (selectedIndex) {
       0 => ['LRMaterials'],
       1 => ['SWMaterials'],
       _ => ['LRMaterials', 'SWMaterials'], // 4 skills
     };
+
+    print(materialIds);
 
     final List<Map<String, dynamic>> items = [];
     int order = 1; // ✅ thứ tự toàn cục, tăng dần xuyên suốt toàn bộ roadmap
@@ -103,9 +108,14 @@ class RoadmapService {
   // ---- helpers ----
   String _pickLevel(String goal) {
     final g = goal.toLowerCase();
-    if (g.contains('800')) return 'lv800';
+    if (g.contains('100')) return 'lv100';
+    if (g.contains('200')) return 'lv200';
+    if (g.contains('300')) return 'lv300';
     if (g.contains('600')) return 'lv600';
-    return 'lv300';
+    return 'lv800';
+    // if (g.contains('800')) return 'lv800';
+    // if (g.contains('600')) return 'lv600';
+    // return 'lv300';
   }
 
   /// Map weakPoints -> part keys trên DB
@@ -124,12 +134,14 @@ class RoadmapService {
       'reading comprehension': 'part7',
     };
     final swMap = <String, String>{
-      'read-aloud': 'speak1',
-      'describe a picture': 'speak2',
-      'respond to questions': 'speak3',
-      'express an opinion': 'speak4',
-      'email writing': 'write1',
-      'opinion essay': 'write2',
+      'read a text aloud': 'part1',
+      'describe a picture': 'part2',
+      'respond to questions': 'part3',
+      'respond to questions using information provided': 'part4',
+      'express an opinion': 'part5',
+      'write a sentence based on a picture': 'part6',
+      'respond to a written request': 'part7',
+      'write an opinion essay': 'part8',
     };
 
     List<String> parts = [];
@@ -137,9 +149,9 @@ class RoadmapService {
       for (final k in lrMap.keys) {
         if (_containsAny(wp, [k])) parts.add(lrMap[k]!);
       }
-      if (parts.isEmpty) {
-        parts = ['part2', 'part3', 'part5']; // mặc định dễ–trung bình–ngữ pháp
-      }
+      // if (parts.isEmpty) {
+      //   parts = ['part1', 'part2', 'part5']; // mặc định dễ–trung bình–ngữ pháp
+      // }
     }
 
     if (tab == 1 || tab == 2) {
@@ -147,9 +159,9 @@ class RoadmapService {
       for (final k in swMap.keys) {
         if (_containsAny(wp, [k])) swPicked.add(swMap[k]!);
       }
-      if (swPicked.isEmpty) {
-        swPicked.addAll(['speak2', 'speak3', 'write1']); // mặc định SW
-      }
+      // if (swPicked.isEmpty) {
+      //   swPicked.addAll(['speak2', 'speak3', 'write1']); // mặc định SW
+      // }
       parts.addAll(swPicked);
     }
 

@@ -6,6 +6,7 @@ import 'package:final_project/seed/study_materials/SW/seed_SW_practice_part4.dar
 import 'package:final_project/seed/study_materials/SW/seed_SW_practice_part5.dart';
 import 'package:final_project/seed/study_materials/SW/seed_SW_practice_part6.dart';
 import 'package:final_project/seed/study_materials/SW/seed_SW_practice_part7.dart';
+import 'package:final_project/seed/study_materials/SW/seed_SW_practice_part8.dart';
 
 Future<void> seedAllSW() async {
   await seedSWPracticePart1();
@@ -15,5 +16,6 @@ Future<void> seedAllSW() async {
   await seedSWPracticePart5();
   await seedSWPracticePart6();
   await seedSWPracticePart7();
+  await seedSWPracticePart8();
   await seedSWMaterials();
 }

@@ -233,6 +233,7 @@ class _LRTestPage extends State<LRTestPage> {
         .join(', ');
 
     showDialog(
+      // ignore: use_build_context_synchronously
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Your Result"),
