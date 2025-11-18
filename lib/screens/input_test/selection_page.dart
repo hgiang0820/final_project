@@ -1,7 +1,6 @@
 import 'package:final_project/screens/main_screens/study_page.dart';
-import 'package:final_project/seed/input_test/seed_input_SW.dart';
-import 'package:final_project/seed/study_materials/seed_LR_materials.dart';
-import 'package:final_project/seed/study_materials/seed_LR_practice_part2.dart';
+import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
+import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
 import 'package:flutter/material.dart';
 
 // Repositories & Services
@@ -101,6 +100,12 @@ class _SelectionState extends State<SelectionPage> {
               onPressed: _handleShowStudyRoadmap,
               title: "Xem lộ trình học",
             ),
+
+            const SizedBox(height: 20),
+            SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
+
+            const SizedBox(height: 20),
+            SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
           ],
         ),
       ),
