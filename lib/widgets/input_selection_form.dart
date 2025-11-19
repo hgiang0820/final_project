@@ -89,7 +89,7 @@ class _SelectionFormState extends State<SelectionForm> {
       case 1:
         return SWTestPage(testId: "testSW");
       case 2:
-      // return FullTestPage(testId: "testFull");
+      return FullTestPage(testId: "testFull");
       default:
         return const SizedBox();
     }

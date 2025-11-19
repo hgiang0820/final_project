@@ -75,7 +75,6 @@ class _SWTestPage extends State<SWTestPage> {
     _startCountdownIfNeeded();
   }
 
-  // Đặt trong class _SWTestPage (ví dụ ngay dưới dispose)
   List<Map<String, dynamic>> _normalizeResults(dynamic results) {
     if (results == null) return const <Map<String, dynamic>>[];
 

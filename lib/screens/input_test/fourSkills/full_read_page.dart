@@ -30,35 +30,19 @@ class FullReadPageState extends State<FullReadPage> {
   void initState() {
     super.initState();
     _load();
-    player.playerStateStream.listen((state) {
-      setState(() {
-        isPlaying = state.playing;
-      });
-    });
   }
 
   Future<void> _load() async {
-    final partMeta = await repo.getPartMeta(
-      'input_tests',
-      widget.testId,
-      'read_part',
-    );
     final qs = await repo.getQuestionsLR(
       'input_tests',
       widget.testId,
-      'read_part',
+      'readPart',
     );
-    final url = partMeta['audioPath'] != null
-        ? repo.getPublicUrl('toeic-assets', partMeta['audioPath'])
-        : null;
     setState(() {
       questions = qs;
       answers = List<int?>.filled(qs.length, null);
-      audioUrl = url;
+      // audioUrl = url;
     });
-    if (url != null) {
-      await player.setUrl(url);
-    }
   }
 
   Map<String, dynamic> getResult() {
@@ -105,7 +89,7 @@ class FullReadPageState extends State<FullReadPage> {
       return AlertDialog(
         title: const Text("Part 2 - Reading"),
         content: const Text(
-          "The part includes 20 questions. You need to mark A/B/C/D to choose best answer for each question. Good luck!",
+          "The part includes 9 questions. You need to choose best answer for each question. Good luck!",
         ),
         actions: [
           TextButton(
@@ -145,36 +129,9 @@ class FullReadPageState extends State<FullReadPage> {
             ),
           Expanded(
             child: ListView.builder(
-              itemCount: questions.length + 1,
+              itemCount: questions.length,
               itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Card(
-                    margin: const EdgeInsets.all(8),
-                    color: Colors.grey[350],
-                    child: ListTile(
-                      title: const Text(
-                        'Audio for Part 2',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                        onPressed: () async {
-                          if (isPlaying) {
-                            await player.pause();
-                          } else {
-                            await player.play();
-                          }
-                        },
-                      ),
-                    ),
-                  );
-                }
-
-                final q = questions[index - 1];
-                // final imageUrl = q.imagePath != null
-                //     ? repo.getPublicUrl(q.imagePath!)
-                //     : null;
-                // final userAnswer = answers[index - 1];
+                final q = questions[index];
                 final correctAnswer = q.correctIndex;
 
                 return Card(
@@ -182,10 +139,24 @@ class FullReadPageState extends State<FullReadPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ListTile(title: Text("Question $index:")),
+                      ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Question ${index + 1}:",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(q.question ?? ''),
+                          ],
+                        ),
+                      ),
                       Column(
                         children: List.generate(q.options.length, (i) {
-                          final isSelected = answers[index - 1] == i;
+                          final isSelected = answers[index] == i;
                           final isCorrect = correctAnswer == i;
 
                           Color? color;
@@ -199,49 +170,14 @@ class FullReadPageState extends State<FullReadPage> {
                             }
                           }
 
-                          if (showAnswers) {
-                            Card(
-                              elevation: 2,
-                              color: Colors.blue[100],
-                              child: ExpansionTile(
-                                initiallyExpanded: false, // ✅ mặc định đóng
-                                title: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lightbulb_outline,
-                                      color: Colors.blue[700],
-                                    ),
-                                    const SizedBox(width: 12),
-                                    const Text(
-                                      'Sample Answer',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Row(
-                                      children: [Text("q.sampleAnswer")],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-
                           return RadioListTile<int>(
                             value: i,
-                            groupValue: answers[index - 1],
+                            groupValue: answers[index],
                             onChanged: showAnswers
                                 ? null
                                 : (val) {
                                     setState(() {
-                                      answers[index - 1] = val;
+                                      answers[index] = val;
                                     });
                                   },
                             title: Text(
@@ -257,6 +193,38 @@ class FullReadPageState extends State<FullReadPage> {
                           );
                         }),
                       ),
+
+                      if (showAnswers)
+                        Card(
+                          elevation: 2,
+                          color: Colors.blue[100],
+                          child: ExpansionTile(
+                            initiallyExpanded: false, // ✅ mặc định đóng
+                            title: Row(
+                              children: [
+                                Icon(
+                                  Icons.lightbulb_outline,
+                                  color: Colors.blue[700],
+                                ),
+                                const SizedBox(width: 12),
+                                const Text(
+                                  'Explain',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(children: [Text(q.explain)]),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 );

@@ -66,7 +66,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
   }
 
   Future<void> _load() async {
-    final qs = await testRepo.getQuestionsSW(widget.testId, 'speak_part');
+    final qs = await testRepo.getQuestionsSW(widget.testId, 'speakPart');
     if (qs.isNotEmpty) {
       setState(() {
         questions = qs;
@@ -80,6 +80,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
 
   /// Bắt đầu ghi âm
   Future<void> _startRecording(String questionId, int recordTime) async {
+    if (isFinishedAll) return; // ✅ đã submit thì không ghi nữa
     final hasPermission = await _requestPermission();
     if (!hasPermission) {
       debugPrint("❌ Microphone permission not granted");
@@ -131,7 +132,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
 
   Future<Map<String, dynamic>> getResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.14:8002');
+    final api = SpeakingApiService(baseUrl: 'http://192.168.20.82:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -251,20 +252,19 @@ class FullSpeakPageState extends State<FullSpeakPage> {
       }
     }
 
-    // debugPrint(remoteUrls.entries.first.key);
-
     return remoteUrls;
   }
 
-  void showFeedbacksMode(Map<String, dynamic> results) {
+  void showFeedbacksMode(Map<String, dynamic> results) async {
+    await forceStopAll();
     setState(() {
-      isFinishedAll = true;
       evaluationResults = results;
     });
   }
 
   /// Bắt đầu 1 câu mới
   void _startQuestion(int index) {
+    if (isFinishedAll) return; // ✅ không start nếu đã submit
     final q = questions[index];
     setState(() {
       currentIndex = index;
@@ -279,6 +279,11 @@ class FullSpeakPageState extends State<FullSpeakPage> {
     // Nếu có thời gian chuẩn bị
     if (q.prepareTime! > 0) {
       prepareTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (!mounted || isFinishedAll) {
+          // ✅ guard
+          t.cancel();
+          return;
+        }
         if (remainingPrepareSeconds <= 0) {
           t.cancel();
           _startRecording(q.id, q.recordTime ?? 0);
@@ -326,6 +331,28 @@ class FullSpeakPageState extends State<FullSpeakPage> {
     }
   }
 
+  Future<void> forceStopAll() async {
+    // Hủy mọi timer
+    try {
+      prepareTimer?.cancel();
+    } catch (_) {}
+    try {
+      recordTimer?.cancel();
+    } catch (_) {}
+
+    // Stop recorder immediately if recording
+    try {
+      if (isRecording) {
+        await recorder.stop();
+      }
+    } catch (_) {}
+
+    setState(() {
+      isRecording = false;
+      isFinishedAll = true; // lock UI to finished state
+    });
+  }
+
   @override
   void dispose() {
     prepareTimer?.cancel();
@@ -368,7 +395,7 @@ class FullSpeakPageState extends State<FullSpeakPage> {
       return AlertDialog(
         title: const Text("Part 3 - Speaking"),
         content: const Text(
-          "The test includes 2 questions: Read text aloud & Respond to question. You will have some time to prepare before recording your answer for each question. Once you click Start, the timer will count down the preparing time. Good luck!",
+          "The test includes 5 questions. You will have some time to prepare before recording your answer for each question. Once you click Start, the timer will count down the preparing time. Good luck!",
         ),
         actions: [
           TextButton(

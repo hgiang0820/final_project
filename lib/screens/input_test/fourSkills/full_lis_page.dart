@@ -44,8 +44,16 @@ class FullLisPageState extends State<FullLisPage> {
 
   Future<void> _load() async {
     try {
-      final partMeta = await repo.getPartMeta('input_tests', widget.testId, 'lis_part');
-      final qs = await repo.getQuestionsLR('input_tests', widget.testId, 'lis_part');
+      final partMeta = await repo.getPartMeta(
+        'input_tests',
+        widget.testId,
+        'lisPart',
+      );
+      final qs = await repo.getQuestionsLR(
+        'input_tests',
+        widget.testId,
+        'lisPart',
+      );
       final url = partMeta['audioPath'] != null
           ? repo.getPublicUrl('toeic-assets', partMeta['audioPath'])
           : null;
@@ -115,7 +123,7 @@ class FullLisPageState extends State<FullLisPage> {
       return AlertDialog(
         title: const Text("Part 1 - Listening"),
         content: const Text(
-          "The test includes 25 questions. You need to listen to the audio carefully and mark A/B/C/D for each question. Good luck!",
+          "The test includes 12 questions. You need to listen to the audio carefully and mark your answer. Good luck!",
         ),
         actions: [
           TextButton(
@@ -165,7 +173,7 @@ class FullLisPageState extends State<FullLisPage> {
                     color: Colors.grey[350],
                     child: ListTile(
                       title: const Text(
-                        'Audio for Part 1',
+                        'Audio for Listening Part',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       trailing: IconButton(
@@ -190,10 +198,10 @@ class FullLisPageState extends State<FullLisPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const ListTile(
+                      ListTile(
                         title: Text(
-                          "Question:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          "Question $index:",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                       Column(

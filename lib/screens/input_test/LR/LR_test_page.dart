@@ -94,7 +94,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part1'] = result1['answers'];
       final partType = await testRepo.getPartType("testLR", 'part1');
-      if (partScores['part1']?['correctPercent'] <= 0.6) {
+      if (partScores['part1']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -109,7 +109,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part2'] = result2['answers'];
       final partType = await testRepo.getPartType("testLR", 'part2');
-      if (partScores['part2']?['correctPercent'] <= 0.6) {
+      if (partScores['part2']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -124,7 +124,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part3'] = result3['answers'];
       final partType = await testRepo.getPartType("testLR", 'part3');
-      if (partScores['part3']?['correctPercent'] <= 0.6) {
+      if (partScores['part3']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -139,7 +139,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part4'] = result4['answers'];
       final partType = await testRepo.getPartType("testLR", 'part4');
-      if (partScores['part4']?['correctPercent'] <= 0.6) {
+      if (partScores['part4']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -154,7 +154,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part5'] = result5['answers'];
       final partType = await testRepo.getPartType("testLR", 'part5');
-      if (partScores['part5']?['correctPercent'] <= 0.6) {
+      if (partScores['part5']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -169,7 +169,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part6'] = result6['answers'];
       final partType = await testRepo.getPartType("testLR", 'part6');
-      if (partScores['part6']?['correctPercent'] <= 0.6) {
+      if (partScores['part6']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);
@@ -184,7 +184,7 @@ class _LRTestPage extends State<LRTestPage> {
       };
       answers['part7'] = result7['answers'];
       final partType = await testRepo.getPartType("testLR", 'part7');
-      if (partScores['part7']?['correctPercent'] <= 0.6) {
+      if (partScores['part7']?['correctPercent'] <= 0.5) {
         if (partType != null) weakPoints.add(partType);
       } else {
         if (partType != null) strongPoints.add(partType);

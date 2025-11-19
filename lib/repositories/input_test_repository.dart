@@ -55,6 +55,33 @@ class InputTestRepository {
     return qs.docs.map((d) => QuestionSW.fromMap(d.id, d.data())).toList();
   }
 
+  Future<String?> getCorrectAnswer(
+    String testId,
+    String partId,
+    String qid,
+  ) async {
+    try {
+      final doc = await _firestore
+          .collection('input_tests')
+          .doc(testId)
+          .collection('parts')
+          .doc(partId)
+          .collection('questions') // điều chỉnh theo cấu trúc của bạn
+          .doc(qid)
+          .get();
+
+      if (!doc.exists) return null;
+
+      final data = doc.data();
+      if (data == null) return null;
+
+      return (data['correctIndex'])?.toString();
+    } catch (e) {
+      print('getCorrectAnswer error: $e');
+      return null;
+    }
+  }
+
   /// Get public URL. If SDK returns map, adapt accordingly.
   String getPublicUrl(String bucket, String storagePath) {
     return _supabase.storage.from(bucket).getPublicUrl(storagePath);

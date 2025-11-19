@@ -38,7 +38,7 @@ class FullWriPageState extends State<FullWriPage> {
   }
 
   Future<void> _load() async {
-    final qs = await repo.getQuestionsSW(widget.testId, 'wri_part');
+    final qs = await repo.getQuestionsSW(widget.testId, 'wriPart');
     if (qs.isNotEmpty) {
       setState(() {
         questions = qs;
@@ -56,18 +56,8 @@ class FullWriPageState extends State<FullWriPage> {
     }
   }
 
-  // Future<void> loadRequirements() async {
-  //   final qs = await repo.getQuestionsSW(widget.testId, 'part2');
-  //   setState(() {
-  //     for (var q in qs) {
-  //       requirements[q.id] = "${q.requirement} \n ${q.text}";
-  //     }
-  //     // requirement = doc.exists ? (doc.data()?['requirement'] ?? '') : 'Requirement not found';
-  //   });
-  // }
-
   Future<Map<String, dynamic>> getResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.14:8000');
+    final api = WritingApiService(baseUrl: 'http://192.168.20.82:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -175,7 +165,7 @@ class FullWriPageState extends State<FullWriPage> {
     if (!isStarted) {
       return AlertDialog(
         title: const Text("Part 4 - Writing"),
-        content: const Text("The test includes 2 questions. Good luck!"),
+        content: const Text("The test includes 3 questions. Good luck!"),
         actions: [
           TextButton(
             onPressed: () {

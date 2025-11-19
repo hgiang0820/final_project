@@ -1,4 +1,5 @@
 import 'package:final_project/screens/main_screens/study_page.dart';
+import 'package:final_project/seed/input_test/seed_input_full.dart';
 import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
 import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,12 @@ class _SelectionState extends State<SelectionPage> {
 
             const SizedBox(height: 20),
             SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
+
+            const SizedBox(height: 20),
+            SmallButton(
+              onPressed: seedInputFull,
+              title: "Seed Full Input Test",
+            ),
           ],
         ),
       ),
