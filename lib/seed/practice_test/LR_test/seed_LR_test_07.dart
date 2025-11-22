@@ -45,12 +45,7 @@ Future<void> seedLRTest07() async {
       // (C) He's mixing chemicals in a beaker.
       // (D) He's writing notes in a notebook.
       'question': "",
-      'options': [
-        "He's putting on a lab coat.",
-        "He's adjusting a microscope.",
-        "He's mixing chemicals in a beaker.",
-        "He's writing notes in a notebook.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người đàn ông đang dùng tay điều chỉnh (adjusting) một chiếc kính hiển vi (microscope).',
@@ -63,12 +58,7 @@ Future<void> seedLRTest07() async {
       // (C) Luggage is being claimed at baggage claim.
       // (D) Travelers are going through security check.
       'question': "",
-      'options': [
-        "Passengers are boarding an airplane.",
-        "People are waiting in a departure lounge.",
-        "Luggage is being claimed at baggage claim.",
-        "Travelers are going through security check.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy nhiều người đang ngồi trên ghế trong một khu vực giống phòng chờ (lounge) ở sân bay.',
@@ -81,12 +71,7 @@ Future<void> seedLRTest07() async {
       // (C) She's smiling while holding a phone.
       // (D) She's plugging in her phone charger.
       'question': "",
-      'options': [
-        "She's hanging up the phone.",
-        "She's sending a text message.",
-        "She's smiling while holding a phone.",
-        "She's plugging in her phone charger.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Người phụ nữ đang mỉm cười (smiling) và tay đang cầm (holding) một chiếc điện thoại.',
@@ -99,12 +84,7 @@ Future<void> seedLRTest07() async {
       // (C) A ferry is transporting vehicles.
       // (D) Construction workers are repairing the bridge.
       'question': "",
-      'options': [
-        "Cars are parked along the riverbank.",
-        "Traffic is crossing a bridge over water.",
-        "A ferry is transporting vehicles.",
-        "Construction workers are repairing the bridge.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy xe cộ (traffic) đang đi qua (crossing) một cây cầu (bridge) bắc qua mặt nước (water).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest07() async {
       // (C) A man is stacking lumber.
       // (D) A customer is buying wood at a store.
       'question': "",
-      'options': [
-        "A carpenter is measuring a piece of wood.",
-        "A worker is painting a wooden fence.",
-        "A man is stacking lumber.",
-        "A customer is buying wood at a store.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người thợ mộc (carpenter) đang dùng thước để đo (measuring) một tấm gỗ (piece of wood).',
@@ -135,12 +110,7 @@ Future<void> seedLRTest07() async {
       // (C) Food is being served from a buffet.
       // (D) A room is being set up for a banquet.
       'question': "",
-      'options': [
-        "Diners are eating a meal in a restaurant.",
-        "Tables and chairs are arranged in a dining room.",
-        "Food is being served from a buffet.",
-        "A room is being set up for a banquet.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy bàn (tables) và ghế (chairs) đã được sắp xếp (arranged) trong một phòng ăn (dining room). Không có người đang ăn.',

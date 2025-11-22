@@ -45,12 +45,7 @@ Future<void> seedLRTest08() async {
       // (C) He's climbing a ladder.
       // (D) He's mixing cement.
       'question': "",
-      'options': [
-        "He's operating heavy machinery.",
-        "He's reviewing blueprints at a construction site.",
-        "He's climbing a ladder.",
-        "He's mixing cement.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người đàn ông đội mũ cứng, đang xem giấy tờ (blueprints - bản thiết kế) tại một nơi đang xây dựng (construction site).',
@@ -63,12 +58,7 @@ Future<void> seedLRTest08() async {
       // (C) She's paying for groceries.
       // (D) She's talking to a customer.
       'question': "",
-      'options': [
-        "She's weighing produce on a scale.",
-        "She's arranging fruit in a display.",
-        "She's paying for groceries.",
-        "She's talking to a customer.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người phụ nữ đang sắp xếp (arranging) các loại trái cây (fruit) trên một quầy trưng bày (display).',
@@ -81,12 +71,7 @@ Future<void> seedLRTest08() async {
       // (C) The conference room is empty.
       // (D) A presentation is being set up.
       'question': "",
-      'options': [
-        "A meeting is in progress.",
-        "The chairs have been stacked against the wall.",
-        "The conference room is empty.",
-        "A presentation is being set up.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy một phòng họp (conference room) không có người (empty).',
@@ -99,12 +84,7 @@ Future<void> seedLRTest08() async {
       // (C) He's listening to music.
       // (D) He's wearing headphones and looking at a screen.
       'question': "",
-      'options': [
-        "He's typing on a keyboard.",
-        "He's talking on the phone.",
-        "He's listening to music.",
-        "He's wearing headphones and looking at a screen.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 3,
       'explain':
           'Người này đang đeo tai nghe (wearing headphones) và nhìn vào màn hình (looking at a screen).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest08() async {
       // (C) A bicycle is being repaired.
       // (D) Bicycles are loaded onto a truck.
       'question': "",
-      'options': [
-        "Bicycles are parked in a row.",
-        "People are riding bicycles in a race.",
-        "A bicycle is being repaired.",
-        "Bicycles are loaded onto a truck.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Nhiều chiếc xe đạp (bicycles) đang được đậu (parked) thành một hàng (in a row).',
@@ -135,12 +110,7 @@ Future<void> seedLRTest08() async {
       // (C) Glasses are being washed in a sink.
       // (D) Bottles are stacked on shelves.
       'question': "",
-      'options': [
-        "A bartender is pouring a drink.",
-        "A customer is ordering a beverage.",
-        "Glasses are being washed in a sink.",
-        "Bottles are stacked on shelves.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người pha chế (bartender) đang rót (pouring) một thứ đồ uống (drink) vào ly.',

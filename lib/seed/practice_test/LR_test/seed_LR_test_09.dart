@@ -45,12 +45,7 @@ Future<void> seedLRTest09() async {
       // (C) He's buying a newspaper.
       // (D) He's walking through a park.
       'question': "",
-      'options': [
-        "He's sleeping on a bench.",
-        "He's reading a book outdoors.",
-        "He's buying a newspaper.",
-        "He's walking through a park.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người đàn ông đang ngồi trên ghế (outdoors) và đọc một cuốn sách (reading a book).',
@@ -63,12 +58,7 @@ Future<void> seedLRTest09() async {
       // (C) The kitchen counters are clear.
       // (D) People are gathered around the table.
       'question': "",
-      'options': [
-        "A meal is being prepared on the stove.",
-        "Dirty dishes are piled in the sink.",
-        "The kitchen counters are clear.",
-        "People are gathered around the table.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy các bề mặt quầy bếp (kitchen counters) trống trải, không có đồ vật lộn xộn (clear).',
@@ -81,12 +71,7 @@ Future<void> seedLRTest09() async {
       // (C) She's answering a phone call.
       // (D) She's drawing a diagram on a board.
       'question': "",
-      'options': [
-        "She's pointing at something on a monitor.",
-        "She's giving a presentation to a large group.",
-        "She's answering a phone call.",
-        "She's drawing a diagram on a board.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người phụ nữ đang dùng ngón tay chỉ (pointing) vào màn hình máy tính (monitor) cho người khác xem.',
@@ -99,12 +84,7 @@ Future<void> seedLRTest09() async {
       // (C) Shelves are empty in a storage room.
       // (D) Workers are packing items for shipment.
       'question': "",
-      'options': [
-        "Boxes are stacked high in a warehouse.",
-        "A forklift is lifting a pallet.",
-        "Shelves are empty in a storage room.",
-        "Workers are packing items for shipment.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Bức tranh cho thấy nhiều thùng hàng (boxes) được xếp chồng (stacked) lên cao trong một không gian giống nhà kho (warehouse).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest09() async {
       // (C) A musician is playing the violin.
       // (D) An orchestra is performing on stage.
       'question': "",
-      'options': [
-        "A man is playing the piano.",
-        "A woman is tuning a guitar.",
-        "A musician is playing the violin.",
-        "An orchestra is performing on stage.",
-      ],
+     'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Hình ảnh rõ ràng cho thấy một người (musician) đang chơi đàn violin.',
@@ -135,15 +110,10 @@ Future<void> seedLRTest09() async {
       // (C) Pedestrians are crossing the street.
       // (D) A bicycle is parked next to a building.
       'question': "",
-      'options': [
-        "A cyclist is waiting at a traffic light.",
-        "A car is turning at an intersection.",
-        "Pedestrians are crossing the street.",
-        "A bicycle is parked next to a building.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
-          'Người đi xe đạp (cyclist) đang dừng lại (waiting) tại một cột đèn tín hiệu giao thông (traffic light).',
+          'Người đi xe máy (biker) đang dừng lại (waiting) tại một cột đèn tín hiệu giao thông (traffic light).',
     },
   ];
 

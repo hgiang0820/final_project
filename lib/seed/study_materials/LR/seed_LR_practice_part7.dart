@@ -7,15 +7,15 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedLRPracticePart7() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'LRMaterials';
+  // final materialId = 'LRMaterials';
 
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('LRMaterials').set({
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonLR({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,7 +23,7 @@ Future<void> seedLRPracticePart7() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('LRMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -39,8 +39,45 @@ Future<void> seedLRPracticePart7() async {
     }, SetOptions(merge: true));
 
     for (int i = 0; i < questions.length; i++) {
-      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      await lessonRef.collection('questions').doc(id).set({
+        'question': q['question'],
+        'imagePath': null,
+        'options': q['options'],
+        'correctIndex': q['correctIndex'],
+        'explain': q['explain'],
+        'order': i + 1,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId, // lesson1..lesson5
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('read3')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Reading comprehension',
+      'lessonName': lessonName,
+      'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       await lessonRef.collection('questions').doc(id).set({
         'question': q['question'],
         'imagePath': null,
@@ -1712,32 +1749,33 @@ Future<void> seedLRPracticePart7() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  /// ===== LRMaterials ========
   // lv300
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Đọc hiểu đoạn văn ngắn',
     questions: p7Lv300L1,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Quảng cáo & Thông báo',
     questions: p7Lv300L2,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv300',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Email đơn giản',
     questions: p7Lv300L3,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv300',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Bảng biểu & thời gian biểu',
     questions: p7Lv300L4,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv300',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
@@ -1745,31 +1783,31 @@ Future<void> seedLRPracticePart7() async {
   );
 
   // lv600
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv600',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Email công việc',
     questions: p7Lv600L1,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv600',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Bài báo & tin tức',
     questions: p7Lv600L2,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv600',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Thư từ công việc',
     questions: p7Lv600L3,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv600',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Double passage',
     questions: p7Lv600L4,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv600',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
@@ -1777,32 +1815,129 @@ Future<void> seedLRPracticePart7() async {
   );
 
   // lv800
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv800',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Double passage nâng cao',
     questions: p7Lv800L1,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv800',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Triple passage',
     questions: p7Lv800L2,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv800',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Văn bản học thuật & báo cáo',
     questions: p7Lv800L3,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv800',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Phân tích suy luận',
     questions: p7Lv800L4,
   );
-  await pushLesson(
+  await pushLessonLR(
     levelId: 'lv800',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p7Lv800L5,
+  );
+
+  /// ===== FullMaterials ========
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Đọc hiểu đoạn văn ngắn',
+    questions: p7Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Quảng cáo & Thông báo',
+    questions: p7Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Email đơn giản',
+    questions: p7Lv300L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Bảng biểu & thời gian biểu',
+    questions: p7Lv300L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p7Lv300L5,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Email công việc',
+    questions: p7Lv600L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Bài báo & tin tức',
+    questions: p7Lv600L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Thư từ công việc',
+    questions: p7Lv600L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Double passage',
+    questions: p7Lv600L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p7Lv600L5,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Double passage nâng cao',
+    questions: p7Lv800L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Triple passage',
+    questions: p7Lv800L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Văn bản học thuật & báo cáo',
+    questions: p7Lv800L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Phân tích suy luận',
+    questions: p7Lv800L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
     questions: p7Lv800L5,

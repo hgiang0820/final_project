@@ -7,15 +7,15 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedLRPracticePart5() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'LRMaterials';
+  // final materialId = 'LRMaterials';
 
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('LRMaterials').set({
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonLR({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,7 +23,7 @@ Future<void> seedLRPracticePart5() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('LRMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -39,8 +39,45 @@ Future<void> seedLRPracticePart5() async {
     }, SetOptions(merge: true));
 
     for (int i = 0; i < questions.length; i++) {
-      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      await lessonRef.collection('questions').doc(id).set({
+        'question': q['question'],
+        'imagePath': null,
+        'options': q['options'],
+        'correctIndex': q['correctIndex'],
+        'explain': q['explain'],
+        'order': i + 1,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId, // lesson1..lesson5
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('read1')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Incomplete sentences',
+      'lessonName': lessonName,
+      'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       await lessonRef.collection('questions').doc(id).set({
         'question': q['question'],
         'imagePath': null,
@@ -59,10 +96,17 @@ Future<void> seedLRPracticePart5() async {
   // L1 — Thì hiện tại: Present Simple vs Present Continuous
   final p5Lv300L1 = <Map<String, dynamic>>[
     {
-      'question': "She usually ______ to work by bus, but today she ______ a taxi.",
-      'options': ['goes / is taking', 'is going / takes', 'go / take', 'goes / takes'],
+      'question':
+          "She usually ______ to work by bus, but today she ______ a taxi.",
+      'options': [
+        'goes / is taking',
+        'is going / takes',
+        'go / take',
+        'goes / takes',
+      ],
       'correctIndex': 0,
-      'explain': 'Habit → present simple “goes”; happening now → present continuous “is taking”.',
+      'explain':
+          'Habit → present simple “goes”; happening now → present continuous “is taking”.',
     },
     {
       'question': "I can’t talk now. I ______ to a client.",
@@ -83,14 +127,26 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Tín hiệu “Listen!” → hành động ngay lúc nói.',
     },
     {
-      'question': "He ______ coffee in the morning, but he ______ tea right now.",
-      'options': ['drinks / is having', 'is drinking / has', 'drink / drinks', 'drank / has'],
+      'question':
+          "He ______ coffee in the morning, but he ______ tea right now.",
+      'options': [
+        'drinks / is having',
+        'is drinking / has',
+        'drink / drinks',
+        'drank / has',
+      ],
       'correctIndex': 0,
       'explain': 'Thói quen “drinks”; hiện tại ngay bây giờ “is having”.',
     },
     {
-      'question': "They ______ in New York, but this week they ______ in Boston.",
-      'options': ['live / are staying', 'are living / stay', 'lives / stay', 'live / stay'],
+      'question':
+          "They ______ in New York, but this week they ______ in Boston.",
+      'options': [
+        'live / are staying',
+        'are living / stay',
+        'lives / stay',
+        'live / stay',
+      ],
       'correctIndex': 0,
       'explain': 'Sống lâu dài “live”; tạm thời “are staying”.',
     },
@@ -114,7 +170,12 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "He ______ in sales and ______ customers every day.",
-      'options': ['works / meets', 'is working / is meeting', 'work / meet', 'worked / met'],
+      'options': [
+        'works / meets',
+        'is working / is meeting',
+        'work / meet',
+        'worked / met',
+      ],
       'correctIndex': 0,
       'explain': 'Mô tả công việc thường xuyên → present simple.',
     },
@@ -126,7 +187,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "She is ______ engineer at ______ software company.",
       'options': ['an / a', 'a / an', 'the / the', 'an / the'],
       'correctIndex': 0,
-      'explain': '“engineer” bắt đầu bằng âm nguyên âm → “an”; “a software company” lần đầu nhắc.',
+      'explain':
+          '“engineer” bắt đầu bằng âm nguyên âm → “an”; “a software company” lần đầu nhắc.',
     },
     {
       'question': "Please put ______ boxes in ______ storage room.",
@@ -174,7 +236,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "I couldn’t find ______ documents you requested.",
       'options': ['the', 'a', 'an', 'some'],
       'correctIndex': 0,
-      'explain': 'Tài liệu được xác định bởi mệnh đề quan hệ ngầm → dùng “the”.',
+      'explain':
+          'Tài liệu được xác định bởi mệnh đề quan hệ ngầm → dùng “the”.',
     },
     {
       'question': "There are ______ chairs but only ______ table.",
@@ -193,7 +256,8 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Giờ dùng “at”; ngày trong tuần dùng “on”.',
     },
     {
-      'question': "Her office is ______ the second floor ______ the main building.",
+      'question':
+          "Her office is ______ the second floor ______ the main building.",
       'options': ['on / in', 'in / on', 'at / in', 'on / at'],
       'correctIndex': 0,
       'explain': 'Tầng → “on”; tòa nhà → “in”.',
@@ -238,7 +302,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "He arrived ______ the airport early ______ the morning.",
       'options': ['at / in', 'in / at', 'on / in', 'at / on'],
       'correctIndex': 0,
-      'explain': 'Địa điểm điểm đến → “at the airport”; buổi sáng → “in the morning”.',
+      'explain':
+          'Địa điểm điểm đến → “at the airport”; buổi sáng → “in the morning”.',
     },
     {
       'question': "The keys are ______ the desk, not ______ the drawer.",
@@ -315,8 +380,14 @@ Future<void> seedLRPracticePart5() async {
   // L5 — Ôn tập tổng hợp (300+)
   final p5Lv300L5 = <Map<String, dynamic>>[
     {
-      'question': "She ______ to the gym on Tuesdays, but she ______ yoga right now.",
-      'options': ['goes / is doing', 'is going / does', 'go / does', 'goes / does'],
+      'question':
+          "She ______ to the gym on Tuesdays, but she ______ yoga right now.",
+      'options': [
+        'goes / is doing',
+        'is going / does',
+        'go / does',
+        'goes / does',
+      ],
       'correctIndex': 0,
       'explain': 'Habit vs now: goes / is doing.',
     },
@@ -383,14 +454,25 @@ Future<void> seedLRPracticePart5() async {
   // L1 — Thì quá khứ & tương lai: Past Simple & Future Simple
   final p5Lv600L1 = <Map<String, dynamic>>[
     {
-      'question': "We ______ the contract yesterday, and we ______ the kickoff next Monday.",
-      'options': ['signed / will hold', 'sign / hold', 'were signing / hold', 'had signed / hold'],
+      'question':
+          "We ______ the contract yesterday, and we ______ the kickoff next Monday.",
+      'options': [
+        'signed / will hold',
+        'sign / hold',
+        'were signing / hold',
+        'had signed / hold',
+      ],
       'correctIndex': 0,
       'explain': '“yesterday” → past simple; kế hoạch tương lai → “will hold”.',
     },
     {
       'question': "He ______ late, so I ______ a taxi for him.",
-      'options': ['arrived / called', 'arrives / call', 'was arriving / call', 'had arrived / am calling'],
+      'options': [
+        'arrived / called',
+        'arrives / call',
+        'was arriving / call',
+        'had arrived / am calling',
+      ],
       'correctIndex': 0,
       'explain': 'Hành động quá khứ nối tiếp → past simple.',
     },
@@ -413,14 +495,25 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Lời hứa/tức thì → “will call”.',
     },
     {
-      'question': "We ______ the report on Friday and ______ feedback next week.",
-      'options': ['sent / will receive', 'send / receive', 'were sending / receive', 'had sent / received'],
+      'question':
+          "We ______ the report on Friday and ______ feedback next week.",
+      'options': [
+        'sent / will receive',
+        'send / receive',
+        'were sending / receive',
+        'had sent / received',
+      ],
       'correctIndex': 0,
       'explain': 'Thứ sáu (quá khứ) + tương lai tuần sau.',
     },
     {
       'question': "The flight ______ on time, but the bus ______ late.",
-      'options': ['arrived / was', 'arrives / is', 'arrived / is', 'was arriving / is'],
+      'options': [
+        'arrived / was',
+        'arrives / is',
+        'arrived / is',
+        'was arriving / is',
+      ],
       'correctIndex': 0,
       'explain': 'Cả hai quá khứ → arrived / was late.',
     },
@@ -490,7 +583,12 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "This route is ______ but ______.",
-      'options': ['shorter / busier', 'short / busier', 'shortest / busy', 'more short / busier'],
+      'options': [
+        'shorter / busier',
+        'short / busier',
+        'shortest / busy',
+        'more short / busier',
+      ],
       'correctIndex': 0,
       'explain': 'Cả hai so sánh hơn: shorter / busier.',
     },
@@ -512,31 +610,56 @@ Future<void> seedLRPracticePart5() async {
   final p5Lv600L3 = <Map<String, dynamic>>[
     {
       'question': "If it ______ tomorrow, we ______ the outdoor event.",
-      'options': ['rains / will cancel', 'will rain / cancel', 'rains / cancel', 'rain / will cancel'],
+      'options': [
+        'rains / will cancel',
+        'will rain / cancel',
+        'rains / cancel',
+        'rain / will cancel',
+      ],
       'correctIndex': 0,
       'explain': 'Type 1: If + present, will + V.',
     },
     {
       'question': "If you ______ early, I ______ you the report.",
-      'options': ['arrive / will show', 'will arrive / show', 'arrives / show', 'arrived / would show'],
+      'options': [
+        'arrive / will show',
+        'will arrive / show',
+        'arrives / show',
+        'arrived / would show',
+      ],
       'correctIndex': 0,
       'explain': 'arrive (present) + will show.',
     },
     {
       'question': "We ______ a discount if you ______ 50 units.",
-      'options': ['will offer / order', 'offer / will order', 'offered / order', 'will offer / will order'],
+      'options': [
+        'will offer / order',
+        'offer / will order',
+        'offered / order',
+        'will offer / will order',
+      ],
       'correctIndex': 0,
       'explain': 'Main clause “will offer”; if-clause present “order”.',
     },
     {
       'question': "If the room ______ full, we ______ a bigger one.",
-      'options': ['is / will book', 'will be / book', 'was / would book', 'is / book'],
+      'options': [
+        'is / will book',
+        'will be / book',
+        'was / would book',
+        'is / book',
+      ],
       'correctIndex': 0,
       'explain': 'is (present) + will book.',
     },
     {
       'question': "If you ______ the form, we ______ processing today.",
-      'options': ['submit / will start', 'will submit / start', 'submitted / would start', 'submit / start'],
+      'options': [
+        'submit / will start',
+        'will submit / start',
+        'submitted / would start',
+        'submit / start',
+      ],
       'correctIndex': 0,
       'explain': 'Type 1 chuẩn.',
     },
@@ -548,25 +671,45 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "We ______ late if the taxi ______ soon.",
-      'options': ['will be / doesn’t arrive', 'are / won’t arrive', 'would be / didn’t arrive', 'will be / isn’t arrived'],
+      'options': [
+        'will be / doesn’t arrive',
+        'are / won’t arrive',
+        'would be / didn’t arrive',
+        'will be / isn’t arrived',
+      ],
       'correctIndex': 0,
       'explain': 'will be + if present negative “doesn’t arrive”.',
     },
     {
       'question': "If you ______ any questions, please ______ us.",
-      'options': ['have / contact', 'will have / will contact', 'had / contacted', 'have / will contact'],
+      'options': [
+        'have / contact',
+        'will have / will contact',
+        'had / contacted',
+        'have / will contact',
+      ],
       'correctIndex': 0,
       'explain': 'Mệnh lệnh/đề nghị → If + present, (imperative) contact.',
     },
     {
       'question': "If we ______ the 9 a.m. train, we ______ by noon.",
-      'options': ['take / will arrive', 'took / would arrive', 'will take / arrive', 'take / arrive'],
+      'options': [
+        'take / will arrive',
+        'took / would arrive',
+        'will take / arrive',
+        'take / arrive',
+      ],
       'correctIndex': 0,
       'explain': 'Type 1 cơ bản.',
     },
     {
       'question': "You ______ the bonus if you ______ all targets.",
-      'options': ['will get / meet', 'get / will meet', 'would get / met', 'will get / will meet'],
+      'options': [
+        'will get / meet',
+        'get / will meet',
+        'would get / met',
+        'will get / will meet',
+      ],
       'correctIndex': 0,
       'explain': 'will get + if present “meet”.',
     },
@@ -606,7 +749,12 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "A new policy ______ last week.",
-      'options': ['was announced', 'is announcing', 'announced', 'has announce'],
+      'options': [
+        'was announced',
+        'is announcing',
+        'announced',
+        'has announce',
+      ],
       'correctIndex': 0,
       'explain': 'was + V3.',
     },
@@ -630,7 +778,12 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "The room ______ when we arrived.",
-      'options': ['was being cleaned', 'is cleaned', 'has been clean', 'cleaned'],
+      'options': [
+        'was being cleaned',
+        'is cleaned',
+        'has been clean',
+        'cleaned',
+      ],
       'correctIndex': 0,
       'explain': 'Quá khứ tiếp diễn bị động → was being + V3.',
     },
@@ -639,8 +792,14 @@ Future<void> seedLRPracticePart5() async {
   // L5 — Ôn tập tổng hợp (600+)
   final p5Lv600L5 = <Map<String, dynamic>>[
     {
-      'question': "If you ______ the form today, we ______ your account tomorrow.",
-      'options': ['submit / will activate', 'submitted / would activate', 'will submit / activate', 'submit / activate'],
+      'question':
+          "If you ______ the form today, we ______ your account tomorrow.",
+      'options': [
+        'submit / will activate',
+        'submitted / would activate',
+        'will submit / activate',
+        'submit / activate',
+      ],
       'correctIndex': 0,
       'explain': 'Type 1.',
     },
@@ -657,26 +816,47 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Past passive.',
     },
     {
-      'question': "We ______ the prototype last week and we ______ feedback soon.",
-      'options': ['sent / will receive', 'send / receive', 'were sending / receive', 'had sent / received'],
+      'question':
+          "We ______ the prototype last week and we ______ feedback soon.",
+      'options': [
+        'sent / will receive',
+        'send / receive',
+        'were sending / receive',
+        'had sent / received',
+      ],
       'correctIndex': 0,
       'explain': 'Past + future.',
     },
     {
       'question': "This option is the ______ for small teams.",
-      'options': ['most efficient', 'more efficient', 'efficientest', 'very efficient'],
+      'options': [
+        'most efficient',
+        'more efficient',
+        'efficientest',
+        'very efficient',
+      ],
       'correctIndex': 0,
       'explain': 'Superlative.',
     },
     {
       'question': "If it ______ again, we ______ the deadline.",
-      'options': ['rains / will extend', 'will rain / extend', 'rained / would extend', 'rains / extend'],
+      'options': [
+        'rains / will extend',
+        'will rain / extend',
+        'rained / would extend',
+        'rains / extend',
+      ],
       'correctIndex': 0,
       'explain': 'Type 1.',
     },
     {
       'question': "The new policy ______ to all staff next week.",
-      'options': ['will be announced', 'is announcing', 'announces', 'was announce'],
+      'options': [
+        'will be announced',
+        'is announcing',
+        'announces',
+        'was announce',
+      ],
       'correctIndex': 0,
       'explain': 'Future passive.',
     },
@@ -772,7 +952,12 @@ Future<void> seedLRPracticePart5() async {
   final p5Lv800L2 = <Map<String, dynamic>>[
     {
       'question': "If I ______ more time, I ______ the report (but I don’t).",
-      'options': ['had / would finish', 'have / will finish', 'had / will finish', 'have / would finish'],
+      'options': [
+        'had / would finish',
+        'have / will finish',
+        'had / will finish',
+        'have / would finish',
+      ],
       'correctIndex': 0,
       'explain': 'Type 2: If + past, would + V.',
     },
@@ -784,31 +969,57 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "I ______ you if I ______ your number.",
-      'options': ['would call / had', 'will call / had', 'would have called / have', 'called / had'],
+      'options': [
+        'would call / had',
+        'will call / had',
+        'would have called / have',
+        'called / had',
+      ],
       'correctIndex': 0,
       'explain': 'Type 2 giả định hiện tại.',
     },
     {
-      'question': "If we ______ the warning, we ______ the system (but we didn’t).",
-      'options': ['had noticed / would have fixed', 'noticed / would fix', 'had noticed / would fix', 'notice / will fix'],
+      'question':
+          "If we ______ the warning, we ______ the system (but we didn’t).",
+      'options': [
+        'had noticed / would have fixed',
+        'noticed / would fix',
+        'had noticed / would fix',
+        'notice / will fix',
+      ],
       'correctIndex': 0,
       'explain': 'Type 3 (quá khứ không có thật).',
     },
     {
       'question': "If I ______ you, I ______ a different supplier.",
-      'options': ['were / would choose', 'was / would choose', 'am / will choose', 'had been / would have choose'],
+      'options': [
+        'were / would choose',
+        'was / would choose',
+        'am / will choose',
+        'had been / would have choose',
+      ],
       'correctIndex': 0,
       'explain': 'Câu điều kiện giả định → If I were you.',
     },
     {
       'question': "We ______ the deal if we ______ the budget last month.",
-      'options': ['would have closed / had increased', 'would close / increased', 'will close / increase', 'closed / had increased'],
+      'options': [
+        'would have closed / had increased',
+        'would close / increased',
+        'will close / increase',
+        'closed / had increased',
+      ],
       'correctIndex': 0,
       'explain': 'Type 3.',
     },
     {
       'question': "If she ______ here, she ______ the issue quickly.",
-      'options': ['were / would handle', 'was / would handle', 'had been / would handle', 'is / will handle'],
+      'options': [
+        'were / would handle',
+        'was / would handle',
+        'had been / would handle',
+        'is / will handle',
+      ],
       'correctIndex': 0,
       'explain': 'Type 2 (giả định hiện tại).',
     },
@@ -820,13 +1031,23 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "If the weather ______ better, we ______ a picnic.",
-      'options': ['were / would have', 'was / would have', 'had been / would have had', 'were / will have'],
+      'options': [
+        'were / would have',
+        'was / would have',
+        'had been / would have had',
+        'were / will have',
+      ],
       'correctIndex': 2,
       'explain': 'Type 3 với quá khứ → had been / would have had.',
     },
     {
       'question': "He ______ earlier if he ______ about the traffic.",
-      'options': ['would have left / had known', 'would leave / knew', 'left / knows', 'will leave / knows'],
+      'options': [
+        'would have left / had known',
+        'would leave / knew',
+        'left / knows',
+        'will leave / knows',
+      ],
       'correctIndex': 0,
       'explain': 'Type 3.',
     },
@@ -835,26 +1056,39 @@ Future<void> seedLRPracticePart5() async {
   // L3 — Đảo ngữ (Hardly/No sooner/Only if…)
   final p5Lv800L3 = <Map<String, dynamic>>[
     {
-      'question': "Hardly ______ the meeting started ______ the fire alarm rang.",
+      'question':
+          "Hardly ______ the meeting started ______ the fire alarm rang.",
       'options': ['had / when', 'have / when', 'had / than', 'did / when'],
       'correctIndex': 0,
       'explain': 'Cấu trúc: Hardly had S + V3 when…',
     },
     {
-      'question': "No sooner ______ the report ______ the manager asked for changes.",
-      'options': ['had he submitted / than', 'he submitted / when', 'had he submitted / when', 'did he submit / than'],
+      'question':
+          "No sooner ______ the report ______ the manager asked for changes.",
+      'options': [
+        'had he submitted / than',
+        'he submitted / when',
+        'had he submitted / when',
+        'did he submit / than',
+      ],
       'correctIndex': 0,
       'explain': 'No sooner had S + V3 than…',
     },
     {
-      'question': "Only if you ______ the fee ______ we process the application.",
+      'question':
+          "Only if you ______ the fee ______ we process the application.",
       'options': ['pay / will', 'will pay / will', 'paid / would', 'pay / do'],
       'correctIndex': 3,
       'explain': 'Only if + clause → đảo ngữ: Only if you pay do we process…',
     },
     {
       'question': "Rarely ______ such a strong response from users.",
-      'options': ['do we receive', 'we receive', 'are we receiving', 'we are receiving'],
+      'options': [
+        'do we receive',
+        'we receive',
+        'are we receiving',
+        'we are receiving',
+      ],
       'correctIndex': 0,
       'explain': 'Trạng từ tiêu cực đầu câu → đảo trợ động từ.',
     },
@@ -862,7 +1096,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "Seldom ______ deliveries arrive ahead of schedule.",
       'options': ['do', 'does', 'are', 'have'],
       'correctIndex': 1,
-      'explain': 'Chủ ngữ “deliveries” (số nhiều) → nhưng đảo với “seldom” cần trợ “do/does”; sai bẫy. Chủ ngữ là “deliveries” → “do” mới đúng. (Chỉnh) ',
+      'explain':
+          'Chủ ngữ “deliveries” (số nhiều) → nhưng đảo với “seldom” cần trợ “do/does”; sai bẫy. Chủ ngữ là “deliveries” → “do” mới đúng. (Chỉnh) ',
     },
   ];
   // chỉnh lại câu 5 cho đúng chủ ngữ số nhiều
@@ -884,7 +1119,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "Only after the audit ______ the errors obvious.",
       'options': ['were', 'was', 'did', 'had'],
       'correctIndex': 2,
-      'explain': 'Only after + time → đảo “did … become” (động từ chính implied).',
+      'explain':
+          'Only after + time → đảo “did … become” (động từ chính implied).',
     },
     {
       'question': "Not until 2026 ______ production resume.",
@@ -893,7 +1129,8 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Not until + time → “will production resume”.',
     },
     {
-      'question': "Under no circumstances ______ personal data be shared externally.",
+      'question':
+          "Under no circumstances ______ personal data be shared externally.",
       'options': ['should', 'must', 'would', 'could'],
       'correctIndex': 0,
       'explain': 'Đảo ngữ mệnh lệnh/khuyến cáo: “should … be shared”.',
@@ -906,7 +1143,8 @@ Future<void> seedLRPracticePart5() async {
       'question': "It was ______ we met at the conference last year.",
       'options': ['there that', 'her that', 'she whom', 'she that'],
       'correctIndex': 3,
-      'explain': 'Cleft sentence: It was she that… (trong văn nói dùng “her” nhưng trang trọng là “she that”).',
+      'explain':
+          'Cleft sentence: It was she that… (trong văn nói dùng “her” nhưng trang trọng là “she that”).',
     },
     {
       'question': "If I ______ you, I ______ ask for a deadline extension.",
@@ -916,13 +1154,23 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "It is ______ teamwork that drives our success.",
-      'options': ['effective', 'effectively', 'effectiveness', 'more effective'],
+      'options': [
+        'effective',
+        'effectively',
+        'effectiveness',
+        'more effective',
+      ],
       'correctIndex': 0,
       'explain': 'Bổ nghĩa danh từ “teamwork” → tính từ “effective”.',
     },
     {
       'question': "Had I ______ the risk, I ______ invested less.",
-      'options': ['known / would have', 'knew / would', 'known / will have', 'know / would have'],
+      'options': [
+        'known / would have',
+        'knew / would',
+        'known / will have',
+        'know / would have',
+      ],
       'correctIndex': 0,
       'explain': 'Đảo “Had I known …, I would have …”.',
     },
@@ -967,8 +1215,14 @@ Future<void> seedLRPracticePart5() async {
   // L5 — Ôn tập tổng hợp (800+)
   final p5Lv800L5 = <Map<String, dynamic>>[
     {
-      'question': "If they ______ the terms, we ______ the agreement last week.",
-      'options': ['had accepted / would have signed', 'accepted / would sign', 'accept / will sign', 'were accepting / would have signed'],
+      'question':
+          "If they ______ the terms, we ______ the agreement last week.",
+      'options': [
+        'had accepted / would have signed',
+        'accepted / would sign',
+        'accept / will sign',
+        'were accepting / would have signed',
+      ],
       'correctIndex': 0,
       'explain': 'Type 3.',
     },
@@ -986,7 +1240,12 @@ Future<void> seedLRPracticePart5() async {
     },
     {
       'question': "Had we ______ the forecast, we ______ stock earlier.",
-      'options': ['seen / would have ordered', 'see / will order', 'saw / would order', 'seen / would order'],
+      'options': [
+        'seen / would have ordered',
+        'see / will order',
+        'saw / would order',
+        'seen / would order',
+      ],
       'correctIndex': 0,
       'explain': 'Đảo điều kiện loại 3.',
     },
@@ -1015,7 +1274,8 @@ Future<void> seedLRPracticePart5() async {
       'explain': 'Nơi chốn → where.',
     },
     {
-      'question': "Hardly ______ he started speaking ______ the lights went out.",
+      'question':
+          "Hardly ______ he started speaking ______ the lights went out.",
       'options': ['had / when', 'did / than', 'had / than', 'has / when'],
       'correctIndex': 0,
       'explain': 'Hardly had … when …',
@@ -1030,24 +1290,197 @@ Future<void> seedLRPracticePart5() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  /// ===== LRMaterials ========
   // lv300
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Thì hiện tại', questions: p5Lv300L1);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Danh từ & Mạo từ', questions: p5Lv300L2);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Giới từ cơ bản', questions: p5Lv300L3);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Đại từ', questions: p5Lv300L4);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv300L5);
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Thì hiện tại',
+    questions: p5Lv300L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Danh từ & Mạo từ',
+    questions: p5Lv300L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Giới từ cơ bản',
+    questions: p5Lv300L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Đại từ',
+    questions: p5Lv300L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv300L5,
+  );
 
   // lv600
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Thì quá khứ & tương lai', questions: p5Lv600L1);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: So sánh', questions: p5Lv600L2);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Câu điều kiện loại 1', questions: p5Lv600L3);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Câu bị động', questions: p5Lv600L4);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv600L5);
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Thì quá khứ & tương lai',
+    questions: p5Lv600L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: So sánh',
+    questions: p5Lv600L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Câu điều kiện loại 1',
+    questions: p5Lv600L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Câu bị động',
+    questions: p5Lv600L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv600L5,
+  );
 
   // lv800
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Mệnh đề quan hệ', questions: p5Lv800L1);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Điều kiện loại 2 & 3', questions: p5Lv800L2);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Đảo ngữ', questions: p5Lv800L3);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Cấu trúc nâng cao', questions: p5Lv800L4);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p5Lv800L5);
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Mệnh đề quan hệ',
+    questions: p5Lv800L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Điều kiện loại 2 & 3',
+    questions: p5Lv800L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Đảo ngữ',
+    questions: p5Lv800L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Cấu trúc nâng cao',
+    questions: p5Lv800L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv800L5,
+  );
+
+  /// ===== FullMaterials ========
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Thì hiện tại',
+    questions: p5Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Danh từ & Mạo từ',
+    questions: p5Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Giới từ cơ bản',
+    questions: p5Lv300L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Đại từ',
+    questions: p5Lv300L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv300L5,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Thì quá khứ & tương lai',
+    questions: p5Lv600L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: So sánh',
+    questions: p5Lv600L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Câu điều kiện loại 1',
+    questions: p5Lv600L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Câu bị động',
+    questions: p5Lv600L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv600L5,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Mệnh đề quan hệ',
+    questions: p5Lv800L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Điều kiện loại 2 & 3',
+    questions: p5Lv800L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Đảo ngữ',
+    questions: p5Lv800L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Cấu trúc nâng cao',
+    questions: p5Lv800L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p5Lv800L5,
+  );
 }

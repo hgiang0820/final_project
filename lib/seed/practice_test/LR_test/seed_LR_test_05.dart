@@ -45,12 +45,7 @@ Future<void> seedLRTest05() async {
       // (C) She's cutting the grass.
       // (D) She's sitting on a bench.
       'question': "",
-      'options': [
-        "She's planting flowers in a garden.",
-        "She's watering plants with a hose.",
-        "She's cutting the grass.",
-        "She's sitting on a bench.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy người phụ nữ đang cầm một vòi nước (hose) và hướng nó vào các chậu cây (plants).',
@@ -63,12 +58,7 @@ Future<void> seedLRTest05() async {
       // (C) Musicians are playing instruments indoors.
       // (D) A parade is moving down the street.
       'question': "",
-      'options': [
-        "People are lined up to buy tickets.",
-        "A crowd is watching a performance.",
-        "Musicians are playing instruments indoors.",
-        "A parade is moving down the street.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy một nhóm người (crowd) đang tập trung nhìn về một hướng, có vẻ như đang xem một buổi biểu diễn (performance).',
@@ -81,12 +71,7 @@ Future<void> seedLRTest05() async {
       // (C) He's putting on a jacket.
       // (D) He's polishing his shoes.
       'question': "",
-      'options': [
-        "He's tying his shoelaces.",
-        "He's adjusting his necktie.",
-        "He's putting on a jacket.",
-        "He's polishing his shoes.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người đàn ông đang dùng tay chỉnh lại chiếc cà vạt (necktie) của mình.',
@@ -99,12 +84,7 @@ Future<void> seedLRTest05() async {
       // (C) A bicycle has a flat tire.
       // (D) A bicycle is locked to a rack.
       'question': "",
-      'options': [
-        "A bicycle is leaning against a wall.",
-        "A bicycle is being ridden down a path.",
-        "A bicycle has a flat tire.",
-        "A bicycle is locked to a rack.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Bức tranh cho thấy một chiếc xe đạp đang dựa (leaning) vào một bức tường (wall).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest05() async {
       // (C) A waiter is taking an order.
       // (D) The diners are finishing their meal.
       'question': "",
-      'options': [
-        "The table is being set for dinner.",
-        "Food has been arranged on a table.",
-        "A waiter is taking an order.",
-        "The diners are finishing their meal.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy các món ăn (food) đã được sắp xếp (arranged) trên một cái bàn.',
@@ -135,12 +110,7 @@ Future<void> seedLRTest05() async {
       // (C) A worker is inspecting a finished product.
       // (D) A worker is taking a break.
       'question': "",
-      'options': [
-        "A worker is operating machinery.",
-        "A worker is cleaning the factory floor.",
-        "A worker is inspecting a finished product.",
-        "A worker is taking a break.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người công nhân đang đứng cạnh và thao tác trên một cỗ máy (machinery).',

@@ -19,26 +19,30 @@ Future<void> seedInputLR() async {
   // // === PART 1 === LISTENING
   final part1Questions = [
     {
+      // Image Description: A woman is standing in front of a whiteboard, pointing at a chart.
+      // Transcript:
+      // (A) She's drawing a diagram on the board.
+      // (B) She's pointing at a presentation screen.
+      // (C) She's erasing the whiteboard.
+      // (D) She's giving a book to a colleague.
       'question': "",
-      'options': [
-        'She is writing on a chalkboard.',
-        'She is typing on a keyboard.',
-        'She is carrying a box.',
-        'She is standing at a counter.',
-      ],
+      'options': ['A', 'B', 'C'],
       'correctIndex': 1,
-      'explain': 'Explain of question 1',
+      'explain':
+          'The woman is using her hand to point at information on a screen, which is the most accurate description among the choices.',
     },
     {
+      // Image Description: A group of people are sitting around a table in a meeting room. Some are looking at a laptop.
+      // Transcript:
+      // (A) They're having a meal together.
+      // (B) They're gathered for a business meeting.
+      // (C) They're watching a movie in a theater.
+      // (D) They're arranging chairs in a row.
       'question': "",
-      'options': [
-        'The bicycles are parked near a fence.',
-        'The people are riding bicycles in the park.',
-        'Some bicycles are being repaired.',
-        'The bicycles are on a boat.',
-      ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 2',
+      'options': ['A', 'B', 'C'],
+      'correctIndex': 1,
+      'explain':
+          'The setting (table, laptop, professional attire) clearly indicates a business meeting.',
     },
   ];
 
@@ -79,34 +83,64 @@ Future<void> seedInputLR() async {
   // // === PART 2 === LISTENING
   final part2Questions = [
     {
-      'question': "Where is the nearest post office?",
+      // Transcript:
+      // Q: Where can I find the marketing department?
+      // (A) It's on the third floor, down the hall.
+      // (B) They are marketing a new product.
+      // (C) At 9:00 AM tomorrow.
+      'question': "",
       'options': ['A', 'B', 'C'],
       'correctIndex': 0,
-      'explain': 'Explain of question 1',
+      'explain':
+          'The question asks "Where", so the correct response should be a location.',
     },
     {
-      'question': "When will the package arrive?",
+      // Transcript:
+      // Q: When is the deadline for the budget report?
+      // (A) Yes, I read it.
+      // (B) It's due this Friday.
+      // (C) About twenty pages.
+      'question': "",
       'options': ['A', 'B', 'C'],
       'correctIndex': 1,
-      'explain': 'Explain of question 2',
+      'explain':
+          'The question asks "When", so the correct response should be a time or date.',
     },
     {
-      'question': "Would you like to join us for lunch?",
+      // Transcript:
+      // Q: Who's in charge of ordering office supplies?
+      // (A) I can supply you with the details.
+      // (B) The office is on the left.
+      // (C) Sarah from accounting handles that.
+      'question': "",
       'options': ['A', 'B', 'C'],
-      'correctIndex': 0,
-      'explain': 'Explain of question 3',
+      'correctIndex': 2,
+      'explain':
+          'The question asks "Who", so the correct response should be a person or a department.',
     },
     {
-      'question': "Who is responsible for this project?",
+      // Transcript:
+      // Q: Would you like me to review the contract?
+      // (A) That would be a great help, thank you.
+      // (B) I have a new contact number.
+      // (C) The view is spectacular.
+      'question': "",
       'options': ['A', 'B', 'C'],
       'correctIndex': 0,
-      'explain': 'Explain of question 4',
+      'explain':
+          'This is an offer of help. Option (A) is a polite acceptance of the offer.',
     },
     {
-      'question': "Why did you cancel the meeting?",
+      // Transcript:
+      // Q: Why was the flight to London canceled?
+      // (A) Due to severe weather conditions.
+      // (B) At gate number twelve.
+      // (C) I'll take a flight of stairs.
+      'question': "",
       'options': ['A', 'B', 'C'],
       'correctIndex': 0,
-      'explain': 'Explain of question 5',
+      'explain':
+          'The question asks "Why", so the correct response should provide a reason.',
     },
   ];
 
@@ -145,83 +179,95 @@ Future<void> seedInputLR() async {
   }
 
   // // === PART 3 === LISTENING
+  final transcript8_10 = """
+(Woman) Excuse me, my printer isn't working. I'm trying to print out the quarterly report for the 3 P.M. meeting, but nothing is coming out.
+(Man) Did you check if there's paper in the tray? That's usually the problem.
+(Woman) Yes, I just refilled it this morning. The screen says 'Ready to Print', but it's just not responding.
+(Man) Let me see... Ah, it looks like you've selected the wrong printer. You're connected to the one in the marketing department on the 5th floor. You need to choose the 'Acct_HP_LaserJet'. I'll change it for you.
+""";
+
+  // --- Conversation 2: Questions 35-37 ---
+  final transcript11_13 = """
+(Man) Hi, I'd like to book a room from November 10th to the 12th.
+(Woman) Certainly. That would be for two nights. Are you here for the technology conference at the convention center?
+(Man) Yes, I am. Does the hotel offer a shuttle service to the center?
+(Woman) We do. It runs every 30 minutes from the lobby, and it's complimentary for our guests. I've just reserved a standard queen room for you.
+""";
+
   final part3Questions = [
+    // Conversation 1 (Q32-34)
     {
-      'question': "What problem does the man mention?",
+      'question': "What is the woman's problem?",
       'options': [
-        'The printer isn’t working.',
-        'He lost a report.',
-        'The meeting was canceled.',
-        'He needs computer training.',
+        "The meeting has been canceled.",
+        "She cannot find a report.",
+        "A piece of equipment is not working.",
+        "She is late for a meeting.",
       ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 1',
+      'correctIndex': 2,
+      'explain':
+          "$transcript8_10 \n\nThe woman clearly states, 'my printer isn't working'.",
     },
     {
-      'question': "Who has not been contacted yet?",
+      'question': "What did the woman do this morning?",
       'options': [
-        'The IT department.',
-        'The manager.',
-        'The client.',
-        'The receptionist.',
+        "Attended a meeting",
+        "Wrote a report",
+        "Fixed the printer",
+        "Put paper in a machine",
       ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 2',
+      'correctIndex': 3,
+      'explain':
+          "$transcript8_10 \n\nIn response to the man's question, she says, 'Yes, I just refilled it this morning.'",
     },
     {
-      'question': "Why can’t the woman help?",
+      'question': "What does the man say is the cause of the problem?",
       'options': [
-        'She is too busy.',
-        'She doesn’t know how.',
-        'She is leaving the company.',
-        'She is fixing another machine.',
-      ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 3',
-    },
-    {
-      'question': "What are they preparing?",
-      'options': [
-        'A report.',
-        'A presentation.',
-        'A meeting.',
-        'A conference.',
+        "The printer is out of ink.",
+        "An incorrect setting was chosen.",
+        "The printer is not turned on.",
+        "A cable is disconnected.",
       ],
       'correctIndex': 1,
-      'explain': 'Explain of question 4',
+      'explain':
+          "$transcript8_10 \n\nThe man explains, 'it looks like you've selected the wrong printer.'",
     },
+    // Conversation 2 (Q35-37)
     {
-      'question': "What does the woman still need to do?",
+      'question': "What is the man trying to do?",
       'options': [
-        'Print the report.',
-        'Prepare the slides.',
-        'Call the client.',
-        'Book the meeting room.',
+        "Make a dinner reservation",
+        "Book a hotel room",
+        "Buy a conference ticket",
+        "Arrange a flight",
       ],
       'correctIndex': 1,
-      'explain': 'Explain of question 5',
+      'explain':
+          "$transcript11_13 \n\n=> The man starts the conversation with 'Hi, I'd like to book a room...'",
     },
     {
-      'question': "What does the man offer to do?",
+      'question': "Why is the man visiting the city?",
       'options': [
-        'Deliver the slides.',
-        'Check the slides.',
-        'Present the slides.',
-        'Print the slides.',
+        "For a vacation",
+        "To visit family",
+        "To attend a conference",
+        "For a job interview",
       ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 6',
+      'correctIndex': 2,
+      'explain':
+          "$transcript11_13 \n\n=> He confirms the woman's question by saying 'Yes, I am' when she asks if he's there for the technology conference.",
     },
     {
-      'question': "How does the woman respond?",
+      'question': "What does the woman say about the shuttle service?",
       'options': [
-        'She declines.',
-        'She agrees.',
-        'She doesn’t answer.',
-        'She changes the topic.',
+        "It is unavailable on weekends.",
+        "It costs extra.",
+        "It needs to be booked in advance.",
+        "It is free for guests.",
       ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 7',
+      'correctIndex': 3,
+      'explain':
+          "$transcript11_13 \n\n=> The woman states, 'it's complimentary for our guests.'",
     },
   ];
 
@@ -233,10 +279,10 @@ Future<void> seedInputLR() async {
       .set({
         'type': 'Conversations',
         'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': 7,
+        'questionCount': 6,
       });
 
-  for (int i = 1; i <= 7; i++) {
+  for (int i = 1; i <= 6; i++) {
     final id = 'q${i.toString().padLeft(2, '0')}';
     // final imagePath = 'input_tests/testLR/part1/$id.jpg';
 
@@ -260,72 +306,89 @@ Future<void> seedInputLR() async {
   }
 
   // // === PART 4 === LISTENING
+  final transcript14_16 = """
+Are you tired of sitting in traffic every morning? Do you want to save money on gas and reduce your carbon footprint? Then come on down to 'Cycle Central' for our annual spring sale! For this week only, all of our 2024 model bicycles are 25% off. We have everything from mountain bikes for the adventurous to comfortable cruisers for a relaxing ride in the park. And with every bike purchase, you will receive a free helmet. Our friendly and knowledgeable staff are here to help you find the perfect bike. Visit us at 15 Oak Street, right across from the city library. Don't miss this chance to ride away with a great deal!
+""";
+
+  // --- Talk 2: Questions 74-76 (Airport Announcement) ---
+  final transcript17_19 = """
+May I have your attention, please. This is a final boarding call for flight AZ-788 to Singapore. All remaining passengers should proceed immediately to Gate B24. The gate will be closing in five minutes. Please have your boarding pass and passport ready for inspection. We are not responsible for passengers who arrive at the gate after the doors have closed. We wish you a pleasant flight. Thank you.
+""";
+
   final part4Questions = [
+    // Talk 1 (Q71-73)
     {
-      'question': "Where is this announcement being made?",
+      'question': "What kind of business is being advertised?",
       'options': [
-        'At a train station.',
-        'At a museum.',
-        'At a hotel.',
-        'At a school.',
+        "A car dealership",
+        "A bicycle shop",
+        "A sporting goods store",
+        "A repair service",
       ],
       'correctIndex': 1,
-      'explain': 'Explain of question 1',
+      'explain':
+          "$transcript14_16 \n\n=> The advertisement is for 'Cycle Central' and mentions 'bicycles', 'mountain bikes', and 'cruisers'.",
     },
     {
-      'question': "How can visitors buy tickets?",
+      'question': "What is offered with a purchase?",
       'options': [
-        'At the counter or online.',
-        'Only by phone.',
-        'Only on weekends.',
-        'Through a travel agency.',
+        "A discount coupon",
+        "A free water bottle",
+        "A free helmet",
+        "A one-year warranty",
       ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 2',
+      'correctIndex': 2,
+      'explain':
+          "$transcript14_16 \n\n=> The speaker says, 'And with every bike purchase, you will receive a free helmet.'",
     },
     {
-      'question': "How often are guided tours offered?",
+      'question': "Where is the business located?",
       'options': [
-        'Every hour.',
-        'Every two hours.',
-        'Every morning.',
-        'Every weekend.',
+        "Next to a park",
+        "Inside a shopping mall",
+        "On Oak Street",
+        "Above the city library",
+      ],
+      'correctIndex': 2,
+      'explain':
+          "$transcript14_16 \n\n=> The ad states the location is '15 Oak Street, right across from the city library'.",
+    },
+    // Talk 2 (Q74-76)
+    {
+      'question': "What is the purpose of the announcement?",
+      'options': [
+        "To announce a flight delay",
+        "To change a boarding gate",
+        "To call remaining passengers to a gate",
+        "To report lost luggage",
+      ],
+      'correctIndex': 2,
+      'explain':
+          "$transcript17_19 \n\n=> The speaker says, 'This is a final boarding call... All remaining passengers should proceed immediately to Gate B24.'",
+    },
+    {
+      'question': "What is the flight's destination?",
+      'options': [
+        "AZ-788",
+        "Gate B24",
+        "Singapore",
+        "The announcement does not say",
+      ],
+      'correctIndex': 2,
+      'explain':
+          "$transcript17_19 \n\n=> The announcement is for 'flight AZ-788 to Singapore'.",
+    },
+    {
+      'question': "What will happen in five minutes?",
+      'options': [
+        "The flight will take off.",
+        "The gate will close.",
+        "The plane will be cleaned.",
+        "A new crew will arrive.",
       ],
       'correctIndex': 1,
-      'explain': 'Explain of question 3',
-    },
-    {
-      'question': "What is being announced?",
-      'options': [
-        'A flight delay.',
-        'A flight cancellation.',
-        'A gate change.',
-        'A boarding call.',
-      ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 4',
-    },
-    {
-      'question': "Why was the flight delayed?",
-      'options': [
-        'Because of mechanical issues.',
-        'Because of weather conditions.',
-        'Because of air traffic.',
-        'Because of missing crew.',
-      ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 5',
-    },
-    {
-      'question': "What should passengers do?",
-      'options': [
-        'Check the information screens.',
-        'Go to the boarding gate.',
-        'Pick up their luggage.',
-        'Contact customer service.',
-      ],
-      'correctIndex': 0,
-      'explain': 'Explain of question 6',
+      'explain':
+          "$transcript17_19 \n\n=> The speaker states, 'The gate will be closing in five minutes.'",
     },
   ];
 
@@ -369,54 +432,62 @@ Future<void> seedInputLR() async {
       'question': "The manager ______ the new policy at the meeting yesterday.",
       'options': ['announce', 'announcing', 'announced', 'announces'],
       'correctIndex': 2,
-      'explain': 'Explain of question 1',
+      'explain':
+          'The adverb "yesterday" indicates the action happened in the past, so the simple past tense "announced" is required.',
     },
     {
       'question':
           "The company will hire additional staff ______ the workload has increased.",
       'options': ['although', 'because', 'despite', 'unless'],
       'correctIndex': 1,
-      'explain': 'Explain of question 2',
+      'explain':
+          '"Because" is a conjunction used to show the reason for something. The increased workload is the reason for hiring more staff.',
     },
     {
       'question':
-          "Please make sure that all forms are ______ before submission.",
-      'options': ['complete', 'completed', 'completion', 'completely'],
-      'correctIndex': 1,
-      'explain': 'Explain of question 3',
+          "Please make sure that all forms are ______ completed before submission.",
+      'options': ['careful', 'caring', 'carefully', 'carefulness'],
+      'correctIndex': 2,
+      'explain':
+          'The adverb "carefully" is needed to modify the verb "completed".',
     },
     {
-      'question': "The seminar will take place ______ March 15th.",
-      'options': ['on', 'in', 'at', 'by'],
+      'question':
+          "Ms. Chen is responsible ______ coordinating all international shipments.",
+      'options': ['for', 'with', 'at', 'about'],
       'correctIndex': 0,
-      'explain': 'Explain of question 4',
+      'explain': 'The correct preposition to follow "responsible" is "for".',
     },
     {
       'question':
-          "Our sales team is looking forward to ______ new clients at the exhibition.",
-      'options': ['meet', 'meeting', 'meets', 'met'],
-      'correctIndex': 1,
-      'explain': 'Explain of question 5',
-    },
-    {
-      'question': "Mr. Lee has worked here ______ more than ten years.",
-      'options': ['for', 'since', 'during', 'until'],
+          "The seminar was ______ more interesting than I had expected.",
+      'options': ['much', 'many', 'very', 'so'],
       'correctIndex': 0,
-      'explain': 'Explain of question 6',
+      'explain':
+          '"Much" is used to modify comparative adjectives like "more interesting".',
     },
+    // ... (Adding more questions to reach 30)
     {
       'question':
-          "The company offers a wide range of products at very ______ prices.",
-      'options': ['compete', 'competitive', 'competition', 'competitively'],
-      'correctIndex': 1,
-      'explain': 'Explain of question 7',
-    },
-    {
-      'question':
-          "If you have any questions, please do not ______ to contact me.",
-      'options': ['hesitate', 'hesitation', 'hesitant', 'hesitating'],
+          "All employees must wear their identification badges ______ all times.",
+      'options': ['at', 'in', 'on', 'by'],
       'correctIndex': 0,
-      'explain': 'Explain of question 8',
+      'explain': 'The correct phrase is "at all times".',
+    },
+    {
+      'question':
+          "The new software allows users to ______ their tasks more efficiently.",
+      'options': ['manage', 'manager', 'management', 'managerial'],
+      'correctIndex': 0,
+      'explain': 'The verb "manage" is needed to follow "to".',
+    },
+    {
+      'question':
+          "______ to the weather, the outdoor event has been postponed.",
+      'options': ['Due', 'Because', 'Since', 'As'],
+      'correctIndex': 0,
+      'explain':
+          'The phrase "Due to" is used to give a reason, followed by a noun phrase ("the weather").',
     },
   ];
 
@@ -451,31 +522,63 @@ Future<void> seedInputLR() async {
   }
 
   // // === PART 6 === READING
+  final passagePart6 = """
+To: All Employees
+From: Human Resources Department
+Subject: Updated Recycling Policy
+Date: October 16
+
+Please be advised that we are implementing a new, more comprehensive recycling program, effective next Monday. New recycling bins will be placed in the kitchen and next to the main printers.
+
+It is now ____(131)____ for all employees to separate their waste into three categories: paper, plastics/glass, and general waste. Detailed guidelines have been posted in the kitchen area for your reference. ____(132)____. We trust that everyone will support this important initiative.
+
+Your cooperation will help us ____(133)____ our environmental impact and create a greener workplace. We ____(134)____ your commitment to making our company more sustainable. Thank you.
+""";
+
   final part6Questions = [
+    // Passage 1 (Q131-134)
     {
-      'question':
-          "Email:\n\nTo: All Employees\nFrom: HR Department\nSubject: Annual Health Check\n\nOur annual health check will be held next week in the main conference room. Please remember to bring your employee ID card. The health check is ______ (Q29) to all staff members. The process usually takes about 30 minutes, and appointments are ______ (Q30) online through the HR portal.Also, please avoid eating heavy meals before the check. The results will be sent to your registered e-mail ______ (Q31) two weeks. Thank you for your cooperation.\n\nIf you have questions, contact the HR department ______ (Q32) extension 123.",
-      'options': ['optional', 'required', 'restricted', 'limited'],
-      'correctIndex': 2,
-      'explain': 'Explain of question 1',
+      'question': passagePart6,
+      'options': ["optional", "mandatory", "suggested", "advised"],
+      'correctIndex': 1,
+      'explain':
+          "Từ 'mandatory' (bắt buộc) phù hợp nhất với ngữ cảnh của một chính sách mới đang được thực thi, mạnh mẽ hơn các lựa chọn còn lại.",
     },
     {
       'question': "",
-      'options': ['made', 'making', 'to make', 'makes'],
+      'options': [
+        "The old bins will be removed on Friday.",
+        "Please feel free to ask your manager if you have questions.",
+        "This will make our collection process much more efficient.",
+        "Further training will be provided next week.",
+      ],
       'correctIndex': 2,
-      'explain': 'Explain of question 2',
+      'explain':
+          "Câu này giải thích kết quả của việc phân loại rác, kết nối một cách hợp lý với câu trước đó mô tả hành động phân loại.",
     },
     {
       'question': "",
-      'options': ['on', 'at', 'by', 'for'],
-      'correctIndex': 2,
-      'explain': 'Explain of question 3',
+      'options': [
+        "significantly reduce",
+        "significant reduction",
+        "reducing significant",
+        "reduction significantly",
+      ],
+      'correctIndex': 0,
+      'explain':
+          "Sau 'help us' cần một động từ nguyên mẫu. 'Significantly' là trạng từ bổ nghĩa cho động từ 'reduce'.",
     },
     {
       'question': "",
-      'options': ['on', 'by', 'with', 'at'],
-      'correctIndex': 2,
-      'explain': 'Explain of question 4',
+      'options': [
+        "appreciate",
+        "are appreciating",
+        "have appreciated",
+        "will be appreciated",
+      ],
+      'correctIndex': 0,
+      'explain':
+          "Thì hiện tại đơn 'appreciate' được sử dụng ở đây để bày tỏ sự cảm kích một cách trang trọng và trực tiếp.",
     },
   ];
 
@@ -510,91 +613,158 @@ Future<void> seedInputLR() async {
   }
 
   // // === PART 7 === READING
+  final passagePart7_1 = """
+**Franklin Green Dry Cleaners – Quality Service You Can Trust**
+
+Get ready for the changing seasons with our special offer! For the entire month of November, bring in any two winter coats and get the second one cleaned for **50% off**. We specialize in handling delicate fabrics, including wool, cashmere, and down.
+
+Our state-of-the-art equipment and eco-friendly cleaning solvents ensure your garments are returned to you fresh, clean, and looking like new. Don't let last year's winter wear stay in storage.
+
+Visit us at our convenient downtown location at 255 Main Street.
+Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
+""";
+
+  // Passage 2: Questions 149-150 (E-mail)
+  final passagePart7_2 = """
+**To**: All Staff <all.staff@innovatech.com>
+**From**: HR Department <hr@innovatech.com>
+**Subject**: Annual Performance Reviews
+**Date**: October 16
+
+Dear Team Members,
+
+This e-mail is a reminder that the annual performance review process will begin next week. Please schedule a one-hour meeting with your direct supervisor before October 31 to discuss your achievements over the past year and set goals for the upcoming year.
+
+Prior to your meeting, you are required to complete the self-assessment form, which can be found on the company's internal server under the 'HR/Forms' directory. Please submit the completed form to your supervisor at least two days before your scheduled review.
+
+Thank you for your cooperation.
+""";
+
+  // Passage 3: Questions 151-152 (Text Message Chain)
+  final passagePart7_3 = """
+**Maria (3:05 P.M.)**: Hi Kenji. Are you still at the office? I left my laptop charger in the third-floor conference room after our 1 P.M. meeting.
+
+**Kenji (3:06 P.M.)**: Hi Maria. Yes, I'm here. I can go check for you right now.
+
+**Maria (3:07 P.M.)**: Thanks so much! I'd really appreciate it. I'm already halfway home on the train.
+
+**Kenji (3:10 P.M.)**: I found it! It was under the table. I'll leave it on your desk so you can get it in the morning.
+
+**Maria (3:11 P.M.)**: You're a lifesaver! Thank you again.
+""";
+
+  // Passage 4: Questions 153-154 (Notice)
+  final passagePart7_4 = """
+**Attention Residents of Elm Street Apartments**
+
+Please be aware that the water in the building will be shut off for scheduled maintenance on **Thursday, October 19, from 10:00 A.M. to 3:00 P.M.**
+
+This is necessary to allow our maintenance crew to repair a leaky pipe in the basement. We expect all work to be completed by 3:00 P.M., but there may be a slight delay.
+
+We recommend storing some water in advance for your basic needs during this period. We apologize for any inconvenience this may cause and appreciate your understanding.
+
+- Building Management
+""";
+
   final part7Questions = [
     {
-      'question':
-          "Green Café is offering a special discount this month. Customers who purchase two drinks will receive one free snack. The promotion is available at all branches until the end of September. Members can also collect double reward points during this period.\n\nWhat is Green Café offering?",
+      'question': passagePart7_1 + "\n\n147. What is the special offer?",
       'options': [
-        'A free drink with every purchase',
-        'A free snack with two drinks',
-        'A discount on membership',
-        'Free delivery service',
+        "A discount on cleaning two coats",
+        "Free cleaning for new customers",
+        "Faster service for winter clothing",
+        "A discount on all services in November",
       ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 1',
-    },
-    {
-      'question': "Where is the promotion available?",
-      'options': [
-        'Only at the main branch',
-        'At all branches',
-        'Online only',
-        'At selected locations',
-      ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 2',
-    },
-    {
-      'question': "Until when is the promotion valid?",
-      'options': [
-        'End of July',
-        'End of August',
-        'End of September',
-        'End of October',
-      ],
-      'correctIndex': 2,
-      'explain': 'Explain of question 3',
-    },
-    {
-      'question': "What additional benefit do members get?",
-      'options': [
-        'Free snacks',
-        'Free drinks',
-        'Double points',
-        'Free membership',
-      ],
-      'correctIndex': 2,
-      'explain': 'Explain of question 4',
+      'correctIndex': 0,
+      'explain':
+          "The ad states, 'bring in any two winter coats and get the second one cleaned for 50% off'.",
     },
     {
       'question':
-          "Job Posting: Marketing Assistant\n\nWe are seeking a Marketing Assistant to join our team. The successful candidate should have at least one year of experience in marketing or a related field. Responsibilities include preparing promotional materials, assisting with social media campaigns, and coordinating events. Candidates must have strong communication skills and be able to work as part of a team.\n\nInterested applicants should send a resume and cover letter to jobs@abccompany.com by October 10.\n\nWhat position is being advertised?",
-      'options': [
-        'Sales Manager',
-        'Marketing Assistant',
-        'Event Coordinator',
-        'Social Media Specialist',
-      ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 5',
+          passagePart7_1 +
+          "\n\n148. When is Franklin Green Dry Cleaners closed?",
+      'options': ["Monday", "Wednesday", "Saturday", "Sunday"],
+      'correctIndex': 3,
+      'explain':
+          "The hours are listed as Monday-Friday and Saturday. Sunday is not mentioned, implying it is closed.",
     },
+    // Passage 2 (Q149-150)
     {
-      'question': "How much experience is required?",
+      'question':
+          passagePart7_2 + "\n\n149. What is the purpose of the e-mail?",
       'options': [
-        'None',
-        'At least one year',
-        'At least three years',
-        'More than five years',
-      ],
-      'correctIndex': 1,
-      'explain': 'Explain of question 6',
-    },
-    {
-      'question': "What is one of the responsibilities mentioned?",
-      'options': [
-        'Designing websites',
-        'Writing software',
-        'Coordinating events',
-        'Managing finances',
+        "To announce a new company policy",
+        "To ask employees to set new goals",
+        "To inform staff about an upcoming process",
+        "To introduce a new supervisor",
       ],
       'correctIndex': 2,
-      'explain': 'Explain of question 7',
+      'explain':
+          "The e-mail is a 'reminder that the annual performance review process will begin next week,' which informs staff about this process.",
     },
     {
-      'question': "When is the application deadline?",
-      'options': ['October 5', 'October 10', 'October 15', 'October 20'],
+      'question':
+          passagePart7_2 +
+          "\n\n150. What must employees do before their meeting?",
+      'options': [
+        "Schedule a follow-up appointment",
+        "Complete a self-assessment form",
+        "Review their previous year's goals",
+        "Contact the HR department",
+      ],
       'correctIndex': 1,
-      'explain': 'Explain of question 8',
+      'explain':
+          "The e-mail states, 'Prior to your meeting, you are required to complete the self-assessment form'.",
+    },
+    // Passage 3 (Q151-152)
+    {
+      'question':
+          passagePart7_3 +
+          "\n\n151. What did Maria leave in the conference room?",
+      'options': ["Her phone", "Her notes", "Her laptop", "A laptop accessory"],
+      'correctIndex': 3,
+      'explain':
+          "Maria writes, 'I left my laptop charger in the third-floor conference room'.",
+    },
+    {
+      'question':
+          passagePart7_3 +
+          "\n\n152. At 3:10 P.M., what does Kenji offer to do?",
+      'options': [
+        "Bring the charger to Maria's home",
+        "Wait for Maria at the office",
+        "Put the charger on Maria's desk",
+        "Call Maria in the morning",
+      ],
+      'correctIndex': 2,
+      'explain':
+          "Kenji writes, 'I'll leave it on your desk so you can get it in the morning.'",
+    },
+    // Passage 4 (Q153-154)
+    {
+      'question':
+          passagePart7_4 + "\n\n153. What is the purpose of the notice?",
+      'options': [
+        "To advertise an apartment for rent",
+        "To announce a rent increase",
+        "To warn about a temporary service interruption",
+        "To introduce a new maintenance crew",
+      ],
+      'correctIndex': 2,
+      'explain':
+          "The notice informs residents that 'the water in the building will be shut off for scheduled maintenance'.",
+    },
+    {
+      'question': passagePart7_4 + "\n\n154. What are residents advised to do?",
+      'options': [
+        "Avoid using the elevators",
+        "Store some water beforehand",
+        "Stay out of the basement",
+        "Contact building management",
+      ],
+      'correctIndex': 1,
+      'explain':
+          "The notice says, 'We recommend storing some water in advance for your basic needs'.",
     },
   ];
 

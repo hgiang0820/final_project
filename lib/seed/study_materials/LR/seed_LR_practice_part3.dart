@@ -7,18 +7,18 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedLRPracticePart3() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'LRMaterials';
+  // final materialId = 'LRMaterials';
   const audioDemo = 'input_tests/testLR/part3/01%20Test%201_LC_Voca.mp3';
 
   // Root doc
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('LRMaterials').set({
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
   // Helper to push 1 lesson
-  Future<void> pushLesson({
+  Future<void> pushLessonLR({
     required String levelId,
     required String lessonId, // lesson1..lesson5
     required String lessonName,
@@ -26,11 +26,48 @@ Future<void> seedLRPracticePart3() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('LRMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
         .doc('part3')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Conversations',
+      'lessonName': lessonName,
+      'audioPath': audioDemo,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      await lessonRef.collection('questions').doc(id).set({
+        'question': q['question'],
+        'imagePath': null,
+        'options': q['options'],
+        'correctIndex': q['correctIndex'],
+        'explain': q['explain'],
+        'order': i + 1,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId, // lesson1..lesson5
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('lis3')
         .collection('lessons')
         .doc(lessonId);
 
@@ -76,7 +113,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Can I return this jacket?\nW: Sure, with the receipt.\nQ: What does the woman say is required?",
-      'options': ['A receipt.', 'A membership card.', 'An ID photo.', 'Cash payment.'],
+      'options': [
+        'A receipt.',
+        'A membership card.',
+        'An ID photo.',
+        'Cash payment.',
+      ],
       'correctIndex': 0,
       'explain': 'Phải có hóa đơn.',
     },
@@ -87,7 +129,7 @@ Future<void> seedLRPracticePart3() async {
         'Mua 1 tặng 1 nửa giá.',
         'Giảm 50% mọi mặt hàng.',
         'Miễn phí giao hàng.',
-        'Tặng voucher 10\$.'
+        'Tặng voucher 10\$.',
       ],
       'correctIndex': 0,
       'explain': '“second half off” = đôi thứ hai giảm 50%.',
@@ -106,7 +148,7 @@ Future<void> seedLRPracticePart3() async {
         'Go to the demo table.',
         'Pay at the cashier.',
         'Ask for a refund.',
-        'Order online.'
+        'Order online.',
       ],
       'correctIndex': 0,
       'explain': 'Hướng dẫn tới bàn trải nghiệm.',
@@ -114,7 +156,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Are these apples fresh?\nW: They arrived this morning.\nQ: What is implied about the apples?",
-      'options': ['They are fresh.', 'They are discounted.', 'They are imported.', 'They are out of stock.'],
+      'options': [
+        'They are fresh.',
+        'They are discounted.',
+        'They are imported.',
+        'They are out of stock.',
+      ],
       'correctIndex': 0,
       'explain': 'Vừa về sáng nay → tươi.',
     },
@@ -125,7 +172,7 @@ Future<void> seedLRPracticePart3() async {
         'They accept multiple payment methods.',
         'They only take cash.',
         'They charge extra for cards.',
-        'They don’t accept mobile pay.'
+        'They don’t accept mobile pay.',
       ],
       'correctIndex': 0,
       'explain': 'Chấp nhận thẻ và ví điện tử.',
@@ -137,7 +184,7 @@ Future<void> seedLRPracticePart3() async {
         'Spend more than \$30.',
         'Buy two items.',
         'Join membership.',
-        'Use cash only.'
+        'Use cash only.',
       ],
       'correctIndex': 0,
       'explain': 'Gói quà miễn phí nếu > \$30.',
@@ -145,7 +192,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Can I try these shoes on?\nM: Sure, the fitting area is in the back.\nQ: Where should she go?",
-      'options': ['To the fitting area.', 'To the cashier.', 'To the info desk.', 'To the exit.'],
+      'options': [
+        'To the fitting area.',
+        'To the cashier.',
+        'To the info desk.',
+        'To the exit.',
+      ],
       'correctIndex': 0,
       'explain': 'Đi khu thử đồ.',
     },
@@ -156,7 +208,7 @@ Future<void> seedLRPracticePart3() async {
         'A competitor’s advertisement.',
         'A loyalty card.',
         'A manager’s approval.',
-        'Online order number.'
+        'Online order number.',
       ],
       'correctIndex': 0,
       'explain': 'Cần bằng chứng giá từ đối thủ.',
@@ -168,14 +220,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: What time is check-in?\nW: After 2 p.m.\nQ: When can guests check in?",
-      'options': ['After 2 p.m.', 'Before noon.', 'Any time.', 'Only at 6 p.m.'],
+      'options': [
+        'After 2 p.m.',
+        'Before noon.',
+        'Any time.',
+        'Only at 6 p.m.',
+      ],
       'correctIndex': 0,
       'explain': 'Check-in sau 2 giờ chiều.',
     },
     {
       'question':
           "W: Is breakfast included?\nM: Yes, from 6 to 9.\nQ: What is true about breakfast?",
-      'options': ['It’s included, 6–9 a.m.', 'Not included.', 'Available all day.', 'Starts at 9 p.m.'],
+      'options': [
+        'It’s included, 6–9 a.m.',
+        'Not included.',
+        'Available all day.',
+        'Starts at 9 p.m.',
+      ],
       'correctIndex': 0,
       'explain': 'Bao gồm và khung giờ 6–9.',
     },
@@ -193,7 +255,7 @@ Future<void> seedLRPracticePart3() async {
         'Rebook the flight.',
         'Refund the ticket.',
         'Upgrade the seat.',
-        'Provide a taxi.'
+        'Provide a taxi.',
       ],
       'correctIndex': 0,
       'explain': 'Đặt lại vé cho sáng hôm sau.',
@@ -201,7 +263,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Is there a shuttle to downtown?\nW: Every 30 minutes.\nQ: How often does the shuttle run?",
-      'options': ['Every 30 minutes.', 'Once a day.', 'Every 3 hours.', 'It’s not available.'],
+      'options': [
+        'Every 30 minutes.',
+        'Once a day.',
+        'Every 3 hours.',
+        'It’s not available.',
+      ],
       'correctIndex': 0,
       'explain': 'Tần suất 30 phút/chuyến.',
     },
@@ -212,7 +279,7 @@ Future<void> seedLRPracticePart3() async {
         'Late checkout is possible with a fee.',
         'Late checkout is free.',
         'Checkout only at noon.',
-        'Checkout not allowed.'
+        'Checkout not allowed.',
       ],
       'correctIndex': 0,
       'explain': 'Được trễ tới 1 giờ chiều, có phí.',
@@ -224,7 +291,7 @@ Future<void> seedLRPracticePart3() async {
         'Next to baggage claim.',
         'Across the street.',
         'At platform 3.',
-        'In the city center.'
+        'In the city center.',
       ],
       'correctIndex': 0,
       'explain': 'Ngay cạnh khu lấy hành lý.',
@@ -236,7 +303,7 @@ Future<void> seedLRPracticePart3() async {
         'Use the room number.',
         'Pay at reception.',
         'Ask for a paper code.',
-        'Call support only.'
+        'Call support only.',
       ],
       'correctIndex': 0,
       'explain': 'Đăng nhập bằng số phòng.',
@@ -255,7 +322,7 @@ Future<void> seedLRPracticePart3() async {
         'Behind the front desk.',
         'Inside the room.',
         'At platform 2.',
-        'No storage available.'
+        'No storage available.',
       ],
       'correctIndex': 0,
       'explain': 'Có chỗ gửi sau quầy lễ tân.',
@@ -267,7 +334,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: What do you recommend?\nM: The grilled salmon is popular.\nQ: What does the waiter suggest?",
-      'options': ['Grilled salmon.', 'Fried chicken.', 'Vegan salad.', 'Pasta only.'],
+      'options': [
+        'Grilled salmon.',
+        'Fried chicken.',
+        'Vegan salad.',
+        'Pasta only.',
+      ],
       'correctIndex': 0,
       'explain': 'Món gợi ý: cá hồi nướng.',
     },
@@ -278,7 +350,7 @@ Future<void> seedLRPracticePart3() async {
         'Provide two checks.',
         'Offer a discount.',
         'Add a service fee.',
-        'Refuse the request.'
+        'Refuse the request.',
       ],
       'correctIndex': 0,
       'explain': 'Tách hóa đơn.',
@@ -286,7 +358,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Is the soup vegetarian?\nM: Yes, no meat or dairy.\nQ: What is true about the soup?",
-      'options': ['It’s vegetarian.', 'It contains meat.', 'It has cheese.', 'It’s spicy beef.'],
+      'options': [
+        'It’s vegetarian.',
+        'It contains meat.',
+        'It has cheese.',
+        'It’s spicy beef.',
+      ],
       'correctIndex': 0,
       'explain': 'Không thịt, không sữa.',
     },
@@ -297,7 +374,7 @@ Future<void> seedLRPracticePart3() async {
         'Correct the order.',
         'Cancel the bill.',
         'Offer free dessert only.',
-        'Ask him to wait until tomorrow.'
+        'Ask him to wait until tomorrow.',
       ],
       'correctIndex': 0,
       'explain': 'Sửa món ngay.',
@@ -305,14 +382,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Could we get some water?\nM: Still or sparkling?\nQ: What is the man asking?",
-      'options': ['Water type preference.', 'Number of glasses.', 'Add ice.', 'Extra napkins.'],
+      'options': [
+        'Water type preference.',
+        'Number of glasses.',
+        'Add ice.',
+        'Extra napkins.',
+      ],
       'correctIndex': 0,
       'explain': 'Hỏi loại nước: thường hay có gas.',
     },
     {
       'question':
           "M: Do you have any vegan options?\nW: Yes, the mushroom risotto.\nQ: What suits the man’s diet?",
-      'options': ['Mushroom risotto.', 'Beef stew.', 'Cheese pizza.', 'Chicken curry.'],
+      'options': [
+        'Mushroom risotto.',
+        'Beef stew.',
+        'Cheese pizza.',
+        'Chicken curry.',
+      ],
       'correctIndex': 0,
       'explain': 'Món thuần chay gợi ý.',
     },
@@ -326,7 +413,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Can I see the dessert menu?\nW: I’ll bring it right away.\nQ: What will the woman do?",
-      'options': ['Bring the menu.', 'Take payment.', 'Refuse the request.', 'Offer a discount.'],
+      'options': [
+        'Bring the menu.',
+        'Take payment.',
+        'Refuse the request.',
+        'Offer a discount.',
+      ],
       'correctIndex': 0,
       'explain': 'Mang menu tráng miệng.',
     },
@@ -337,7 +429,7 @@ Future<void> seedLRPracticePart3() async {
         'Includes a 10% service charge.',
         'No tax included.',
         'Tip is mandatory 20%.',
-        'It’s cash-only.'
+        'It’s cash-only.',
       ],
       'correctIndex': 0,
       'explain': 'Có phụ phí 10%.',
@@ -349,7 +441,7 @@ Future<void> seedLRPracticePart3() async {
         'The order will be prepared faster.',
         'They must leave.',
         'They get a refund.',
-        'They will wait longer.'
+        'They will wait longer.',
       ],
       'correctIndex': 0,
       'explain': 'Ưu tiên món → ra nhanh hơn.',
@@ -361,56 +453,96 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: I’ll pick up the package at the counter.\nW: Bring your ID, please.\nQ: Who is the woman likely to be?",
-      'options': ['A clerk.', 'A delivery driver.', 'A customer.', 'A security guard.'],
+      'options': [
+        'A clerk.',
+        'A delivery driver.',
+        'A customer.',
+        'A security guard.',
+      ],
       'correctIndex': 0,
       'explain': 'Yêu cầu ID → nhân viên quầy.',
     },
     {
       'question':
           "W: The next stop is Central Station.\nM: Great, that’s my stop.\nQ: Where are they?",
-      'options': ['On a train.', 'At a bank.', 'In a hotel.', 'In a classroom.'],
+      'options': [
+        'On a train.',
+        'At a bank.',
+        'In a hotel.',
+        'In a classroom.',
+      ],
       'correctIndex': 0,
       'explain': 'Có “next stop” → tàu/xe.',
     },
     {
       'question':
           "M: Your total is \$24.50. Do you need a bag?\nW: Yes, please.\nQ: What are they talking about?",
-      'options': ['Paying at a store.', 'Booking a room.', 'Scheduling a meeting.', 'Repairing a phone.'],
+      'options': [
+        'Paying at a store.',
+        'Booking a room.',
+        'Scheduling a meeting.',
+        'Repairing a phone.',
+      ],
       'correctIndex': 0,
       'explain': 'Tổng tiền & túi → thu ngân.',
     },
     {
       'question':
           "W: Your room includes breakfast and Wi-Fi.\nM: What time is checkout?\nQ: Where are they?",
-      'options': ['At a hotel.', 'At a clinic.', 'At an office.', 'At a school.'],
+      'options': [
+        'At a hotel.',
+        'At a clinic.',
+        'At an office.',
+        'At a school.',
+      ],
       'correctIndex': 0,
       'explain': 'Nhắc “room, checkout”.',
     },
     {
       'question':
           "M: The meeting’s moved to 3 p.m.\nW: I’ll update the team.\nQ: What are they discussing?",
-      'options': ['A schedule change.', 'A product price.', 'A food order.', 'Travel insurance.'],
+      'options': [
+        'A schedule change.',
+        'A product price.',
+        'A food order.',
+        'Travel insurance.',
+      ],
       'correctIndex': 0,
       'explain': 'Đổi giờ họp.',
     },
     {
       'question':
           "W: Could you sign here?\nM: Sure. Do I get a copy?\nQ: Who is the man likely to be?",
-      'options': ['A recipient.', 'A chef.', 'A driver instructor.', 'A cashier.'],
+      'options': [
+        'A recipient.',
+        'A chef.',
+        'A driver instructor.',
+        'A cashier.',
+      ],
       'correctIndex': 0,
       'explain': 'Ký & nhận bản sao → người nhận hàng/tài liệu.',
     },
     {
       'question':
           "M: Your table will be ready in five minutes.\nW: We’ll wait at the bar.\nQ: Where are they?",
-      'options': ['At a restaurant.', 'At a cinema.', 'At a bank.', 'At a hospital.'],
+      'options': [
+        'At a restaurant.',
+        'At a cinema.',
+        'At a bank.',
+        'At a hospital.',
+      ],
       'correctIndex': 0,
       'explain': 'Bàn sẽ sẵn sàng → nhà hàng.',
     },
     {
       'question':
           "W: You can board through Gate 7.\nM: Thanks, I’ll head there now.\nQ: What are they talking about?",
-      'options': ['Air travel.', 'Car rental.', 'Hotel check-in.', 'Job interview.'],
+      'options': [
+        'Air travel.',
+        'Car rental.',
+        'Hotel check-in.',
+        'Job interview.',
+      ],
       'correctIndex': 0,
       'explain': 'Boarding & Gate.',
     },
@@ -424,7 +556,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Your parcel will arrive by Friday.\nM: Great, I need it for the event.\nQ: What are they talking about?",
-      'options': ['A delivery.', 'A medical test.', 'A class schedule.', 'A hotel upgrade.'],
+      'options': [
+        'A delivery.',
+        'A medical test.',
+        'A class schedule.',
+        'A hotel upgrade.',
+      ],
       'correctIndex': 0,
       'explain': 'Parcel & arrive.',
     },
@@ -435,21 +572,36 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Do you have vegetarian dishes?\nM: Yes, the tofu curry.\nQ: What are they talking about?",
-      'options': ['A menu choice.', 'Flight options.', 'Refund process.', 'Job duties.'],
+      'options': [
+        'A menu choice.',
+        'Flight options.',
+        'Refund process.',
+        'Job duties.',
+      ],
       'correctIndex': 0,
       'explain': 'Chọn món chay.',
     },
     {
       'question':
           "M: Is this the line for boarding?\nW: Yes, have your passport ready.\nQ: Where are they?",
-      'options': ['At an airport gate.', 'At a supermarket.', 'At a bank.', 'At a theater.'],
+      'options': [
+        'At an airport gate.',
+        'At a supermarket.',
+        'At a bank.',
+        'At a theater.',
+      ],
       'correctIndex': 0,
       'explain': 'Passport + boarding.',
     },
     {
       'question':
           "W: Can I return this within 14 days?\nM: Yes, with the receipt.\nQ: What’s required for the return?",
-      'options': ['Receipt.', 'Membership.', 'Cash only.', 'Original box not needed.'],
+      'options': [
+        'Receipt.',
+        'Membership.',
+        'Cash only.',
+        'Original box not needed.',
+      ],
       'correctIndex': 0,
       'explain': 'Cần hóa đơn.',
     },
@@ -463,21 +615,36 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Could we get the bill?\nM: I’ll bring it right over.\nQ: What will the man do?",
-      'options': ['Bring the check.', 'Offer dessert.', 'Change the table.', 'Refuse the request.'],
+      'options': [
+        'Bring the check.',
+        'Offer dessert.',
+        'Change the table.',
+        'Refuse the request.',
+      ],
       'correctIndex': 0,
       'explain': 'Mang hóa đơn.',
     },
     {
       'question':
           "M: Where’s the taxi stand?\nW: Outside, to the left.\nQ: What should the man do?",
-      'options': ['Go left outside.', 'Go to platform 3.', 'Wait inside.', 'Call customer service.'],
+      'options': [
+        'Go left outside.',
+        'Go to platform 3.',
+        'Wait inside.',
+        'Call customer service.',
+      ],
       'correctIndex': 0,
       'explain': 'Đi ra ngoài, rẽ trái.',
     },
     {
       'question':
           "W: Do you deliver?\nM: Yes, free over \$50.\nQ: What is true about delivery?",
-      'options': ['Free if over \$50.', 'Only in-store pickup.', 'No deliveries today.', 'Express only.'],
+      'options': [
+        'Free if over \$50.',
+        'Only in-store pickup.',
+        'No deliveries today.',
+        'Express only.',
+      ],
       'correctIndex': 0,
       'explain': 'Miễn phí nếu đơn > \$50.',
     },
@@ -491,14 +658,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Can I try this coat?\nM: Fitting rooms are down the hall.\nQ: Where should she go?",
-      'options': ['To the fitting rooms.', 'To the cashier.', 'To the exit.', 'To the info desk.'],
+      'options': [
+        'To the fitting rooms.',
+        'To the cashier.',
+        'To the exit.',
+        'To the info desk.',
+      ],
       'correctIndex': 0,
       'explain': 'Đi phòng thử đồ.',
     },
     {
       'question':
           "M: Is the pool open now?\nW: It opens at 7.\nQ: What does the woman mean?",
-      'options': ['It opens at 7.', 'It is open now.', 'It closes at 7.', 'It is closed for the day.'],
+      'options': [
+        'It opens at 7.',
+        'It is open now.',
+        'It closes at 7.',
+        'It is closed for the day.',
+      ],
       'correctIndex': 0,
       'explain': 'Mở lúc 7 giờ.',
     },
@@ -513,21 +690,36 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Can we move the meeting to 3?\nM: Fine, I’ll inform the team.\nQ: What will the man do?",
-      'options': ['Notify the team.', 'Cancel the meeting.', 'Book a venue.', 'Prepare lunch.'],
+      'options': [
+        'Notify the team.',
+        'Cancel the meeting.',
+        'Book a venue.',
+        'Prepare lunch.',
+      ],
       'correctIndex': 0,
       'explain': 'Anh sẽ thông báo.',
     },
     {
       'question':
           "M: The draft is due tomorrow.\nW: I’ll send you the latest tonight.\nQ: What does the woman promise?",
-      'options': ['Send the draft tonight.', 'Finish the final report.', 'Print copies now.', 'Delay the deadline.'],
+      'options': [
+        'Send the draft tonight.',
+        'Finish the final report.',
+        'Print copies now.',
+        'Delay the deadline.',
+      ],
       'correctIndex': 0,
       'explain': 'Gửi bản mới tối nay.',
     },
     {
       'question':
           "W: Who can take minutes?\nM: I’ll do it this time.\nQ: What does the man volunteer to do?",
-      'options': ['Take minutes.', 'Lead the meeting.', 'Reschedule.', 'Book a room.'],
+      'options': [
+        'Take minutes.',
+        'Lead the meeting.',
+        'Reschedule.',
+        'Book a room.',
+      ],
       'correctIndex': 0,
       'explain': 'Xung phong ghi biên bản.',
     },
@@ -541,7 +733,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: We’re short on staff Friday.\nM: I can cover the morning shift.\nQ: What does the man offer?",
-      'options': ['Work the morning shift.', 'Hire a temp.', 'Close the store.', 'Cancel shifts.'],
+      'options': [
+        'Work the morning shift.',
+        'Hire a temp.',
+        'Close the store.',
+        'Cancel shifts.',
+      ],
       'correctIndex': 0,
       'explain': 'Nhận ca sáng.',
     },
@@ -552,7 +749,7 @@ Future<void> seedLRPracticePart3() async {
         'Accelerate the schedule.',
         'Cancel the order.',
         'Ignore the request.',
-        'Change the product.'
+        'Change the product.',
       ],
       'correctIndex': 0,
       'explain': 'Đẩy tiến độ lên.',
@@ -564,7 +761,7 @@ Future<void> seedLRPracticePart3() async {
         'Adjust access rights.',
         'Send a new laptop.',
         'Call the client.',
-        'Print the files.'
+        'Print the files.',
       ],
       'correctIndex': 0,
       'explain': 'Reset quyền truy cập.',
@@ -572,14 +769,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: The budget is over by 8%.\nW: Let’s remove optional items.\nQ: What is suggested?",
-      'options': ['Cut optional items.', 'Ask for more funds.', 'Delay payment.', 'Change supplier.'],
+      'options': [
+        'Cut optional items.',
+        'Ask for more funds.',
+        'Delay payment.',
+        'Change supplier.',
+      ],
       'correctIndex': 0,
       'explain': 'Giảm hạng mục không bắt buộc.',
     },
     {
       'question':
           "W: Could you lead the kickoff tomorrow?\nM: Sure, I’ll prepare an outline.\nQ: What will the man do?",
-      'options': ['Lead the kickoff.', 'Cancel the meeting.', 'Email minutes.', 'Order lunch.'],
+      'options': [
+        'Lead the kickoff.',
+        'Cancel the meeting.',
+        'Email minutes.',
+        'Order lunch.',
+      ],
       'correctIndex': 0,
       'explain': 'Đồng ý lead buổi khởi động.',
     },
@@ -590,7 +797,7 @@ Future<void> seedLRPracticePart3() async {
         'End of business day Wednesday.',
         'Start of day Wednesday.',
         'Close of bank Friday.',
-        'Conference on Wednesday.'
+        'Conference on Wednesday.',
       ],
       'correctIndex': 0,
       'explain': 'COB = close of business.',
@@ -602,14 +809,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: My order arrived damaged.\nM: I’m sorry. I’ll arrange a replacement.\nQ: What will the man do?",
-      'options': ['Send a replacement.', 'Issue a coupon.', 'Cancel the account.', 'Ignore the issue.'],
+      'options': [
+        'Send a replacement.',
+        'Issue a coupon.',
+        'Cancel the account.',
+        'Ignore the issue.',
+      ],
       'correctIndex': 0,
       'explain': 'Xử lý thay thế.',
     },
     {
       'question':
           "M: I was overcharged.\nW: Let me refund the difference.\nQ: What is the solution?",
-      'options': ['Refund the difference.', 'Free shipping.', 'Gift points.', 'Store credit only.'],
+      'options': [
+        'Refund the difference.',
+        'Free shipping.',
+        'Gift points.',
+        'Store credit only.',
+      ],
       'correctIndex': 0,
       'explain': 'Hoàn tiền phần chênh lệch.',
     },
@@ -620,7 +837,7 @@ Future<void> seedLRPracticePart3() async {
         'A technician visit.',
         'A router replacement by mail.',
         'A plan upgrade.',
-        'No action.'
+        'No action.',
       ],
       'correctIndex': 0,
       'explain': 'Cử kỹ thuật viên đến.',
@@ -632,7 +849,7 @@ Future<void> seedLRPracticePart3() async {
         'Update the app.',
         'Change the phone.',
         'Create a new account.',
-        'Turn off Wi-Fi.'
+        'Turn off Wi-Fi.',
       ],
       'correctIndex': 0,
       'explain': 'Cập nhật ứng dụng.',
@@ -644,7 +861,7 @@ Future<void> seedLRPracticePart3() async {
         'Check tracking and follow up.',
         'Send a courier immediately.',
         'Cancel the shipment.',
-        'Offer a coupon only.'
+        'Offer a coupon only.',
       ],
       'correctIndex': 0,
       'explain': 'Kiểm tra & gọi lại.',
@@ -656,7 +873,7 @@ Future<void> seedLRPracticePart3() async {
         'A restock notification.',
         'A refund.',
         'A substitute item now.',
-        'A manager call.'
+        'A manager call.',
       ],
       'correctIndex': 0,
       'explain': 'Yêu cầu báo khi có hàng.',
@@ -664,7 +881,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: The device is still under warranty.\nM: Then we’ll repair it for free.\nQ: What will the company do?",
-      'options': ['Repair for free.', 'Replace with fee.', 'Decline service.', 'Offer accessories.'],
+      'options': [
+        'Repair for free.',
+        'Replace with fee.',
+        'Decline service.',
+        'Offer accessories.',
+      ],
       'correctIndex': 0,
       'explain': 'Bảo hành → sửa miễn phí.',
     },
@@ -675,7 +897,7 @@ Future<void> seedLRPracticePart3() async {
         'A different seat.',
         'A free meal.',
         'A refund.',
-        'A pillow only.'
+        'A pillow only.',
       ],
       'correctIndex': 0,
       'explain': 'Đổi chỗ ngồi.',
@@ -683,7 +905,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: I never got the confirmation email.\nM: I’ll resend it now.\nQ: What will the man do?",
-      'options': ['Resend the email.', 'Cancel the booking.', 'Change the address.', 'Issue a refund.'],
+      'options': [
+        'Resend the email.',
+        'Cancel the booking.',
+        'Change the address.',
+        'Issue a refund.',
+      ],
       'correctIndex': 0,
       'explain': 'Gửi lại email xác nhận.',
     },
@@ -694,7 +921,7 @@ Future<void> seedLRPracticePart3() async {
         'Ship the missing part.',
         'Collect the product.',
         'Issue store credit.',
-        'Offer a discount code.'
+        'Offer a discount code.',
       ],
       'correctIndex': 0,
       'explain': 'Gửi bổ sung linh kiện.',
@@ -706,7 +933,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: Could you review my slides?\nM: Sure, I’ll send comments by 5.\nQ: What will the man do?",
-      'options': ['Review and comment.', 'Print the slides.', 'Lead the talk.', 'Cancel the review.'],
+      'options': [
+        'Review and comment.',
+        'Print the slides.',
+        'Lead the talk.',
+        'Cancel the review.',
+      ],
       'correctIndex': 0,
       'explain': 'Nhận xem & góp ý.',
     },
@@ -717,7 +949,7 @@ Future<void> seedLRPracticePart3() async {
         'Choose a smaller venue.',
         'Delay the event.',
         'Invite more people.',
-        'Change the topic.'
+        'Change the topic.',
       ],
       'correctIndex': 0,
       'explain': 'Đồng ý địa điểm nhỏ hơn.',
@@ -732,49 +964,84 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Let’s send out the agenda today.\nW: I’ll draft it now.\nQ: What will the woman do?",
-      'options': ['Draft the agenda.', 'Cancel the email.', 'Schedule a meeting.', 'Print brochures.'],
+      'options': [
+        'Draft the agenda.',
+        'Cancel the email.',
+        'Schedule a meeting.',
+        'Print brochures.',
+      ],
       'correctIndex': 0,
       'explain': 'Soạn agenda.',
     },
     {
       'question':
           "W: Could you reserve a projector?\nM: I’ll book one online.\nQ: What will the man do?",
-      'options': ['Reserve a projector.', 'Fix the projector.', 'Buy a projector.', 'Borrow slides.'],
+      'options': [
+        'Reserve a projector.',
+        'Fix the projector.',
+        'Buy a projector.',
+        'Borrow slides.',
+      ],
       'correctIndex': 0,
       'explain': 'Đặt máy chiếu.',
     },
     {
       'question':
           "M: Why don’t we share rides to the event?\nW: I can drive two people.\nQ: What does the woman offer?",
-      'options': ['Drive two coworkers.', 'Pay for gas.', 'Cancel attendance.', 'Rent a van.'],
+      'options': [
+        'Drive two coworkers.',
+        'Pay for gas.',
+        'Cancel attendance.',
+        'Rent a van.',
+      ],
       'correctIndex': 0,
       'explain': 'Đề nghị chở 2 người.',
     },
     {
       'question':
           "W: Could you extend the deadline?\nM: I can give you two more days.\nQ: What will the man do?",
-      'options': ['Extend by two days.', 'Reject the request.', 'Assign more tasks.', 'Close the project.'],
+      'options': [
+        'Extend by two days.',
+        'Reject the request.',
+        'Assign more tasks.',
+        'Close the project.',
+      ],
       'correctIndex': 0,
       'explain': 'Gia hạn 2 ngày.',
     },
     {
       'question':
           "M: Let’s meet first thing tomorrow.\nW: I’ll book a room at nine.\nQ: When will they meet?",
-      'options': ['At 9 a.m. tomorrow.', 'At 9 p.m. today.', 'At noon today.', 'Next week.'],
+      'options': [
+        'At 9 a.m. tomorrow.',
+        'At 9 p.m. today.',
+        'At noon today.',
+        'Next week.',
+      ],
       'correctIndex': 0,
       'explain': 'Đặt phòng lúc 9 sáng.',
     },
     {
       'question':
           "W: Could you send the invoice to Accounts?\nM: I’ll forward it now.\nQ: What will the man do?",
-      'options': ['Forward the invoice.', 'Print the invoice.', 'Pay the invoice.', 'Reject the invoice.'],
+      'options': [
+        'Forward the invoice.',
+        'Print the invoice.',
+        'Pay the invoice.',
+        'Reject the invoice.',
+      ],
       'correctIndex': 0,
       'explain': 'Chuyển tiếp hóa đơn.',
     },
     {
       'question':
           "M: Why don’t we ask for user feedback?\nW: I’ll prepare a short survey.\nQ: What will the woman do?",
-      'options': ['Prepare a survey.', 'Call all users.', 'Stop the release.', 'Raise the price.'],
+      'options': [
+        'Prepare a survey.',
+        'Call all users.',
+        'Stop the release.',
+        'Raise the price.',
+      ],
       'correctIndex': 0,
       'explain': 'Soạn khảo sát.',
     },
@@ -785,7 +1052,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: The workshop is moved to Room B.\nW: Okay, do we still start at ten?\nQ: What is the main change?",
-      'options': ['Room change.', 'Time change.', 'Speaker change.', 'Topic change.'],
+      'options': [
+        'Room change.',
+        'Time change.',
+        'Speaker change.',
+        'Topic change.',
+      ],
       'correctIndex': 0,
       'explain': 'Đổi phòng, không đổi giờ.',
     },
@@ -799,42 +1071,72 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: We’ll serve coffee and snacks.\nW: Any vegan options?\nQ: What detail is the woman asking for?",
-      'options': ['Dietary options.', 'Ticket price.', 'Seat location.', 'Parking fee.'],
+      'options': [
+        'Dietary options.',
+        'Ticket price.',
+        'Seat location.',
+        'Parking fee.',
+      ],
       'correctIndex': 0,
       'explain': 'Chi tiết chế độ ăn.',
     },
     {
       'question':
           "W: The keynote starts at 9.\nM: Who’s introducing the speaker?\nQ: What detail does the man want?",
-      'options': ['Who will introduce.', 'The venue size.', 'The agenda order.', 'The coffee break time.'],
+      'options': [
+        'Who will introduce.',
+        'The venue size.',
+        'The agenda order.',
+        'The coffee break time.',
+      ],
       'correctIndex': 0,
       'explain': 'Hỏi người giới thiệu.',
     },
     {
       'question':
           "M: The budget increased by 5%.\nW: Is marketing included?\nQ: What is the woman confirming?",
-      'options': ['Whether marketing is included.', 'Exact date.', 'Payment method.', 'Travel plan.'],
+      'options': [
+        'Whether marketing is included.',
+        'Exact date.',
+        'Payment method.',
+        'Travel plan.',
+      ],
       'correctIndex': 0,
       'explain': 'Xác nhận hạng mục.',
     },
     {
       'question':
           "W: We’ll email the report tonight.\nM: Could you CC Maria?\nQ: What is the man’s request?",
-      'options': ['CC Maria.', 'Delay the email.', 'Print copies.', 'Change the format.'],
+      'options': [
+        'CC Maria.',
+        'Delay the email.',
+        'Print copies.',
+        'Change the format.',
+      ],
       'correctIndex': 0,
       'explain': 'Yêu cầu CC.',
     },
     {
       'question':
           "M: The demo lasts thirty minutes.\nW: Do we have Q&A?\nQ: What detail does the woman ask?",
-      'options': ['Whether there is Q&A.', 'The speaker fee.', 'Venue address.', 'Attendee list.'],
+      'options': [
+        'Whether there is Q&A.',
+        'The speaker fee.',
+        'Venue address.',
+        'Attendee list.',
+      ],
       'correctIndex': 0,
       'explain': 'Hỏi phần hỏi đáp.',
     },
     {
       'question':
           "W: Our stand is near Entrance A.\nM: Do we have power outlets?\nQ: What is the man concerned about?",
-      'options': ['Power supply.', 'Staff count.', 'Poster size.', 'Ticket price.'],
+      'options': [
+        'Power supply.',
+        'Staff count.',
+        'Poster size.',
+        'Ticket price.',
+      ],
       'correctIndex': 0,
       'explain': 'Ổ điện cho gian hàng.',
     },
@@ -848,7 +1150,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: The training is on Tuesday.\nM: Do we need laptops?\nQ: What detail is asked?",
-      'options': ['Equipment requirement.', 'Parking info.', 'Dress code.', 'Lunch menu.'],
+      'options': [
+        'Equipment requirement.',
+        'Parking info.',
+        'Dress code.',
+        'Lunch menu.',
+      ],
       'correctIndex': 0,
       'explain': 'Hỏi cần mang laptop không.',
     },
@@ -859,28 +1166,48 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: The client wants to push back the call.\nM: Let’s reschedule for Thursday.\nQ: What will they do?",
-      'options': ['Reschedule.', 'Cancel.', 'Extend the call.', 'Hire a translator.'],
+      'options': [
+        'Reschedule.',
+        'Cancel.',
+        'Extend the call.',
+        'Hire a translator.',
+      ],
       'correctIndex': 0,
       'explain': 'Đổi lịch sang thứ Năm.',
     },
     {
       'question':
           "M: The device overheats.\nW: Use the latest firmware.\nQ: What is the solution?",
-      'options': ['Update firmware.', 'Replace battery.', 'Stop using it.', 'Add a case.'],
+      'options': [
+        'Update firmware.',
+        'Replace battery.',
+        'Stop using it.',
+        'Add a case.',
+      ],
       'correctIndex': 0,
       'explain': 'Cập nhật phần mềm máy.',
     },
     {
       'question':
           "W: Could you send me the invoice?\nM: I’ve just emailed it.\nQ: What has the man done?",
-      'options': ['Emailed the invoice.', 'Printed the invoice.', 'Paid the invoice.', 'Rejected the invoice.'],
+      'options': [
+        'Emailed the invoice.',
+        'Printed the invoice.',
+        'Paid the invoice.',
+        'Rejected the invoice.',
+      ],
       'correctIndex': 0,
       'explain': 'Đã gửi qua email.',
     },
     {
       'question':
           "M: Any vegetarian options?\nW: Yes, a quinoa salad.\nQ: What are they discussing?",
-      'options': ['Menu choices.', 'Travel plans.', 'Office rent.', 'Delivery fees.'],
+      'options': [
+        'Menu choices.',
+        'Travel plans.',
+        'Office rent.',
+        'Delivery fees.',
+      ],
       'correctIndex': 0,
       'explain': 'Chọn món ăn.',
     },
@@ -894,14 +1221,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: The supplier is late.\nW: I’ll call and expedite.\nQ: What will the woman do?",
-      'options': ['Call to speed up.', 'Find a new supplier.', 'Cancel the order.', 'Send an email only.'],
+      'options': [
+        'Call to speed up.',
+        'Find a new supplier.',
+        'Cancel the order.',
+        'Send an email only.',
+      ],
       'correctIndex': 0,
       'explain': 'Gọi hối thúc.',
     },
     {
       'question':
           "W: Could you book a room for 10 a.m.?\nM: I’ll reserve Meeting B.\nQ: What will the man do?",
-      'options': ['Book a room.', 'Order lunch.', 'Cancel the meeting.', 'Invite guests.'],
+      'options': [
+        'Book a room.',
+        'Order lunch.',
+        'Cancel the meeting.',
+        'Invite guests.',
+      ],
       'correctIndex': 0,
       'explain': 'Đặt phòng họp.',
     },
@@ -922,7 +1259,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Can we get separate checks?\nW: Sure.\nQ: Where are they most likely?",
-      'options': ['At a restaurant.', 'At an office.', 'At a hotel.', 'At a bank.'],
+      'options': [
+        'At a restaurant.',
+        'At an office.',
+        'At a hotel.',
+        'At a bank.',
+      ],
       'correctIndex': 0,
       'explain': 'Tách hóa đơn → nhà hàng.',
     },
@@ -941,7 +1283,7 @@ Future<void> seedLRPracticePart3() async {
         'Ordering 700 units.',
         'Paying in cash.',
         'Signing a 2-year contract.',
-        'Local pickup.'
+        'Local pickup.',
       ],
       'correctIndex': 0,
       'explain': 'Tăng số lượng lên 700 → giảm 8%.',
@@ -949,14 +1291,24 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: We need delivery by the 15th.\nM: That’s tight—unless we cut the inspection stage.\nW: Quality is non-negotiable.\nQ: What will NOT be changed?",
-      'options': ['Quality inspection.', 'Delivery date.', 'Price.', 'Quantity.'],
+      'options': [
+        'Quality inspection.',
+        'Delivery date.',
+        'Price.',
+        'Quantity.',
+      ],
       'correctIndex': 0,
       'explain': '“Quality is non-negotiable”.',
     },
     {
       'question':
           "M: Can you extend the warranty to 18 months?\nW: We can, if you choose the premium plan.\nQ: What is required for longer warranty?",
-      'options': ['Premium plan.', 'Advance payment.', 'Bigger order.', 'On-site training.'],
+      'options': [
+        'Premium plan.',
+        'Advance payment.',
+        'Bigger order.',
+        'On-site training.',
+      ],
       'correctIndex': 0,
       'explain': 'Cần premium plan.',
     },
@@ -967,7 +1319,7 @@ Future<void> seedLRPracticePart3() async {
         'The feature set.',
         'The tax rate.',
         'The delivery address.',
-        'The payment currency.'
+        'The payment currency.',
       ],
       'correctIndex': 0,
       'explain': 'Cắt tính năng tùy chọn.',
@@ -979,7 +1331,7 @@ Future<void> seedLRPracticePart3() async {
         'Monthly maintenance (year 1).',
         'Free spare parts for 5 years.',
         'Daily support on site.',
-        'Lifetime warranty.'
+        'Lifetime warranty.',
       ],
       'correctIndex': 0,
       'explain': 'Bao gồm bảo trì tháng trong năm đầu.',
@@ -991,7 +1343,7 @@ Future<void> seedLRPracticePart3() async {
         '50/50 (deposit & on delivery).',
         'Full upfront.',
         'Monthly installments.',
-        'After 60 days.'
+        'After 60 days.',
       ],
       'correctIndex': 0,
       'explain': 'Điều khoản thanh toán.',
@@ -1003,7 +1355,7 @@ Future<void> seedLRPracticePart3() async {
         'Delay penalty of 1%/week.',
         'Early payment bonus.',
         'Free upgrades.',
-        'Longer warranty.'
+        'Longer warranty.',
       ],
       'correctIndex': 0,
       'explain': 'Phạt trễ tiến độ.',
@@ -1015,7 +1367,7 @@ Future<void> seedLRPracticePart3() async {
         'Split delivery into two batches.',
         'Cancel the order.',
         'Air ship only.',
-        'Single bulk shipment.'
+        'Single bulk shipment.',
       ],
       'correctIndex': 0,
       'explain': 'Chia lô giao hàng.',
@@ -1034,7 +1386,7 @@ Future<void> seedLRPracticePart3() async {
         'Training sessions included.',
         'Free hardware.',
         'Extended warranty.',
-        'Office renovation.'
+        'Office renovation.',
       ],
       'correctIndex': 0,
       'explain': 'Bao gồm 2 khóa huấn luyện online.',
@@ -1050,7 +1402,7 @@ Future<void> seedLRPracticePart3() async {
         'Install the new patch and restart.',
         'Replace the computer.',
         'Change the password.',
-        'Use offline mode.'
+        'Use offline mode.',
       ],
       'correctIndex': 0,
       'explain': 'Cài bản vá rồi khởi động lại.',
@@ -1058,7 +1410,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: The room smells like smoke.\nW: I can move you to a non-smoking floor.\nQ: What does the woman offer?",
-      'options': ['A different room.', 'A refund.', 'Free breakfast.', 'Late checkout only.'],
+      'options': [
+        'A different room.',
+        'A refund.',
+        'Free breakfast.',
+        'Late checkout only.',
+      ],
       'correctIndex': 0,
       'explain': 'Chuyển phòng không hút thuốc.',
     },
@@ -1069,7 +1426,7 @@ Future<void> seedLRPracticePart3() async {
         'Send missing cartons, shipping covered.',
         'Cancel the order.',
         'Ask for pickup.',
-        'Charge extra.'
+        'Charge extra.',
       ],
       'correctIndex': 0,
       'explain': 'Gửi bù phần thiếu & chịu phí.',
@@ -1081,7 +1438,7 @@ Future<void> seedLRPracticePart3() async {
         'Issue a corrected invoice.',
         'Offer a free meal.',
         'Provide store credit.',
-        'Ignore the request.'
+        'Ignore the request.',
       ],
       'correctIndex': 0,
       'explain': 'Xuất hoá đơn chỉnh sửa.',
@@ -1093,7 +1450,7 @@ Future<void> seedLRPracticePart3() async {
         'Lubricate or replace the fan.',
         'Refund immediately.',
         'Change the color.',
-        'Extend the cable.'
+        'Extend the cable.',
       ],
       'correctIndex': 0,
       'explain': 'Hai phương án khắc phục.',
@@ -1105,7 +1462,7 @@ Future<void> seedLRPracticePart3() async {
         'Change the room and reset router.',
         'Provide a new laptop.',
         'Cancel the booking.',
-        'Offer breakfast coupons.'
+        'Offer breakfast coupons.',
       ],
       'correctIndex': 0,
       'explain': 'Đổi phòng gần router + reset.',
@@ -1117,7 +1474,7 @@ Future<void> seedLRPracticePart3() async {
         'Partial refund or reschedule.',
         'Full refund only.',
         'Free lunch.',
-        'Taxi voucher only.'
+        'Taxi voucher only.',
       ],
       'correctIndex': 0,
       'explain': 'Hoàn 20% hoặc đổi lịch.',
@@ -1129,7 +1486,7 @@ Future<void> seedLRPracticePart3() async {
         'Express shipping for the next order.',
         'A free product now.',
         'Cancel subscription.',
-        'Store credit only.'
+        'Store credit only.',
       ],
       'correctIndex': 0,
       'explain': 'Nâng cấp vận chuyển lần tới.',
@@ -1141,7 +1498,7 @@ Future<void> seedLRPracticePart3() async {
         'Escalate to engineering and follow up.',
         'Issue a refund.',
         'Replace the phone.',
-        'Close the ticket.'
+        'Close the ticket.',
       ],
       'correctIndex': 0,
       'explain': 'Chuyển cấp & cập nhật lại.',
@@ -1153,7 +1510,7 @@ Future<void> seedLRPracticePart3() async {
         'Send a replacement printer.',
         'Dispatch a cleaning crew.',
         'Offer ink discount.',
-        'Extend warranty only.'
+        'Extend warranty only.',
       ],
       'correctIndex': 0,
       'explain': 'Gửi máy thay thế.',
@@ -1165,21 +1522,36 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: The quote is \$480 including tax.\nM: If we add installation, what’s the total?\nW: \$550.\nQ: How much with installation?",
-      'options': ['550 dollars.', '480 dollars.', '530 dollars.', '505 dollars.'],
+      'options': [
+        '550 dollars.',
+        '480 dollars.',
+        '530 dollars.',
+        '505 dollars.',
+      ],
       'correctIndex': 0,
       'explain': 'Tổng \$550.',
     },
     {
       'question':
           "M: Delivery by the 14th is tough.\nW: If we ship today, it’ll arrive on the 13th.\nQ: When will it arrive if shipped today?",
-      'options': ['On the 13th.', 'On the 14th.', 'On the 15th.', 'Next month.'],
+      'options': [
+        'On the 13th.',
+        'On the 14th.',
+        'On the 15th.',
+        'Next month.',
+      ],
       'correctIndex': 0,
       'explain': 'Giao ngày 13.',
     },
     {
       'question':
           "W: The discount applies when you buy at least three.\nM: Then I’ll get four.\nQ: What triggers the discount?",
-      'options': ['Buying ≥ 3 items.', 'Paying cash.', 'Weekend only.', 'Members only.'],
+      'options': [
+        'Buying ≥ 3 items.',
+        'Paying cash.',
+        'Weekend only.',
+        'Members only.',
+      ],
       'correctIndex': 0,
       'explain': 'Điều kiện mua tối thiểu.',
     },
@@ -1218,7 +1590,7 @@ Future<void> seedLRPracticePart3() async {
         'Use express shipping.',
         'Order 1000 units.',
         'Pay extra tax.',
-        'Change address.'
+        'Change address.',
       ],
       'correctIndex': 0,
       'explain': 'Cần chuyển phát nhanh.',
@@ -1237,7 +1609,7 @@ Future<void> seedLRPracticePart3() async {
         'Switch supplier upon delay.',
         'Early payment discount.',
         'Free samples.',
-        'Automatic renewal.'
+        'Automatic renewal.',
       ],
       'correctIndex': 0,
       'explain': 'Điều kiện đổi nhà cung cấp nếu trễ.',
@@ -1253,7 +1625,7 @@ Future<void> seedLRPracticePart3() async {
         'Working together from different places.',
         'Office renovation schedule.',
         'Budget approval process.',
-        'On-site training only.'
+        'On-site training only.',
       ],
       'correctIndex': 0,
       'explain': 'Paraphrase đúng ý chính.',
@@ -1261,7 +1633,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: We’ll phase out the old app by Q3.\nM: You mean discontinue it before October?\nQ: What is the timeline implied?",
-      'options': ['Before October (by Q3).', 'After December.', 'In Q4.', 'No timeline.'],
+      'options': [
+        'Before October (by Q3).',
+        'After December.',
+        'In Q4.',
+        'No timeline.',
+      ],
       'correctIndex': 0,
       'explain': 'Q3 kết thúc trước tháng 10.',
     },
@@ -1272,7 +1649,7 @@ Future<void> seedLRPracticePart3() async {
         'Remove optional functions.',
         'Increase features.',
         'Delay release.',
-        'Change platform.'
+        'Change platform.',
       ],
       'correctIndex': 0,
       'explain': 'Paraphrase chính xác.',
@@ -1284,7 +1661,7 @@ Future<void> seedLRPracticePart3() async {
         'Review pilot results.',
         'Launch globally.',
         'Cancel the pilot.',
-        'Hire new staff.'
+        'Hire new staff.',
       ],
       'correctIndex': 0,
       'explain': '“circle back” = xem lại.',
@@ -1296,7 +1673,7 @@ Future<void> seedLRPracticePart3() async {
         'Focus on critical tasks.',
         'Hire immediately.',
         'Stop projects.',
-        'Extend vacations.'
+        'Extend vacations.',
       ],
       'correctIndex': 0,
       'explain': 'Ưu tiên việc quan trọng.',
@@ -1308,7 +1685,7 @@ Future<void> seedLRPracticePart3() async {
         'Increase update frequency.',
         'Reduce testing.',
         'Stop feedback.',
-        'Cut scope drastically.'
+        'Cut scope drastically.',
       ],
       'correctIndex': 0,
       'explain': 'Paraphrase “iterate faster”.',
@@ -1320,7 +1697,7 @@ Future<void> seedLRPracticePart3() async {
         'Keep costs low.',
         'Increase spending.',
         'Delay payments.',
-        'Change vendors.'
+        'Change vendors.',
       ],
       'correctIndex': 0,
       'explain': 'Giữ chi phí thấp.',
@@ -1332,7 +1709,7 @@ Future<void> seedLRPracticePart3() async {
         'Approval from management.',
         'A bigger office.',
         'New tools.',
-        'Extra vacation days.'
+        'Extra vacation days.',
       ],
       'correctIndex': 0,
       'explain': 'Buy-in = đồng thuận/phê duyệt.',
@@ -1344,7 +1721,7 @@ Future<void> seedLRPracticePart3() async {
         'Supplier unreliability.',
         'Weather delays.',
         'Employee turnover.',
-        'Marketing costs.'
+        'Marketing costs.',
       ],
       'correctIndex': 0,
       'explain': 'Điểm mấu chốt là độ tin cậy NCC.',
@@ -1356,7 +1733,7 @@ Future<void> seedLRPracticePart3() async {
         'Phase out the old system.',
         'Expand the old system.',
         'Open-source it now.',
-        'Hire more admins.'
+        'Hire more admins.',
       ],
       'correctIndex': 0,
       'explain': '“Sunset” = ngừng dần.',
@@ -1368,28 +1745,48 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Do you know when the interview starts?\nW: At 2:30 in Room 5.\nQ: What information is provided?",
-      'options': ['Time and place.', 'Only the date.', 'Only the interviewer.', 'Only the topic.'],
+      'options': [
+        'Time and place.',
+        'Only the date.',
+        'Only the interviewer.',
+        'Only the topic.',
+      ],
       'correctIndex': 0,
       'explain': 'Giờ + phòng.',
     },
     {
       'question':
           "W: Can you make it to the meeting?\nM: I’m tied up until noon.\nQ: What does the man imply?",
-      'options': ['He cannot attend before noon.', 'He will be early.', 'He is on vacation.', 'He forgot the meeting.'],
+      'options': [
+        'He cannot attend before noon.',
+        'He will be early.',
+        'He is on vacation.',
+        'He forgot the meeting.',
+      ],
       'correctIndex': 0,
       'explain': 'Bận tới trưa.',
     },
     {
       'question':
           "M: The quote is valid through the 30th.\nW: We’ll confirm by the 28th.\nQ: What will the woman do?",
-      'options': ['Confirm before the deadline.', 'Ask for a new quote.', 'Decline the offer.', 'Delay to next month.'],
+      'options': [
+        'Confirm before the deadline.',
+        'Ask for a new quote.',
+        'Decline the offer.',
+        'Delay to next month.',
+      ],
       'correctIndex': 0,
       'explain': 'Xác nhận trước hạn.',
     },
     {
       'question':
           "W: The fare to downtown is \$18.\nM: Do you take cards?\nQ: What is the man asking about?",
-      'options': ['Payment method.', 'Departure time.', 'Seat type.', 'Discount.'],
+      'options': [
+        'Payment method.',
+        'Departure time.',
+        'Seat type.',
+        'Discount.',
+      ],
       'correctIndex': 0,
       'explain': 'Hỏi cách thanh toán.',
     },
@@ -1400,7 +1797,7 @@ Future<void> seedLRPracticePart3() async {
         'The repair will be prioritized.',
         'They will cancel it.',
         'They will ignore it.',
-        'They will charge extra automatically.'
+        'They will charge extra automatically.',
       ],
       'correctIndex': 0,
       'explain': 'Ưu tiên xử lý.',
@@ -1412,7 +1809,7 @@ Future<void> seedLRPracticePart3() async {
         'The venue is large enough.',
         'They need a bigger venue.',
         'They will exceed capacity.',
-        'They must split sessions.'
+        'They must split sessions.',
       ],
       'correctIndex': 0,
       'explain': '50 > 45 nên đủ chỗ.',
@@ -1420,7 +1817,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "M: Unless the supplier confirms today, we’ll postpone.\nW: I’ll call them again.\nQ: What will the woman do?",
-      'options': ['Call the supplier again.', 'Postpone immediately.', 'Change supplier now.', 'Cancel the order.'],
+      'options': [
+        'Call the supplier again.',
+        'Postpone immediately.',
+        'Change supplier now.',
+        'Cancel the order.',
+      ],
       'correctIndex': 0,
       'explain': 'Gọi lại để xác nhận.',
     },
@@ -1438,7 +1840,7 @@ Future<void> seedLRPracticePart3() async {
         'They won’t wait long.',
         'The shuttle is hourly.',
         'No shuttles today.',
-        'They missed the last one.'
+        'They missed the last one.',
       ],
       'correctIndex': 0,
       'explain': 'Chạy 20 phút/chuyến → sắp có.',
@@ -1446,7 +1848,12 @@ Future<void> seedLRPracticePart3() async {
     {
       'question':
           "W: We’ll need a deposit to secure the booking.\nM: I’ll transfer it today.\nQ: What will the man do?",
-      'options': ['Pay the deposit today.', 'Cancel the booking.', 'Request a refund.', 'Change the date.'],
+      'options': [
+        'Pay the deposit today.',
+        'Cancel the booking.',
+        'Request a refund.',
+        'Change the date.',
+      ],
       'correctIndex': 0,
       'explain': 'Thanh toán tiền đặt cọc.',
     },
@@ -1454,24 +1861,197 @@ Future<void> seedLRPracticePart3() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  /// ===== LRMaterials ========
   // lv300
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Hội thoại ngắn – Shopping', questions: p3Lv300L1);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Hội thoại dịch vụ – Travel/Hotel', questions: p3Lv300L2);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Hội thoại ăn uống – Food & Restaurant', questions: p3Lv300L3);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Nhận diện who/where/what', questions: p3Lv300L4);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p3Lv300L5);
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại ngắn – Shopping',
+    questions: p3Lv300L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại dịch vụ – Travel/Hotel',
+    questions: p3Lv300L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Hội thoại ăn uống – Food & Restaurant',
+    questions: p3Lv300L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Nhận diện who/where/what',
+    questions: p3Lv300L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv300L5,
+  );
 
   // lv600
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Hội thoại công việc – Meeting', questions: p3Lv600L1);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Hội thoại dịch vụ khách hàng', questions: p3Lv600L2);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Yêu cầu & đề xuất – Requests & Suggestions', questions: p3Lv600L3);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Nghe ý chính & chi tiết', questions: p3Lv600L4);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p3Lv600L5);
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại công việc – Meeting',
+    questions: p3Lv600L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại dịch vụ khách hàng',
+    questions: p3Lv600L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Yêu cầu & đề xuất – Requests & Suggestions',
+    questions: p3Lv600L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Nghe ý chính & chi tiết',
+    questions: p3Lv600L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv600L5,
+  );
 
   // lv800
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Hội thoại dài – Negotiation', questions: p3Lv800L1);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Hội thoại khiếu nại & giải pháp', questions: p3Lv800L2);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Hội thoại có số liệu & điều kiện', questions: p3Lv800L3);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Note-taking & paraphrase', questions: p3Lv800L4);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp', questions: p3Lv800L5);
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại dài – Negotiation',
+    questions: p3Lv800L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại khiếu nại & giải pháp',
+    questions: p3Lv800L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Hội thoại có số liệu & điều kiện',
+    questions: p3Lv800L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Note-taking & paraphrase',
+    questions: p3Lv800L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv800L5,
+  );
+
+  /// ===== FullMaterials ========
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại ngắn – Shopping',
+    questions: p3Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại dịch vụ – Travel/Hotel',
+    questions: p3Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Hội thoại ăn uống – Food & Restaurant',
+    questions: p3Lv300L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Nhận diện who/where/what',
+    questions: p3Lv300L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv300L5,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại công việc – Meeting',
+    questions: p3Lv600L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại dịch vụ khách hàng',
+    questions: p3Lv600L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Yêu cầu & đề xuất – Requests & Suggestions',
+    questions: p3Lv600L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Nghe ý chính & chi tiết',
+    questions: p3Lv600L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv600L5,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Hội thoại dài – Negotiation',
+    questions: p3Lv800L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Hội thoại khiếu nại & giải pháp',
+    questions: p3Lv800L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Hội thoại có số liệu & điều kiện',
+    questions: p3Lv800L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Note-taking & paraphrase',
+    questions: p3Lv800L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp',
+    questions: p3Lv800L5,
+  );
 }

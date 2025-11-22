@@ -6,22 +6,29 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWMaterials() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushPdf({
+  await db.collection('study_materials').doc('FullMaterials').set({
+    'title': 'Four Skills Materials',
+    'levels': ['lv1', 'lv2', 'lv3'],
+    'createdAt': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
+
+  Future<void> pushPdfSW({
     required String levelId,
     required String partId,
   }) async {
+    // Push to SWMaterials
     await db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -35,7 +42,7 @@ Future<void> seedSWMaterials() async {
 
       await db
           .collection('study_materials')
-          .doc(materialId)
+          .doc('SWMaterials')
           .collection('levels')
           .doc(levelId)
           .collection('parts')
@@ -46,35 +53,99 @@ Future<void> seedSWMaterials() async {
     }
   }
 
+  Future<void> pushPdfFull({
+    required String levelId,
+    required String partId,
+  }) async {
+    // Push to SWMaterials
+    await db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc(partId)
+        .set({'lessonCount': 3}, SetOptions(merge: true));
+
+    for (int i = 1; i <= 3; i++) {
+      // final id = 'q${i.toString().padLeft(2, '0')}';
+      // final pdfPath = 'part1/lv300/lesson$i/theory.pdf';
+      final pdfPath = 'Full/$levelId/$partId/lesson$i/theory.pdf';
+
+      await db
+          .collection('study_materials')
+          .doc('FullMaterials')
+          .collection('levels')
+          .doc(levelId)
+          .collection('parts')
+          .doc(partId)
+          .collection('lessons')
+          .doc('lesson$i')
+          .set({'pdfPath': pdfPath, 'order': i}, SetOptions(merge: true));
+    }
+  }
+
+  // ====== SWMaterials =======
   // ====== LEVEL 100+ =======
-  pushPdf(levelId: "lv100", partId: "part1");
-  pushPdf(levelId: "lv100", partId: "part2");
-  pushPdf(levelId: "lv100", partId: "part3");
-  pushPdf(levelId: "lv100", partId: "part4");
-  pushPdf(levelId: "lv100", partId: "part5");
-  pushPdf(levelId: "lv100", partId: "part6");
-  pushPdf(levelId: "lv100", partId: "part7");
-  pushPdf(levelId: "lv100", partId: "part8");
+  pushPdfSW(levelId: "lv100", partId: "part1");
+  pushPdfSW(levelId: "lv100", partId: "part2");
+  pushPdfSW(levelId: "lv100", partId: "part3");
+  pushPdfSW(levelId: "lv100", partId: "part4");
+  pushPdfSW(levelId: "lv100", partId: "part5");
+  pushPdfSW(levelId: "lv100", partId: "part6");
+  pushPdfSW(levelId: "lv100", partId: "part7");
+  pushPdfSW(levelId: "lv100", partId: "part8");
 
   // ====== LEVEL 200+ =======
-  pushPdf(levelId: "lv200", partId: "part1");
-  pushPdf(levelId: "lv200", partId: "part2");
-  pushPdf(levelId: "lv200", partId: "part3");
-  pushPdf(levelId: "lv200", partId: "part4");
-  pushPdf(levelId: "lv200", partId: "part5");
-  pushPdf(levelId: "lv200", partId: "part6");
-  pushPdf(levelId: "lv200", partId: "part7");
-  pushPdf(levelId: "lv200", partId: "part8");
+  pushPdfSW(levelId: "lv200", partId: "part1");
+  pushPdfSW(levelId: "lv200", partId: "part2");
+  pushPdfSW(levelId: "lv200", partId: "part3");
+  pushPdfSW(levelId: "lv200", partId: "part4");
+  pushPdfSW(levelId: "lv200", partId: "part5");
+  pushPdfSW(levelId: "lv200", partId: "part6");
+  pushPdfSW(levelId: "lv200", partId: "part7");
+  pushPdfSW(levelId: "lv200", partId: "part8");
 
   // ====== LEVEL 300+ =======
-  pushPdf(levelId: "lv300", partId: "part1");
-  pushPdf(levelId: "lv300", partId: "part2");
-  pushPdf(levelId: "lv300", partId: "part3");
-  pushPdf(levelId: "lv300", partId: "part4");
-  pushPdf(levelId: "lv300", partId: "part5");
-  pushPdf(levelId: "lv300", partId: "part6");
-  pushPdf(levelId: "lv300", partId: "part7");
-  pushPdf(levelId: "lv300", partId: "part8");
+  pushPdfSW(levelId: "lv300", partId: "part1");
+  pushPdfSW(levelId: "lv300", partId: "part2");
+  pushPdfSW(levelId: "lv300", partId: "part3");
+  pushPdfSW(levelId: "lv300", partId: "part4");
+  pushPdfSW(levelId: "lv300", partId: "part5");
+  pushPdfSW(levelId: "lv300", partId: "part6");
+  pushPdfSW(levelId: "lv300", partId: "part7");
+  pushPdfSW(levelId: "lv300", partId: "part8");
+
+  //===== FullMaterials =====
+  //===== Level 1 =======
+  pushPdfFull(levelId: "lv1", partId: "speak1");
+  pushPdfFull(levelId: "lv1", partId: "speak2");
+  pushPdfFull(levelId: "lv1", partId: "speak3");
+  pushPdfFull(levelId: "lv1", partId: "speak4");
+  pushPdfFull(levelId: "lv1", partId: "speak5");
+  pushPdfFull(levelId: "lv1", partId: "write1");
+  pushPdfFull(levelId: "lv1", partId: "write2");
+  pushPdfFull(levelId: "lv1", partId: "write3");
+
+  //===== Level 2 =======
+  pushPdfFull(levelId: "lv2", partId: "speak1");
+  pushPdfFull(levelId: "lv2", partId: "speak2");
+  pushPdfFull(levelId: "lv2", partId: "speak3");
+  pushPdfFull(levelId: "lv2", partId: "speak4");
+  pushPdfFull(levelId: "lv2", partId: "speak5");
+  pushPdfFull(levelId: "lv2", partId: "write1");
+  pushPdfFull(levelId: "lv2", partId: "write2");
+  pushPdfFull(levelId: "lv2", partId: "write3");
+
+  //===== Level 3 =======
+  pushPdfFull(levelId: "lv3", partId: "speak1");
+  pushPdfFull(levelId: "lv3", partId: "speak2");
+  pushPdfFull(levelId: "lv3", partId: "speak3");
+  pushPdfFull(levelId: "lv3", partId: "speak4");
+  pushPdfFull(levelId: "lv3", partId: "speak5");
+  pushPdfFull(levelId: "lv3", partId: "write1");
+  pushPdfFull(levelId: "lv3", partId: "write2");
+  pushPdfFull(levelId: "lv3", partId: "write3");
 
   // === LEVEL 100 ===
   // === PART 1 READ A TEXT ALOUD ===

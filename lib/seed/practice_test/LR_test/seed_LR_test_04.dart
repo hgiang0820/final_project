@@ -45,12 +45,7 @@ Future<void> seedLRTest04() async {
       // (C) She's cleaning a window.
       // (D) She's choosing a paint color.
       'question': "",
-      'options': [
-        "She's hanging a picture frame.",
-        "She's painting a wall with a roller.",
-        "She's cleaning a window.",
-        "She's choosing a paint color.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy một người phụ nữ đang dùng con lăn (roller) để sơn lên một bức tường.',
@@ -63,12 +58,7 @@ Future<void> seedLRTest04() async {
       // (C) A band is performing on a stage.
       // (D) People are dancing in a club.
       'question': "",
-      'options': [
-        "The musicians are packing their instruments.",
-        "The audience is clapping for the performers.",
-        "A band is performing on a stage.",
-        "People are dancing in a club.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy nhiều người đang chơi nhạc cụ (một ban nhạc - band) trên một sân khấu (stage).',
@@ -81,12 +71,7 @@ Future<void> seedLRTest04() async {
       // (C) A man is paying at the cash register.
       // (D) A man is bagging groceries.
       'question': "",
-      'options': [
-        "A man is pushing a shopping cart.",
-        "A man is stocking the shelves.",
-        "A man is paying at the cash register.",
-        "A man is bagging groceries.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Hình ảnh rõ ràng cho thấy một người đàn ông đang đẩy một chiếc xe đẩy (shopping cart) trong một lối đi.',
@@ -99,12 +84,7 @@ Future<void> seedLRTest04() async {
       // (C) Vehicles are moving in heavy traffic.
       // (D) A bridge is being built over a highway.
       'question': "",
-      'options': [
-        "Cars are parked in a garage.",
-        "A road is closed for construction.",
-        "Vehicles are moving in heavy traffic.",
-        "A bridge is being built over a highway.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy nhiều ô tô (vehicles) đang di chuyển trên một con đường đông đúc (heavy traffic).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest04() async {
       // (C) A man is setting up a tent.
       // (D) A man is looking at a map.
       'question': "",
-      'options': [
-        "A man is hiking on a mountain trail.",
-        "A man is riding a bicycle.",
-        "A man is setting up a tent.",
-        "A man is looking at a map.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người đàn ông đang đi bộ (hiking) trên một con đường mòn (trail) ở khu vực đồi núi.',
@@ -135,12 +110,7 @@ Future<void> seedLRTest04() async {
       // (C) A scientist is pouring liquid into a test tube.
       // (D) A patient is speaking to a doctor.
       'question': "",
-      'options': [
-        "A man is adjusting a microscope.",
-        "A woman is typing on a laptop.",
-        "A scientist is pouring liquid into a test tube.",
-        "A patient is speaking to a doctor.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy một người (nhà khoa học) đang đổ chất lỏng (pouring liquid) vào một ống nghiệm (test tube).',

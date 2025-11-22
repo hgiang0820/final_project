@@ -7,18 +7,18 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedLRPracticePart2() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'LRMaterials';
+  // final materialId = 'LRMaterials';
   const audioDemo = 'input_tests/testLR/part2/01%20Test%201_LC_Voca.mp3';
 
   // Root doc
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('LRMaterials').set({
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
   // Helper to push 1 lesson
-  Future<void> pushLesson({
+  Future<void> pushLessonLR({
     required String levelId,
     required String lessonId, // lesson1..lesson5
     required String lessonName,
@@ -26,11 +26,48 @@ Future<void> seedLRPracticePart2() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('LRMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
         .doc('part2')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Question & Response',
+      'lessonName': lessonName,
+      'audioPath': audioDemo,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final q = questions[i];
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      await lessonRef.collection('questions').doc(id).set({
+        'question': q['question'],
+        'imagePath': null,
+        'options': q['options'],
+        'correctIndex': q['correctIndex'],
+        'explain': q['explain'],
+        'order': i + 1,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId, // lesson1..lesson5
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('lis2')
         .collection('lessons')
         .doc(lessonId);
 
@@ -81,7 +118,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Why was the flight delayed?',
-      'options': ['Because of bad weather.', 'At Gate 12.', 'Tomorrow morning.'],
+      'options': [
+        'Because of bad weather.',
+        'At Gate 12.',
+        'Tomorrow morning.',
+      ],
       'correctIndex': 0,
       'explain': '“Why” → lý do.',
     },
@@ -127,7 +168,11 @@ Future<void> seedLRPracticePart2() async {
   final p2Lv300L2 = <Map<String, dynamic>>[
     {
       'question': 'Do you need any help with the boxes?',
-      'options': ['Yes, please. They’re heavy.', 'In the storage room.', 'Tomorrow.'],
+      'options': [
+        'Yes, please. They’re heavy.',
+        'In the storage room.',
+        'Tomorrow.',
+      ],
       'correctIndex': 0,
       'explain': 'Yes/No → câu trả lời ngắn + chi tiết.',
     },
@@ -157,13 +202,21 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Have you seen Mr. Brown?',
-      'options': ['Yes, he’s in a meeting.', 'At the front desk.', 'At 11 o’clock.'],
+      'options': [
+        'Yes, he’s in a meeting.',
+        'At the front desk.',
+        'At 11 o’clock.',
+      ],
       'correctIndex': 0,
       'explain': 'Yes + nơi hiện tại.',
     },
     {
       'question': 'Is the printer working now?',
-      'options': ['No, it’s still jammed.', 'Next to the copier.', 'A technician.'],
+      'options': [
+        'No, it’s still jammed.',
+        'Next to the copier.',
+        'A technician.',
+      ],
       'correctIndex': 0,
       'explain': 'No + tình trạng.',
     },
@@ -297,7 +350,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Why is the office closed?',
-      'options': ['Due to maintenance.', 'On the second floor.', 'The manager.'],
+      'options': [
+        'Due to maintenance.',
+        'On the second floor.',
+        'The manager.',
+      ],
       'correctIndex': 0,
       'explain': 'Lý do đóng cửa.',
     },
@@ -367,7 +424,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Can you join us for lunch?',
-      'options': ['Sorry, I have a meeting.', 'At the cafeteria.', 'Around 1 p.m.'],
+      'options': [
+        'Sorry, I have a meeting.',
+        'At the cafeteria.',
+        'Around 1 p.m.',
+      ],
       'correctIndex': 0,
       'explain': 'Yes/No với lý do.',
     },
@@ -457,7 +518,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Where should the boxes be delivered?',
-      'options': ['To the back entrance.', 'Thirty dollars.', 'The supervisor.'],
+      'options': [
+        'To the back entrance.',
+        'Thirty dollars.',
+        'The supervisor.',
+      ],
       'correctIndex': 0,
       'explain': 'Địa điểm giao.',
     },
@@ -475,7 +540,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'How often do the buses run?',
-      'options': ['Every fifteen minutes.', 'At the station.', 'A monthly pass.'],
+      'options': [
+        'Every fifteen minutes.',
+        'At the station.',
+        'A monthly pass.',
+      ],
       'correctIndex': 0,
       'explain': 'Tần suất.',
     },
@@ -493,7 +562,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Which train goes to the airport?',
-      'options': ['The express on Track 4.', 'A round-trip ticket.', 'At Gate B.'],
+      'options': [
+        'The express on Track 4.',
+        'A round-trip ticket.',
+        'At Gate B.',
+      ],
       'correctIndex': 0,
       'explain': 'Tuyến phù hợp.',
     },
@@ -515,13 +588,21 @@ Future<void> seedLRPracticePart2() async {
   final p2Lv600L3 = <Map<String, dynamic>>[
     {
       'question': 'Where can I find the rolls?',
-      'options': ['In the bakery section.', 'On a rolling chair.', 'At the role desk.'],
+      'options': [
+        'In the bakery section.',
+        'On a rolling chair.',
+        'At the role desk.',
+      ],
       'correctIndex': 0,
       'explain': 'rolls (bánh mì) ≠ role/rolling.',
     },
     {
       'question': 'Do you sell fare cards here?',
-      'options': ['Yes, at the counter.', 'It’s a fair price.', 'Fire alarm is over there.'],
+      'options': [
+        'Yes, at the counter.',
+        'It’s a fair price.',
+        'Fire alarm is over there.',
+      ],
       'correctIndex': 0,
       'explain': 'fare (tiền vé) ≠ fair/fire.',
     },
@@ -551,13 +632,21 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Is parking permitted here?',
-      'options': ['No, it’s prohibited.', 'We’re barking here.', 'The park is closed.'],
+      'options': [
+        'No, it’s prohibited.',
+        'We’re barking here.',
+        'The park is closed.',
+      ],
       'correctIndex': 0,
       'explain': 'parking ≠ barking/park.',
     },
     {
       'question': 'Do you accept coupons?',
-      'options': ['Only valid ones.', 'We have a couple.', 'Copper wires only.'],
+      'options': [
+        'Only valid ones.',
+        'We have a couple.',
+        'Copper wires only.',
+      ],
       'correctIndex': 0,
       'explain': 'coupon ≠ couple/copper.',
     },
@@ -741,7 +830,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Do you know where I can park?',
-      'options': ['In the underground lot.', 'Yes, I do.', 'The security guard.'],
+      'options': [
+        'In the underground lot.',
+        'Yes, I do.',
+        'The security guard.',
+      ],
       'correctIndex': 0,
       'explain': 'Vị trí đỗ xe.',
     },
@@ -765,7 +858,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Do you know if Mr. Lee approved it?',
-      'options': ['He approved it yesterday.', 'Yes, I know it.', 'At the office.'],
+      'options': [
+        'He approved it yesterday.',
+        'Yes, I know it.',
+        'At the office.',
+      ],
       'correctIndex': 0,
       'explain': 'Nội dung phê duyệt cụ thể.',
     },
@@ -775,7 +872,11 @@ Future<void> seedLRPracticePart2() async {
   final p2Lv800L2 = <Map<String, dynamic>>[
     {
       'question': 'Is the report finished?',
-      'options': ['It should be ready by tomorrow.', 'Yes, finished.', 'On your desk.'],
+      'options': [
+        'It should be ready by tomorrow.',
+        'Yes, finished.',
+        'On your desk.',
+      ],
       'correctIndex': 0,
       'explain': 'Hàm ý: chưa xong, sẽ xong vào ngày mai.',
     },
@@ -787,7 +888,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Do you have time to help?',
-      'options': ['I’m swamped this morning.', 'Yes, I have time.', 'In a minute.'],
+      'options': [
+        'I’m swamped this morning.',
+        'Yes, I have time.',
+        'In a minute.',
+      ],
       'correctIndex': 0,
       'explain': 'Hàm ý từ chối.',
     },
@@ -811,7 +916,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Can I borrow your car?',
-      'options': ['I need it this afternoon.', 'Yes, you can.', 'In the garage.'],
+      'options': [
+        'I need it this afternoon.',
+        'Yes, you can.',
+        'In the garage.',
+      ],
       'correctIndex': 0,
       'explain': 'Hàm ý: từ chối lịch sự.',
     },
@@ -823,7 +932,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Do you like the new policy?',
-      'options': ['It’ll take some getting used to.', 'Yes, I do.', 'On Monday.'],
+      'options': [
+        'It’ll take some getting used to.',
+        'Yes, I do.',
+        'On Monday.',
+      ],
       'correctIndex': 0,
       'explain': 'Hàm ý: không quá thích.',
     },
@@ -903,7 +1016,11 @@ Future<void> seedLRPracticePart2() async {
   final p2Lv800L4 = <Map<String, dynamic>>[
     {
       'question': 'Can you send the signed contract?',
-      'options': ['I’ve attached it to the email.', 'I saw the sign.', 'There’s a concert.'],
+      'options': [
+        'I’ve attached it to the email.',
+        'I saw the sign.',
+        'There’s a concert.',
+      ],
       'correctIndex': 0,
       'explain': '“signed contract” vs sign/concert (đồng âm/nhiễu).',
     },
@@ -915,7 +1032,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Did you book the venue?',
-      'options': ['Yes, it’s reserved.', 'Yes, I read the menu.', 'Yes, the avenue is busy.'],
+      'options': [
+        'Yes, it’s reserved.',
+        'Yes, I read the menu.',
+        'Yes, the avenue is busy.',
+      ],
       'correctIndex': 0,
       'explain': 'venue ≠ menu/avenue.',
     },
@@ -927,7 +1048,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Is the shipment insured?',
-      'options': ['Yes, fully covered.', 'Yes, the shirt mentored.', 'Yes, the ship meant.'],
+      'options': [
+        'Yes, fully covered.',
+        'Yes, the shirt mentored.',
+        'Yes, the ship meant.',
+      ],
       'correctIndex': 0,
       'explain': 'insured ≠ shirt/ship meant.',
     },
@@ -939,13 +1064,21 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Will you finalize the layout today?',
-      'options': ['I’ll finish it by 6.', 'There’s a loud out.', 'We found a lay out.'],
+      'options': [
+        'I’ll finish it by 6.',
+        'There’s a loud out.',
+        'We found a lay out.',
+      ],
       'correctIndex': 0,
       'explain': 'finalize layout ≠ loud out/lay out (nhiễu).',
     },
     {
       'question': 'Can we postpone the briefing?',
-      'options': ['Let’s move it to Friday.', 'Let’s post a post.', 'Let’s pose tone.'],
+      'options': [
+        'Let’s move it to Friday.',
+        'Let’s post a post.',
+        'Let’s pose tone.',
+      ],
       'correctIndex': 0,
       'explain': 'postpone ≠ post/pose tone.',
     },
@@ -957,7 +1090,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Where should I file the receipt?',
-      'options': ['Under Expenses 2025.', 'In the recipe book.', 'By the receptionist.'],
+      'options': [
+        'Under Expenses 2025.',
+        'In the recipe book.',
+        'By the receptionist.',
+      ],
       'correctIndex': 0,
       'explain': 'receipt ≠ recipe/receptionist.',
     },
@@ -985,7 +1122,11 @@ Future<void> seedLRPracticePart2() async {
     },
     {
       'question': 'Would you mind sending the slides?',
-      'options': ['I’ll email them right away.', 'In the slideshow.', 'At the side.'],
+      'options': [
+        'I’ll email them right away.',
+        'In the slideshow.',
+        'At the side.',
+      ],
       'correctIndex': 0,
       'explain': 'Polite request.',
     },
@@ -1029,24 +1170,197 @@ Future<void> seedLRPracticePart2() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  /// ===== LRMaterials ========
   // lv300
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson1', lessonName: 'Bài 1: Wh-questions cơ bản — Time/Place/People', questions: p2Lv300L1);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson2', lessonName: 'Bài 2: Yes/No questions — Basic confirmations', questions: p2Lv300L2);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson3', lessonName: 'Bài 3: Lựa chọn (A or B) — This or that', questions: p2Lv300L3);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson4', lessonName: 'Bài 4: Keyword mapping — Spot the cue', questions: p2Lv300L4);
-  await pushLesson(levelId: 'lv300', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập hỗn hợp — Mixed practice', questions: p2Lv300L5);
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Wh-questions cơ bản — Time/Place/People',
+    questions: p2Lv300L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Yes/No questions — Basic confirmations',
+    questions: p2Lv300L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Lựa chọn (A or B) — This or that',
+    questions: p2Lv300L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Keyword mapping — Spot the cue',
+    questions: p2Lv300L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv300',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập hỗn hợp — Mixed practice',
+    questions: p2Lv300L5,
+  );
 
   // lv600
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & lịch sự — Polite requests', questions: p2Lv600L1);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi lựa chọn phức tạp — Multiple-options', questions: p2Lv600L2);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson3', lessonName: 'Bài 3: Bẫy từ vựng — False friends & distractors', questions: p2Lv600L3);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson4', lessonName: 'Bài 4: Shadowing phản xạ — Speed & fluency', questions: p2Lv600L4);
-  await pushLesson(levelId: 'lv600', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập nâng cao — Mixed medium', questions: p2Lv600L5);
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Câu hỏi gián tiếp & lịch sự — Polite requests',
+    questions: p2Lv600L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Câu hỏi lựa chọn phức tạp — Multiple-options',
+    questions: p2Lv600L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Bẫy từ vựng — False friends & distractors',
+    questions: p2Lv600L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Shadowing phản xạ — Speed & fluency',
+    questions: p2Lv600L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv600',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập nâng cao — Mixed medium',
+    questions: p2Lv600L5,
+  );
 
   // lv800
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson1', lessonName: 'Bài 1: Câu hỏi gián tiếp & bẫy ngữ nghĩa', questions: p2Lv800L1);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson2', lessonName: 'Bài 2: Câu hỏi suy luận & hàm ý (Inference/Implication)', questions: p2Lv800L2);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson3', lessonName: 'Bài 3: Nghe chi tiết & con số', questions: p2Lv800L3);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson4', lessonName: 'Bài 4: Câu hỏi bẫy nhiều tầng (Double distractors)', questions: p2Lv800L4);
-  await pushLesson(levelId: 'lv800', lessonId: 'lesson5', lessonName: 'Bài 5: Ôn tập tổng hợp – Mini Test nâng cao', questions: p2Lv800L5);
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Câu hỏi gián tiếp & bẫy ngữ nghĩa',
+    questions: p2Lv800L1,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Câu hỏi suy luận & hàm ý (Inference/Implication)',
+    questions: p2Lv800L2,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Nghe chi tiết & con số',
+    questions: p2Lv800L3,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Câu hỏi bẫy nhiều tầng (Double distractors)',
+    questions: p2Lv800L4,
+  );
+  await pushLessonLR(
+    levelId: 'lv800',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp – Mini Test nâng cao',
+    questions: p2Lv800L5,
+  );
+
+  /// ===== FullMaterials ========
+  // lv300
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Wh-questions cơ bản — Time/Place/People',
+    questions: p2Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Yes/No questions — Basic confirmations',
+    questions: p2Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Lựa chọn (A or B) — This or that',
+    questions: p2Lv300L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Keyword mapping — Spot the cue',
+    questions: p2Lv300L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập hỗn hợp — Mixed practice',
+    questions: p2Lv300L5,
+  );
+
+  // lv600
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Câu hỏi gián tiếp & lịch sự — Polite requests',
+    questions: p2Lv600L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Câu hỏi lựa chọn phức tạp — Multiple-options',
+    questions: p2Lv600L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Bẫy từ vựng — False friends & distractors',
+    questions: p2Lv600L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Shadowing phản xạ — Speed & fluency',
+    questions: p2Lv600L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập nâng cao — Mixed medium',
+    questions: p2Lv600L5,
+  );
+
+  // lv800
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Câu hỏi gián tiếp & bẫy ngữ nghĩa',
+    questions: p2Lv800L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Câu hỏi suy luận & hàm ý (Inference/Implication)',
+    questions: p2Lv800L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Nghe chi tiết & con số',
+    questions: p2Lv800L3,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson4',
+    lessonName: 'Bài 4: Câu hỏi bẫy nhiều tầng (Double distractors)',
+    questions: p2Lv800L4,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson5',
+    lessonName: 'Bài 5: Ôn tập tổng hợp – Mini Test nâng cao',
+    questions: p2Lv800L5,
+  );
 }

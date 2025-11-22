@@ -6,16 +6,16 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWPracticePart8() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonSW({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,11 +23,52 @@ Future<void> seedSWPracticePart8() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
         .doc('part8')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Write an opinion essay',
+      'lessonName': lessonName,
+      // 'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      // final imagePath =
+      //     'study_materials/SWMaterials/part6/$levelId/$lessonId/$id.jpg';
+      final q = questions[i];
+
+      await lessonRef.collection('questions').doc(id).set({
+        'type': 'Write an opinion essay',
+        // 'imagePath': imagePath,
+        'text': q['text'],
+        'sample_answer': q['sample_answer'],
+        'directions': q['directions'],
+        'max_score': q['max_score'],
+        'order': i,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('write3')
         .collection('lessons')
         .doc(lessonId);
 
@@ -305,19 +346,19 @@ Future<void> seedSWPracticePart8() async {
   // ========== PUSH ALL LESSONS ==========
 
   // lv100
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Viết mở bài nêu rõ quan điểm',
     questions: p8Lv100L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Viết thân bài với lý do và ví dụ',
     questions: p8Lv100L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết kết bài nhấn mạnh lại quan điểm',
@@ -325,19 +366,19 @@ Future<void> seedSWPracticePart8() async {
   );
 
   // lv200
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Viết thân bài có 2 lý do và ví dụ',
     questions: p8Lv200L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng từ nối học thuật để tăng độ mạch lạc',
     questions: p8Lv200L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết bài luận hoàn chỉnh (mở bài – thân bài – kết bài)',
@@ -345,20 +386,82 @@ Future<void> seedSWPracticePart8() async {
   );
 
   // lv300
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Phản biện ý kiến đối lập trong thân bài',
     questions: p8Lv300L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng cấu trúc học thuật nâng cao',
     questions: p8Lv300L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Viết bài luận nâng cao có phản biện và kết luận mạnh',
+    questions: p8Lv300L3,
+  );
+
+
+
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Viết mở bài nêu rõ quan điểm',
+    questions: p8Lv100L1,
+  );
+  await pushLessonSW(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Viết thân bài với lý do và ví dụ',
+    questions: p8Lv100L2,
+  );
+  await pushLessonSW(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Viết kết bài nhấn mạnh lại quan điểm',
+    questions: p8Lv100L3,
+  );
+
+  // lv2
+  await pushLessonSW(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Viết thân bài có 2 lý do và ví dụ',
+    questions: p8Lv200L1,
+  );
+  await pushLessonSW(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng từ nối học thuật để tăng độ mạch lạc',
+    questions: p8Lv200L2,
+  );
+  await pushLessonSW(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Viết bài luận hoàn chỉnh (mở bài – thân bài – kết bài)',
+    questions: p8Lv200L3,
+  );
+
+  // lv3
+  await pushLessonSW(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Phản biện ý kiến đối lập trong thân bài',
+    questions: p8Lv300L1,
+  );
+  await pushLessonSW(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng cấu trúc học thuật nâng cao',
+    questions: p8Lv300L2,
+  );
+  await pushLessonSW(
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết bài luận nâng cao có phản biện và kết luận mạnh',
     questions: p8Lv300L3,

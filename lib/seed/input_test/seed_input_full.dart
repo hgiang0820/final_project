@@ -58,12 +58,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       // (D) She's giving a book to a colleague.
       'type': 'Picture description',
       'question': "",
-      'options': [
-        "She's drawing a diagram on the board.",
-        "She's pointing at a presentation screen.",
-        "She's erasing the whiteboard.",
-        "She's giving a book to a colleague.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The woman is using her hand to point at information on a screen, which is the most accurate description among the choices.',
@@ -77,12 +72,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       // (D) They're arranging chairs in a row.
       'type': 'Picture description',
       'question': "",
-      'options': [
-        "They're having a meal together.",
-        "They're gathered for a business meeting.",
-        "They're watching a movie in a theater.",
-        "They're arranging chairs in a row.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The setting (table, laptop, professional attire) clearly indicates a business meeting.',
@@ -96,12 +86,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       // (D) The man is repairing a vehicle.
       'type': 'Picture description',
       'question': "",
-      'options': [
-        "The man is painting a wall.",
-        "The man is reviewing some architectural plans.",
-        "The man is stacking boxes in a warehouse.",
-        "The man is repairing a vehicle.",
-      ],
+     'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The man is at a construction site and holding blueprints, which are architectural plans.',

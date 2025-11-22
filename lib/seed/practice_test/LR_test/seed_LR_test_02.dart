@@ -44,12 +44,7 @@ Future<void> seedLRTest02() async {
       // (C) He's hanging a picture on the wall.
       // (D) He's drawing a chart by hand.
       'question': "",
-      'options': [
-        "He's plugging in a monitor.",
-        "He's analyzing some data on a screen.",
-        "He's hanging a picture on the wall.",
-        "He's drawing a chart by hand.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The man is looking intently at a chart on the monitor, which is accurately described as "analyzing some data on a screen".',
@@ -62,12 +57,7 @@ Future<void> seedLRTest02() async {
       // (C) A chef is preparing food in a kitchen.
       // (D) People are waiting in line to be seated.
       'question': "",
-      'options': [
-        "People are dining at an outdoor patio.",
-        "The tables are being cleared by a waiter.",
-        "A chef is preparing food in a kitchen.",
-        "People are waiting in line to be seated.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'The picture shows several people eating at tables set up outside, which is an "outdoor patio".',
@@ -80,12 +70,7 @@ Future<void> seedLRTest02() async {
       // (C) She's stocking items on a shelf.
       // (D) She's mopping the floor of an aisle.
       'question': "",
-      'options': [
-        "She's pushing a shopping cart.",
-        "She's paying for groceries at the checkout.",
-        "She's stocking items on a shelf.",
-        "She's mopping the floor of an aisle.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The woman is taking items (likely from a box) and placing them onto the shelves, which is "stocking items".',
@@ -98,12 +83,7 @@ Future<void> seedLRTest02() async {
       // (C) People are boarding a ferry.
       // (D) A man is fishing from a pier.
       'question': "",
-      'options': [
-        "A ship is sailing in the open ocean.",
-        "A boat is secured to a dock.",
-        "People are boarding a ferry.",
-        "A man is fishing from a pier.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The boat is tied with ropes to a wooden structure (a dock/pier), so it is "secured".',
@@ -116,12 +96,7 @@ Future<void> seedLRTest02() async {
       // (C) A man is packing up his instrument.
       // (D) A man is playing a guitar on a stage.
       'question': "",
-      'options': [
-        "A man is adjusting a microphone.",
-        "A man is performing in front of an audience.",
-        "A man is packing up his instrument.",
-        "A man is playing a guitar on a stage.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 3,
       'explain':
           'The image clearly shows a man with a guitar on an elevated platform, which is a stage.',
@@ -134,12 +109,7 @@ Future<void> seedLRTest02() async {
       // (C) Trucks are being loaded with materials.
       // (D) Workers are painting the side of a building.
       'question': "",
-      'options': [
-        "Cranes are operating at a construction site.",
-        "The building is being demolished.",
-        "Trucks are being loaded with materials.",
-        "Workers are painting the side of a building.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'The most prominent features in the image are the large cranes on a site that is clearly under construction.',

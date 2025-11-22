@@ -7,14 +7,115 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedLRPracticePart1() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'LRMaterials';
+  // final materialId = 'LRMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('LRMaterials').set({
     'title': 'Listening & Reading Materials',
     'levels': ['lv300', 'lv600', 'lv800'],
     'createdAt': FieldValue.serverTimestamp(),
   });
+
+  Future<void> pushLessonLR({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc("LRMaterials")
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('part1')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Picture description',
+      'lessonName': lessonName,
+      'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 1; i <= questions.length; i++) {
+      final id = 'q${i.toString().padLeft(2, '0')}';
+      final imagePath = 'LR/$levelId/part1/$lessonId/$id.jpeg';
+      final q = questions[i - 1];
+
+      await db
+          .collection('study_materials')
+          .doc("LRMaterials")
+          .collection('levels')
+          .doc(levelId)
+          .collection('parts')
+          .doc('part1')
+          .collection('lessons')
+          .doc(lessonId)
+          .collection('questions')
+          .doc(id)
+          .set({
+            'question': q['question'],
+            'imagePath': imagePath,
+            'options': q['options'],
+            'correctIndex': q['correctIndex'],
+            'explain': q['explain'],
+            'order': i,
+          });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc("FullMaterials")
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('lis1')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Picture description',
+      'lessonName': lessonName,
+      'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 1; i <= questions.length; i++) {
+      final id = 'q${i.toString().padLeft(2, '0')}';
+      // final imagePath = 'input_tests/testLR/part1/$id.jpg';
+      final imagePath = 'Full/$levelId/lis1/$lessonId/$id.jpeg';
+      final q = questions[i - 1];
+
+      await db
+          .collection('study_materials')
+          .doc("FullMaterials")
+          .collection('levels')
+          .doc(levelId)
+          .collection('parts')
+          .doc('lis1')
+          .collection('lessons')
+          .doc(lessonId)
+          .collection('questions')
+          .doc(id)
+          .set({
+            'question': q['question'],
+            'imagePath': imagePath,
+            'options': q['options'],
+            'correctIndex': q['correctIndex'],
+            'explain': q['explain'],
+            'order': i,
+          });
+    }
+  }
 
   // === PART 1 — Picture Description ===
   // LEVEL 300+ : 5 bài lý thuyết × 10 câu = 50 câu
@@ -135,47 +236,47 @@ Future<void> seedLRPracticePart1() async {
   ];
 
   // Tạo metadata Part 1 Lesson 1
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv300')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson1')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 1: Daily activities',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv300L1Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv300')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson1')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 1: Daily activities',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv300L1Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv300L1Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/$id.jpg';
-    final q = p1Lv300L1Questions[i - 1];
+  // for (int i = 1; i <= p1Lv300L1Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/$id.jpg';
+  //   final q = p1Lv300L1Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv300')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson1')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv300')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson1')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 2 - LV 300 =====
   final p1Lv300L2Questions = <Map<String, dynamic>>[
@@ -293,47 +394,47 @@ Future<void> seedLRPracticePart1() async {
   ];
 
   // Tạo metadata Part 1 Lesson 2
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv300')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson2')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 2: Places & Objects',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv300L2Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv300')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson2')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 2: Places & Objects',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv300L2Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv300L2Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/$id.jpg';
-    final q = p1Lv300L2Questions[i - 1];
+  // for (int i = 1; i <= p1Lv300L2Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/$id.jpg';
+  //   final q = p1Lv300L2Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv300')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson2')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv300')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson2')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // Lesson 3 - LV 300
   final p1Lv300L3Questions = <Map<String, dynamic>>[
@@ -452,48 +553,48 @@ Future<void> seedLRPracticePart1() async {
   ];
 
   // Tạo metadata Part 1 Lesson 3
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv300')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson3')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 3: People & Things (Trạng thái)',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv300L3Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv300')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson3')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 3: People & Things (Trạng thái)',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv300L3Questions.length,
+  //     }, SetOptions(merge: true));
 
-  // Push 50 câu vào Firestore, auto imagePath theo thứ tự q01.jpg → q50.jpg
-  for (int i = 1; i <= p1Lv300L3Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/$id.jpg';
-    final q = p1Lv300L3Questions[i - 1];
+  // // Push 50 câu vào Firestore, auto imagePath theo thứ tự q01.jpg → q50.jpg
+  // for (int i = 1; i <= p1Lv300L3Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/$id.jpg';
+  //   final q = p1Lv300L3Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv300')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson3')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv300')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson3')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // Lesson 4 - LV 300
   final p1Lv300L4Questions = <Map<String, dynamic>>[
@@ -612,47 +713,47 @@ Future<void> seedLRPracticePart1() async {
   ];
 
   // Tạo metadata Part 1 Lesson 4
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv300')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson4')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 4: Minimal pairs',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv300L4Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv300')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson4')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 4: Minimal pairs',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv300L4Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv300L4Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/$id.jpg';
-    final q = p1Lv300L4Questions[i - 1];
+  // for (int i = 1; i <= p1Lv300L4Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/$id.jpg';
+  //   final q = p1Lv300L4Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv300')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson4')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv300')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson4')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // Lesson 5 - LV 300
   final p1Lv300L5Questions = <Map<String, dynamic>>[
@@ -791,47 +892,47 @@ Future<void> seedLRPracticePart1() async {
   ];
 
   // Tạo metadata Part 1 Lesson 5
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv300')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson5')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 5: Outdoor scenes',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv300L5Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv300')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson5')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 5: Outdoor scenes',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv300L5Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv300L5Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/$id.jpg';
-    final q = p1Lv300L5Questions[i - 1];
+  // for (int i = 1; i <= p1Lv300L5Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/$id.jpg';
+  //   final q = p1Lv300L5Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv300')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson5')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv300')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson5')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // === PART 1 — Picture Description ===
   // LEVEL 600+ : 5 bài lý thuyết × 10 câu = 50 câu
@@ -949,47 +1050,47 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv600')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson1')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 1: Workplace actions',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv600L1Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv600')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson1')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 1: Workplace actions',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv600L1Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv600L1Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv600_l1_$id.jpg';
-    final q = p1Lv600L1Questions[i - 1];
+  // for (int i = 1; i <= p1Lv600L1Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv600_l1_$id.jpg';
+  //   final q = p1Lv600L1Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv600')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson1')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv600')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson1')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 2 - LV 600 — Transportation & Equipment =====
   final p1Lv600L2Questions = <Map<String, dynamic>>[
@@ -1105,47 +1206,47 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv600')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson2')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 2: Transportation & Equipment',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv600L2Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv600')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson2')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 2: Transportation & Equipment',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv600L2Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv600L2Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv600_l2_$id.jpg';
-    final q = p1Lv600L2Questions[i - 1];
+  // for (int i = 1; i <= p1Lv600L2Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv600_l2_$id.jpg';
+  //   final q = p1Lv600L2Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv600')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson2')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv600')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson2')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 3 - LV 600 — Tenses in description =====
   final p1Lv600L3Questions = <Map<String, dynamic>>[
@@ -1262,47 +1363,47 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv600')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson3')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 3: Tenses in description',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv600L3Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv600')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson3')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 3: Tenses in description',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv600L3Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv600L3Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv600_l3_$id.jpg';
-    final q = p1Lv600L3Questions[i - 1];
+  // for (int i = 1; i <= p1Lv600L3Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv600_l3_$id.jpg';
+  //   final q = p1Lv600L3Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv600')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson3')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv600')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson3')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 4 - LV 600 — Sound-alike words (nâng cao) =====
   final p1Lv600L4Questions = <Map<String, dynamic>>[
@@ -1418,47 +1519,47 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv600')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson4')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 4: Sound-alike words',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv600L4Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv600')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson4')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 4: Sound-alike words',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv600L4Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv600L4Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv600_l4_$id.jpg';
-    final q = p1Lv600L4Questions[i - 1];
+  // for (int i = 1; i <= p1Lv600L4Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv600_l4_$id.jpg';
+  //   final q = p1Lv600L4Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv600')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson4')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv600')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson4')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 5 - LV 600 — Paraphrase mô tả =====
   final p1Lv600L5Questions = <Map<String, dynamic>>[
@@ -1575,47 +1676,47 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv600')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson5')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 5: Paraphrase mô tả',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv600L5Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv600')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson5')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 5: Paraphrase mô tả',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv600L5Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv600L5Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv600_l5_$id.jpg';
-    final q = p1Lv600L5Questions[i - 1];
+  // for (int i = 1; i <= p1Lv600L5Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv600_l5_$id.jpg';
+  //   final q = p1Lv600L5Questions[i - 1];
 
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv600')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson5')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv600')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson5')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // === PART 1 — Picture Description ===
   // LEVEL 800+ : 5 bài lý thuyết × 10 câu = 50 câu
@@ -1740,46 +1841,46 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv800')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson1')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 1: Advanced actions',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv800L1Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv800')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson1')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 1: Advanced actions',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv800L1Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv800L1Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv800_l1_$id.jpg';
-    final q = p1Lv800L1Questions[i - 1];
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv800')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson1')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  // for (int i = 1; i <= p1Lv800L1Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv800_l1_$id.jpg';
+  //   final q = p1Lv800L1Questions[i - 1];
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv800')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson1')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 2 - LV 800 — Synonyms practice (paraphrase sâu) =====
   final p1Lv800L2Questions = <Map<String, dynamic>>[
@@ -1895,46 +1996,46 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv800')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson2')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 2: Synonyms practice',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv800L2Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv800')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson2')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 2: Synonyms practice',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv800L2Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv800L2Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv800_l2_$id.jpg';
-    final q = p1Lv800L2Questions[i - 1];
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv800')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson2')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  // for (int i = 1; i <= p1Lv800L2Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv800_l2_$id.jpg';
+  //   final q = p1Lv800L2Questions[i - 1];
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv800')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson2')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 3 - LV 800 — Grammar traps (thì, chủ/động, bị động) =====
   final p1Lv800L3Questions = <Map<String, dynamic>>[
@@ -2050,46 +2151,46 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv800')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson3')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 3: Grammar traps',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv800L3Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv800')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson3')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 3: Grammar traps',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv800L3Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv800L3Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv800_l3_$id.jpg';
-    final q = p1Lv800L3Questions[i - 1];
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv800')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson3')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  // for (int i = 1; i <= p1Lv800L3Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv800_l3_$id.jpg';
+  //   final q = p1Lv800L3Questions[i - 1];
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv800')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson3')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 4 - LV 800 — Complex scenes (foreground/background) =====
   final p1Lv800L4Questions = <Map<String, dynamic>>[
@@ -2206,46 +2307,46 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv800')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson4')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 4: Complex scenes',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv800L4Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv800')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson4')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 4: Complex scenes',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv800L4Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv800L4Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv800_l4_$id.jpg';
-    final q = p1Lv800L4Questions[i - 1];
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv800')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson4')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  // for (int i = 1; i <= p1Lv800L4Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv800_l4_$id.jpg';
+  //   final q = p1Lv800L4Questions[i - 1];
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv800')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson4')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
 
   // ===== Lesson 5 - LV 800 — Fast listening (tập trung keywords dễ nuốt âm) =====
   final p1Lv800L5Questions = <Map<String, dynamic>>[
@@ -2363,44 +2464,245 @@ Future<void> seedLRPracticePart1() async {
     },
   ];
 
-  await db
-      .collection('study_materials')
-      .doc(materialId)
-      .collection('levels')
-      .doc('lv800')
-      .collection('parts')
-      .doc('part1')
-      .collection('lessons')
-      .doc('lesson5')
-      .set({
-        'type': 'Picture description',
-        'lessonName': 'Bài 5: Fast listening',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
-        'questionCount': p1Lv800L5Questions.length,
-      }, SetOptions(merge: true));
+  // await db
+  //     .collection('study_materials')
+  //     .doc(materialId)
+  //     .collection('levels')
+  //     .doc('lv800')
+  //     .collection('parts')
+  //     .doc('part1')
+  //     .collection('lessons')
+  //     .doc('lesson5')
+  //     .set({
+  //       'type': 'Picture description',
+  //       'lessonName': 'Bài 5: Fast listening',
+  //       'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+  //       'questionCount': p1Lv800L5Questions.length,
+  //     }, SetOptions(merge: true));
 
-  for (int i = 1; i <= p1Lv800L5Questions.length; i++) {
-    final id = 'q${i.toString().padLeft(2, '0')}';
-    final imagePath = 'input_tests/testLR/part1/lv800_l5_$id.jpg';
-    final q = p1Lv800L5Questions[i - 1];
-    await db
-        .collection('study_materials')
-        .doc(materialId)
-        .collection('levels')
-        .doc('lv800')
-        .collection('parts')
-        .doc('part1')
-        .collection('lessons')
-        .doc('lesson5')
-        .collection('questions')
-        .doc(id)
-        .set({
-          'question': q['question'],
-          'imagePath': imagePath,
-          'options': q['options'],
-          'correctIndex': q['correctIndex'],
-          'explain': q['explain'],
-          'order': i,
-        });
-  }
+  // for (int i = 1; i <= p1Lv800L5Questions.length; i++) {
+  //   final id = 'q${i.toString().padLeft(2, '0')}';
+  //   final imagePath = 'input_tests/testLR/part1/lv800_l5_$id.jpg';
+  //   final q = p1Lv800L5Questions[i - 1];
+  //   await db
+  //       .collection('study_materials')
+  //       .doc(materialId)
+  //       .collection('levels')
+  //       .doc('lv800')
+  //       .collection('parts')
+  //       .doc('part1')
+  //       .collection('lessons')
+  //       .doc('lesson5')
+  //       .collection('questions')
+  //       .doc(id)
+  //       .set({
+  //         'question': q['question'],
+  //         'imagePath': imagePath,
+  //         'options': q['options'],
+  //         'correctIndex': q['correctIndex'],
+  //         'explain': q['explain'],
+  //         'order': i,
+  //       });
+  // }
+
+  /// ===== LRMaterials ========
+  /// ===== Level 300 ======
+  pushLessonLR(
+    levelId: "lv300",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Daily activities',
+    questions: p1Lv300L1Questions,
+  );
+  pushLessonLR(
+    levelId: "lv300",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Places & Objects',
+    questions: p1Lv300L2Questions,
+  );
+  pushLessonLR(
+    levelId: "lv300",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: People & Things (Trạng thái)',
+    questions: p1Lv300L3Questions,
+  );
+  pushLessonLR(
+    levelId: "lv300",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Minimal pairs',
+    questions: p1Lv300L4Questions,
+  );
+  pushLessonLR(
+    levelId: "lv300",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Outdoor scene',
+    questions: p1Lv300L5Questions,
+  );
+
+  /// ===== Level 600 ======
+  pushLessonLR(
+    levelId: "lv600",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Workplace actions',
+    questions: p1Lv600L1Questions,
+  );
+  pushLessonLR(
+    levelId: "lv600",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Transportation & Equipment',
+    questions: p1Lv600L2Questions,
+  );
+  pushLessonLR(
+    levelId: "lv600",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: Tenses in description',
+    questions: p1Lv600L3Questions,
+  );
+  pushLessonLR(
+    levelId: "lv600",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Sound-alike words',
+    questions: p1Lv600L4Questions,
+  );
+  pushLessonLR(
+    levelId: "lv600",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Paraphrase mô tả',
+    questions: p1Lv600L5Questions,
+  );
+
+  /// ===== Level 800 ======
+  pushLessonLR(
+    levelId: "lv800",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Advanced actions',
+    questions: p1Lv800L1Questions,
+  );
+  pushLessonLR(
+    levelId: "lv800",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Synonyms practice',
+    questions: p1Lv800L2Questions,
+  );
+  pushLessonLR(
+    levelId: "lv800",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: Grammar traps',
+    questions: p1Lv800L3Questions,
+  );
+  pushLessonLR(
+    levelId: "lv800",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Complex scenes',
+    questions: p1Lv800L4Questions,
+  );
+  pushLessonLR(
+    levelId: "lv800",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Fast listening',
+    questions: p1Lv800L5Questions,
+  );
+
+  /// ===== FullMaterials ========
+  /// ===== Level 1 ======
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Daily activities',
+    questions: p1Lv300L1Questions,
+  );
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Places & Objects',
+    questions: p1Lv300L2Questions,
+  );
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: People & Things (Trạng thái)',
+    questions: p1Lv300L3Questions,
+  );
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Minimal pairs',
+    questions: p1Lv300L4Questions,
+  );
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Outdoor scene',
+    questions: p1Lv300L5Questions,
+  );
+
+  /// ===== Level 2 ======
+  pushLessonFull(
+    levelId: "lv2",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Workplace actions',
+    questions: p1Lv600L1Questions,
+  );
+  pushLessonFull(
+    levelId: "lv2",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Transportation & Equipment',
+    questions: p1Lv600L2Questions,
+  );
+  pushLessonFull(
+    levelId: "lv2",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: Tenses in description',
+    questions: p1Lv600L3Questions,
+  );
+  pushLessonFull(
+    levelId: "lv2",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Sound-alike words',
+    questions: p1Lv600L4Questions,
+  );
+  pushLessonFull(
+    levelId: "lv2",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Paraphrase mô tả',
+    questions: p1Lv600L5Questions,
+  );
+
+  /// ===== Level 3 ======
+  pushLessonFull(
+    levelId: "lv3",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Advanced actions',
+    questions: p1Lv800L1Questions,
+  );
+  pushLessonFull(
+    levelId: "lv3",
+    lessonId: "lesson2",
+    lessonName: 'Bài 2: Synonyms practice',
+    questions: p1Lv800L2Questions,
+  );
+  pushLessonFull(
+    levelId: "lv3",
+    lessonId: "lesson3",
+    lessonName: 'Bài 3: Grammar traps',
+    questions: p1Lv800L3Questions,
+  );
+  pushLessonFull(
+    levelId: "lv3",
+    lessonId: "lesson4",
+    lessonName: 'Bài 4: Complex scenes',
+    questions: p1Lv800L4Questions,
+  );
+  pushLessonFull(
+    levelId: "lv3",
+    lessonId: "lesson5",
+    lessonName: 'Bài 5: Fast listening',
+    questions: p1Lv800L5Questions,
+  );
+
+  pushLessonFull(
+    levelId: "lv1",
+    lessonId: "lesson1",
+    lessonName: 'Bài 1: Daily activities',
+    questions: p1Lv300L1Questions,
+  );
 }

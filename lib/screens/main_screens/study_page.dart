@@ -237,43 +237,104 @@ class _StudyPageState extends State<StudyPage> {
                     final isDone = status == 'done';
                     final lessonName = (it['lessonName'] ?? 'Lesson') as String;
 
-                    String part;
-                    if (it['part'] == 'part1') {
-                      part = 'Part 1';
-                    } else if (it['part'] == 'part2') {
-                      part = 'Part 2';
-                    } else if (it['part'] == 'part3') {
-                      part = 'Part 3';
-                    } else if (it['part'] == 'part4') {
-                      part = 'Part 4';
-                    } else if (it['part'] == 'part5') {
-                      part = 'Part 5';
-                    } else if (it['part'] == 'part6') {
-                      part = 'Part 6';
-                    } else if (it['part'] == 'part7') {
-                      part = 'Part 7';
-                    } else {
-                      part = 'Part 8';
-                    }
-
-                    String level;
-                    if (it['level'] == 'lv100') {
-                      level = 'Level 100+';
-                    } else if (it['level'] == 'lv200') {
-                      level = 'Level 200+';
-                    } else if (it['level'] == 'lv300') {
-                      level = 'Level 300+';
-                    } else if (it['level'] == 'lv600') {
-                      level = 'Level 600+';
-                    } else {
-                      level = 'Level 800+';
-                    }
+                    // String part;
+                    // if (it['partId'] == 'part1') {
+                    //   part = 'Part 1';
+                    // } else if (it['partId'] == 'part2') {
+                    //   part = 'Part 2';
+                    // } else if (it['partId'] == 'part3') {
+                    //   part = 'Part 3';
+                    // } else if (it['partId'] == 'part4') {
+                    //   part = 'Part 4';
+                    // } else if (it['partId'] == 'part5') {
+                    //   part = 'Part 5';
+                    // } else if (it['partId'] == 'part6') {
+                    //   part = 'Part 6';
+                    // } else if (it['partId'] == 'part7') {
+                    //   part = 'Part 7';
+                    // } else {
+                    //   part = 'Part 8';
+                    // }
 
                     String material;
                     if (it['materialId'] == 'LRMaterials') {
                       material = 'Listening & Reading';
-                    } else {
+                    } else if (it['materialId'] == 'SWMaterials') {
                       material = 'Speaking & Writing';
+                    } else {
+                      material = 'Four Skills';
+                    }
+
+                    String level;
+                    if (it['levelId'] == 'lv100') {
+                      level = 'Level 100+';
+                    } else if (it['levelId'] == 'lv200') {
+                      level = 'Level 200+';
+                    } else if (it['levelId'] == 'lv300') {
+                      level = 'Level 300+';
+                    } else if (it['levelId'] == 'lv600') {
+                      level = 'Level 600+';
+                    } else if (it['levelId'] == 'lv800') {
+                      level = 'Level 800+';
+                    } else if (it['levelId'] == 'lv1') {
+                      level = 'LR 300+ & SW 100+';
+                    } else if (it['levelId'] == 'lv2') {
+                      level = 'LR 600+ & SW 200+';
+                    } else {
+                      level = 'LR 800+ & SW 300+';
+                    }
+
+                    String part = '';
+                    if (material == 'Listening & Reading' ||
+                        material == 'Four Skills') {
+                      if (it['partId'] == 'part1' || it['partId'] == 'lis1') {
+                        part = 'Picture description';
+                      } else if (it['partId'] == 'part2' ||
+                          it['partId'] == 'lis2') {
+                        part = 'Question & response';
+                      } else if (it['partId'] == 'part3' ||
+                          it['partId'] == 'lis3') {
+                        part = 'Conversations';
+                      } else if (it['partId'] == 'part4' ||
+                          it['partId'] == 'lis4') {
+                        part = 'Talks';
+                      } else if (it['partId'] == 'part5' ||
+                          it['partId'] == 'read1') {
+                        part = 'Incomplete sentences';
+                      } else if (it['partId'] == 'part6' ||
+                          it['partId'] == 'read2') {
+                        part = 'Text completion';
+                      } else if (it['partId'] == 'part7' ||
+                          it['partId'] == 'read3') {
+                        part = 'Reading comprehension';
+                      }
+                    } else if (material == 'Speaking & Writing' ||
+                        material == 'Four Skills') {
+                      if (it['partId'] == 'part1' || it['partId'] == 'speak1') {
+                        part = 'Read a text aloud';
+                      } else if (it['partId'] == 'part2' ||
+                          it['partId'] == 'speak2') {
+                        part = 'Describe a picture';
+                      } else if (it['partId'] == 'part3' ||
+                          it['partId'] == 'speak3') {
+                        part = 'Respond to questions';
+                      } else if (it['partId'] == 'part4' ||
+                          it['partId'] == 'speak4') {
+                        part =
+                            'Respond to questions using information provided';
+                      } else if (it['partId'] == 'part5' ||
+                          it['partId'] == 'speak5') {
+                        part = 'Express an opinion';
+                      } else if (it['partId'] == 'part6' ||
+                          it['partId'] == 'write1') {
+                        part = 'Write a sentence based on a picture';
+                      } else if (it['partId'] == 'part7' ||
+                          it['partId'] == 'write2') {
+                        part = 'Respond to a written request';
+                      } else if (it['partId'] == 'part8' ||
+                          it['partId'] == 'write3') {
+                        part = 'Write an opinion essay';
+                      }
                     }
 
                     final intNumber = (it['order'] is num)
@@ -289,11 +350,13 @@ class _StudyPageState extends State<StudyPage> {
                     final badgeColor = kind == 'theory'
                         ? Colors.blue
                         : Colors.orange;
+                    // final test = it['partId'];
 
                     return LessonCard(
                       orderLabel: orderLabel,
                       lessonName: lessonName,
                       subtitle: '$material • $level • $part',
+                      // subtitle: '$material $test',
                       isDone: isDone,
                       badgeText: badgeText,
                       badgeColor: badgeColor,

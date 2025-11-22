@@ -44,12 +44,7 @@ Future<void> seedLRTest01() async {
       // (C) She's erasing the whiteboard.
       // (D) She's giving a book to a colleague.
       'question': "",
-      'options': [
-        "She's drawing a diagram on the board.",
-        "She's pointing at a presentation screen.",
-        "She's erasing the whiteboard.",
-        "She's giving a book to a colleague.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The woman is using her hand to point at information on a screen, which is the most accurate description among the choices.',
@@ -62,12 +57,7 @@ Future<void> seedLRTest01() async {
       // (C) They're watching a movie in a theater.
       // (D) They're arranging chairs in a row.
       'question': "",
-      'options': [
-        "They're having a meal together.",
-        "They're gathered for a business meeting.",
-        "They're watching a movie in a theater.",
-        "They're arranging chairs in a row.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The setting (table, laptop, professional attire) clearly indicates a business meeting.',
@@ -80,12 +70,7 @@ Future<void> seedLRTest01() async {
       // (C) The man is stacking boxes in a warehouse.
       // (D) The man is repairing a vehicle.
       'question': "",
-      'options': [
-        "The man is painting a wall.",
-        "The man is reviewing some architectural plans.",
-        "The man is stacking boxes in a warehouse.",
-        "The man is repairing a vehicle.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The man is at a construction site and holding blueprints, which are architectural plans.',
@@ -98,12 +83,7 @@ Future<void> seedLRTest01() async {
       // (C) A ladder has been placed against a bookshelf.
       // (D) The librarian is checking out a book.
       'question': "",
-      'options': [
-        "The library is empty of people.",
-        "Books are being sorted into piles.",
-        "A ladder has been placed against a bookshelf.",
-        "The librarian is checking out a book.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The most prominent and accurate description of the scene is the ladder leaning against the bookshelf.',
@@ -116,12 +96,7 @@ Future<void> seedLRTest01() async {
       // (C) He is taking an order from a customer.
       // (D) He is mopping the kitchen floor.
       'question': "",
-      'options': [
-        "He is washing the dishes.",
-        "He is putting the final touches on a dish.",
-        "He is taking an order from a customer.",
-        "He is mopping the kitchen floor.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Garnishing is a way of "putting the final touches on a dish" before it is served.',
@@ -134,12 +109,7 @@ Future<void> seedLRTest01() async {
       // (C) Bicycles have been left in a designated area.
       // (D) A man is locking his bicycle to a post.
       'question': "",
-      'options': [
-        "People are riding bicycles down a street.",
-        "A bicycle is being repaired.",
-        "Bicycles have been left in a designated area.",
-        "A man is locking his bicycle to a post.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The bicycles are neatly parked in a bike rack, which is a "designated area".',

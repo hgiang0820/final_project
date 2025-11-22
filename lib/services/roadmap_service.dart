@@ -31,7 +31,7 @@ class RoadmapService {
     final materialIds = switch (selectedIndex) {
       0 => ['LRMaterials'],
       1 => ['SWMaterials'],
-      _ => ['LRMaterials', 'SWMaterials'], // 4 skills
+      _ => ['FullMaterials'], // 4 skills
     };
 
     print(materialIds);
@@ -108,11 +108,15 @@ class RoadmapService {
   // ---- helpers ----
   String _pickLevel(String goal) {
     final g = goal.toLowerCase();
-    if (g.contains('100')) return 'lv100';
-    if (g.contains('200')) return 'lv200';
-    if (g.contains('300')) return 'lv300';
-    if (g.contains('600')) return 'lv600';
-    return 'lv800';
+    if (g.contains('lr 300+ & sw 100+')) return 'lv1';
+    if (g.contains('lr 600+ & sw 200+')) return 'lv2';
+    if (g.contains('lr 800+ & sw 300+')) return 'lv3';
+    if (g.contains('toeic lr 300+')) return 'lv300';
+    if (g.contains('toeic lr 600+')) return 'lv600';
+    if (g.contains('toeic lr 800+')) return 'lv800';
+    if (g.contains('toeic sw 100+')) return 'lv100';
+    if (g.contains('toeic sw 200+')) return 'lv200';
+    return 'lv300';
     // if (g.contains('800')) return 'lv800';
     // if (g.contains('600')) return 'lv600';
     // return 'lv300';
@@ -143,9 +147,26 @@ class RoadmapService {
       'respond to a written request': 'part7',
       'write an opinion essay': 'part8',
     };
+    final fullMap = <String, String>{
+      'picture description': 'lis1',
+      'question & response': 'lis2',
+      'conversations': 'lis3',
+      'talks': 'lis4',
+      'incomplete sentences': 'read1',
+      'text completion': 'read2',
+      'reading comprehension': 'read3',
+      'read a text aloud': 'speak1',
+      'describe a picture': 'speak2',
+      'respond to questions': 'speak3',
+      'respond to questions using information provided': 'speak4',
+      'express an opinion': 'speak5',
+      'write a sentence based on a picture': 'write1',
+      'respond to a written request': 'write2',
+      'write an opinion essay': 'write3',
+    };
 
     List<String> parts = [];
-    if (tab == 0 || tab == 2) {
+    if (tab == 0) {
       for (final k in lrMap.keys) {
         if (_containsAny(wp, [k])) parts.add(lrMap[k]!);
       }
@@ -154,15 +175,26 @@ class RoadmapService {
       // }
     }
 
-    if (tab == 1 || tab == 2) {
-      final swPicked = <String>[];
+    if (tab == 1) {
+      // final swPicked = <String>[];
       for (final k in swMap.keys) {
-        if (_containsAny(wp, [k])) swPicked.add(swMap[k]!);
+        if (_containsAny(wp, [k])) parts.add(swMap[k]!);
       }
       // if (swPicked.isEmpty) {
       //   swPicked.addAll(['speak2', 'speak3', 'write1']); // mặc định SW
       // }
-      parts.addAll(swPicked);
+      // parts.addAll(swPicked);
+    }
+
+    if (tab == 2) {
+      // final swPicked = <String>[];
+      for (final k in fullMap.keys) {
+        if (_containsAny(wp, [k])) parts.add(fullMap[k]!);
+      }
+      // if (swPicked.isEmpty) {
+      //   swPicked.addAll(['speak2', 'speak3', 'write1']); // mặc định SW
+      // }
+      // parts.addAll(swPicked);
     }
 
     // Loại trùng

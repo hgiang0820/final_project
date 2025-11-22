@@ -6,16 +6,16 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWPracticePart1() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonSW({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,11 +23,52 @@ Future<void> seedSWPracticePart1() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
         .doc('part1')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Read a text aloud',
+      'lessonName': lessonName,
+      // 'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      final q = questions[i];
+      await lessonRef.collection('questions').doc(id).set({
+        'type': 'Read a text aloud',
+        // 'imagePath': imagePath,
+        'text': q['text'],
+        'prepare_time': q['prepare_time'],
+        'record_time': q['record_time'],
+        'sample_answer': q['sample_answer'],
+        'directions':
+            "Read the sentence aloud clearly and confidently. Focus on correct pronunciation.",
+        'max_score': q['max_score'],
+        'order': i,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('speak1')
         .collection('lessons')
         .doc(lessonId);
 
@@ -308,20 +349,21 @@ Future<void> seedSWPracticePart1() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  // ===== SWMaterials =====
   // lv100
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Phát âm nguyên âm đơn',
     questions: p1Lv100L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Ngắt nghỉ đúng chỗ trong câu',
     questions: p1Lv100L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Đọc đoạn văn ngắn có dấu câu',
@@ -329,19 +371,19 @@ Future<void> seedSWPracticePart1() async {
   );
 
   // lv200
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Nhấn trọng âm từ và câu',
     questions: p1Lv200L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Đọc đoạn văn có từ vựng học thuật',
     questions: p1Lv200L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Luyện đọc với tốc độ vừa phải',
@@ -349,20 +391,81 @@ Future<void> seedSWPracticePart1() async {
   );
 
   // lv300
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Đọc đoạn văn dài với cảm xúc',
     questions: p1Lv300L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Luyện đọc với ngữ điệu tự nhiên',
     questions: p1Lv300L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Ghi âm và tự đánh giá phát âm',
+    questions: p1Lv300L3,
+  );
+
+  // ===== FullMaterials =====
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Phát âm nguyên âm đơn',
+    questions: p1Lv100L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Ngắt nghỉ đúng chỗ trong câu',
+    questions: p1Lv100L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Đọc đoạn văn ngắn có dấu câu',
+    questions: p1Lv100L3,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Nhấn trọng âm từ và câu',
+    questions: p1Lv200L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Đọc đoạn văn có từ vựng học thuật',
+    questions: p1Lv200L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Luyện đọc với tốc độ vừa phải',
+    questions: p1Lv200L3,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Đọc đoạn văn dài với cảm xúc',
+    questions: p1Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Luyện đọc với ngữ điệu tự nhiên',
+    questions: p1Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Ghi âm và tự đánh giá phát âm',
     questions: p1Lv300L3,

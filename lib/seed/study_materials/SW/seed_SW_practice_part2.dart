@@ -6,16 +6,16 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWPracticePart2() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonSW({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,7 +23,7 @@ Future<void> seedSWPracticePart2() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -41,9 +41,51 @@ Future<void> seedSWPracticePart2() async {
     for (int i = 0; i < questions.length; i++) {
       final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       final imagePath =
-          'study_materials/SWMaterials/part2/$levelId/$lessonId/$id.jpg';
+          'study_materials/SWMaterials/part2/$levelId/$lessonId/$id.jpeg';
       final q = questions[i];
+      await lessonRef.collection('questions').doc(id).set({
+        'type': 'Describe a picture',
+        'imagePath': imagePath,
+        'text': q['text'],
+        'prepare_time': q['prepare_time'],
+        'record_time': q['record_time'],
+        'sample_answer': q['sample_answer'],
+        'directions':
+            "In this question of the test, you will describe the picture on your screen in 1 sentence as much detail as you can.",
+        'max_score': q['max_score'],
+        'order': i,
+      });
+    }
+  }
 
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('speak2')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Describe a picture',
+      'lessonName': lessonName,
+      // 'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      final imagePath =
+          'study_materials/FullMaterials/speak2/$levelId/$lessonId/$id.jpeg';
+      final q = questions[i];
       await lessonRef.collection('questions').doc(id).set({
         'type': 'Describe a picture',
         'imagePath': imagePath,
@@ -295,20 +337,21 @@ Future<void> seedSWPracticePart2() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  // === SWMaterials ===
   // lv100
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Từ vựng mô tả hình ảnh cơ bản',
     questions: p2Lv100L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Cấu trúc câu đơn giản (There is/are…)',
     questions: p2Lv100L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Mô tả ảnh tĩnh đơn giản',
@@ -316,19 +359,19 @@ Future<void> seedSWPracticePart2() async {
   );
 
   // lv200
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Mô tả hành động trong ảnh',
     questions: p2Lv200L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng thì hiện tại tiếp diễn',
     questions: p2Lv200L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Mô tả ảnh có nhiều chi tiết',
@@ -336,20 +379,81 @@ Future<void> seedSWPracticePart2() async {
   );
 
   // lv300
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: So sánh hai bức ảnh',
     questions: p2Lv300L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng từ nối và liên kết',
     questions: p2Lv300L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Mô tả ảnh theo bố cục logic',
+    questions: p2Lv300L3,
+  );
+
+  // === FullMaterials ===
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Từ vựng mô tả hình ảnh cơ bản',
+    questions: p2Lv100L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Cấu trúc câu đơn giản (There is/are…)',
+    questions: p2Lv100L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Mô tả ảnh tĩnh đơn giản',
+    questions: p2Lv100L3,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Mô tả hành động trong ảnh',
+    questions: p2Lv200L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng thì hiện tại tiếp diễn',
+    questions: p2Lv200L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Mô tả ảnh có nhiều chi tiết',
+    questions: p2Lv200L3,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: So sánh hai bức ảnh',
+    questions: p2Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng từ nối và liên kết',
+    questions: p2Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Mô tả ảnh theo bố cục logic',
     questions: p2Lv300L3,

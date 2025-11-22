@@ -45,12 +45,7 @@ Future<void> seedLRTest10() async {
       // (C) He's painting the exterior of a house.
       // (D) He's installing new glass panes.
       'question': "",
-      'options': [
-        "He's washing windows on a tall building.",
-        "He's repairing a window frame.",
-        "He's painting the exterior of a house.",
-        "He's installing new glass panes.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Người đàn ông đang lau (washing) các cửa sổ kính (windows) của một tòa nhà cao tầng.',
@@ -63,12 +58,7 @@ Future<void> seedLRTest10() async {
       // (C) Customers are waiting in line.
       // (D) Bread loaves are being sliced.
       'question': "",
-      'options': [
-        "A baker is kneading dough.",
-        "Pastries are displayed in a bakery case.",
-        "Customers are waiting in line.",
-        "Bread loaves are being sliced.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy nhiều loại bánh ngọt (pastries) được trưng bày (displayed) trong tủ kính của tiệm bánh (bakery case).',
@@ -81,12 +71,7 @@ Future<void> seedLRTest10() async {
       // (C) She's holding an umbrella in the rain.
       // (D) She's folding an umbrella.
       'question': "",
-      'options': [
-        "She's opening an umbrella.",
-        "She's waiting for a bus.",
-        "She's holding an umbrella in the rain.",
-        "She's folding an umbrella.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Người phụ nữ đang cầm (holding) một chiếc ô (umbrella) khi trời đang mưa (in the rain).',
@@ -99,12 +84,7 @@ Future<void> seedLRTest10() async {
       // (C) An auditorium is empty of people.
       // (D) Workers are cleaning the seats.
       'question': "",
-      'options': [
-        "An audience is watching a performance.",
-        "Musicians are setting up on stage.",
-        "An auditorium is empty of people.",
-        "Workers are cleaning the seats.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy một khán phòng (auditorium) không có người (empty of people).',
@@ -117,12 +97,7 @@ Future<void> seedLRTest10() async {
       // (C) He's writing in a notebook.
       // (D) He's working on a laptop computer.
       'question': "",
-      'options': [
-        "He's closing his laptop.",
-        "He's talking on a mobile phone.",
-        "He's writing in a notebook.",
-        "He's working on a laptop computer.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 3,
       'explain':
           'Người đàn ông đang ngồi trước máy tính xách tay (laptop computer) và có vẻ đang làm việc (working).',
@@ -135,12 +110,7 @@ Future<void> seedLRTest10() async {
       // (C) Passengers are disembarking from a plane.
       // (D) Luggage is being unloaded from an aircraft.
       'question': "",
-      'options': [
-        "An airplane is flying overhead.",
-        "An airplane is parked near a terminal building.",
-        "Passengers are disembarking from a plane.",
-        "Luggage is being unloaded from an aircraft.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bức tranh cho thấy một chiếc máy bay (airplane) đang đậu (parked) gần một tòa nhà nhà ga (terminal building).',

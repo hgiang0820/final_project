@@ -6,16 +6,16 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWPracticePart4() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonSW({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,7 +23,7 @@ Future<void> seedSWPracticePart4() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -42,6 +42,50 @@ Future<void> seedSWPracticePart4() async {
       final id = 'q${(i + 1).toString().padLeft(2, '0')}';
       final imagePath =
           'study_materials/SWMaterials/part4/$levelId/$lessonId/$id.jpg';
+      final q = questions[i];
+
+      await lessonRef.collection('questions').doc(id).set({
+        'type': 'Respond to questions using information provided',
+        'imagePath': imagePath,
+        'text': q['text'],
+        'prepare_time': q['prepare_time'],
+        'record_time': q['record_time'],
+        'sample_answer': q['sample_answer'],
+        'directions':
+            "In this question of the test, you will respond to questions using information provided on your screen.",
+        'max_score': q['max_score'],
+        'order': i,
+      });
+    }
+  }
+
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('speak4')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Respond to questions using information provided',
+      'lessonName': lessonName,
+      // 'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      final imagePath =
+          'study_materials/FullMaterials/speak4/$levelId/$lessonId/$id.jpg';
       final q = questions[i];
 
       await lessonRef.collection('questions').doc(id).set({
@@ -320,20 +364,21 @@ Future<void> seedSWPracticePart4() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  /// ==== SWMaterials =====
   // lv100
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Đọc hiểu bảng thông tin đơn giản',
     questions: p4Lv100L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Trích xuất dữ liệu cơ bản',
     questions: p4Lv100L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Trả lời câu hỏi dựa trên bảng',
@@ -341,19 +386,19 @@ Future<void> seedSWPracticePart4() async {
   );
 
   // lv200
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: So sánh thông tin từ bảng',
     questions: p4Lv200L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng số liệu để trả lời',
     questions: p4Lv200L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Tóm tắt thông tin chính xác',
@@ -361,20 +406,81 @@ Future<void> seedSWPracticePart4() async {
   );
 
   // lv300
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Phân tích và suy luận từ dữ liệu',
     questions: p4Lv300L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Trả lời câu hỏi phức tạp',
     questions: p4Lv300L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Luyện tập với biểu đồ và bảng nâng cao',
+    questions: p4Lv300L3,
+  );
+
+  /// ==== FullMaterials =====
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Đọc hiểu bảng thông tin đơn giản',
+    questions: p4Lv100L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Trích xuất dữ liệu cơ bản',
+    questions: p4Lv100L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Trả lời câu hỏi dựa trên bảng',
+    questions: p4Lv100L3,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: So sánh thông tin từ bảng',
+    questions: p4Lv200L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng số liệu để trả lời',
+    questions: p4Lv200L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Tóm tắt thông tin chính xác',
+    questions: p4Lv200L3,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Phân tích và suy luận từ dữ liệu',
+    questions: p4Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Trả lời câu hỏi phức tạp',
+    questions: p4Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Luyện tập với biểu đồ và bảng nâng cao',
     questions: p4Lv300L3,

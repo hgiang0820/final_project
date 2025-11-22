@@ -6,16 +6,16 @@ final supabase = Supabase.instance.client;
 
 Future<void> seedSWPracticePart3() async {
   final db = FirebaseFirestore.instance;
-  final materialId = 'SWMaterials';
+  // final materialId = 'SWMaterials';
 
   // Firestore: Create test document
-  await db.collection('study_materials').doc(materialId).set({
+  await db.collection('study_materials').doc('SWMaterials').set({
     'title': 'Speaking & Writing Materials',
     'levels': ['lv100', 'lv200', 'lv300'],
     'createdAt': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
 
-  Future<void> pushLesson({
+  Future<void> pushLessonSW({
     required String levelId,
     required String lessonId,
     required String lessonName,
@@ -23,7 +23,7 @@ Future<void> seedSWPracticePart3() async {
   }) async {
     final lessonRef = db
         .collection('study_materials')
-        .doc(materialId)
+        .doc('SWMaterials')
         .collection('levels')
         .doc(levelId)
         .collection('parts')
@@ -40,10 +40,48 @@ Future<void> seedSWPracticePart3() async {
 
     for (int i = 0; i < questions.length; i++) {
       final id = 'q${(i + 1).toString().padLeft(2, '0')}';
-      // final imagePath =
-      //     'study_materials/SWMaterials/part2/$levelId/$lessonId/$id.jpg';
       final q = questions[i];
+      await lessonRef.collection('questions').doc(id).set({
+        'type': 'Respond to questions',
+        // 'imagePath': imagePath,
+        'text': q['text'],
+        'prepare_time': q['prepare_time'],
+        'record_time': q['record_time'],
+        'sample_answer': q['sample_answer'],
+        'directions':
+            "In this question of the test, you will respond to questions on your screen.",
+        'max_score': q['max_score'],
+        'order': i,
+      });
+    }
+  }
 
+  Future<void> pushLessonFull({
+    required String levelId,
+    required String lessonId,
+    required String lessonName,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final lessonRef = db
+        .collection('study_materials')
+        .doc('FullMaterials')
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc('speak3')
+        .collection('lessons')
+        .doc(lessonId);
+
+    await lessonRef.set({
+      'type': 'Respond to questions',
+      'lessonName': lessonName,
+      // 'audioPath': null,
+      'questionCount': questions.length,
+    }, SetOptions(merge: true));
+
+    for (int i = 0; i < questions.length; i++) {
+      final id = 'q${(i + 1).toString().padLeft(2, '0')}';
+      final q = questions[i];
       await lessonRef.collection('questions').doc(id).set({
         'type': 'Respond to questions',
         // 'imagePath': imagePath,
@@ -299,20 +337,21 @@ Future<void> seedSWPracticePart3() async {
 
   // ========== PUSH ALL LESSONS ==========
 
+  // ==== SWMaterials =====
   // lv100
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Trả lời câu hỏi Yes/No',
     questions: p3Lv100L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Trả lời câu hỏi Wh- đơn giản',
     questions: p3Lv100L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv100',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Mở rộng câu trả lời bằng 1 lý do',
@@ -320,19 +359,19 @@ Future<void> seedSWPracticePart3() async {
   );
 
   // lv200
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Trả lời với ví dụ cụ thể',
     questions: p3Lv200L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Diễn đạt cảm xúc và quan điểm',
     questions: p3Lv200L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv200',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Luyện phản xạ trả lời nhanh',
@@ -340,20 +379,81 @@ Future<void> seedSWPracticePart3() async {
   );
 
   // lv300
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Trả lời câu hỏi trừu tượng',
     questions: p3Lv300L1,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng thành ngữ và cấu trúc nâng cao',
     questions: p3Lv300L2,
   );
-  await pushLesson(
+  await pushLessonSW(
     levelId: 'lv300',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Tự đặt và trả lời câu hỏi phản biện',
+    questions: p3Lv300L3,
+  );
+
+  // ==== FullMaterials =====
+  // lv1
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Trả lời câu hỏi Yes/No',
+    questions: p3Lv100L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Trả lời câu hỏi Wh- đơn giản',
+    questions: p3Lv100L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv1',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Mở rộng câu trả lời bằng 1 lý do',
+    questions: p3Lv100L3,
+  );
+
+  // lv2
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Trả lời với ví dụ cụ thể',
+    questions: p3Lv200L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Diễn đạt cảm xúc và quan điểm',
+    questions: p3Lv200L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv2',
+    lessonId: 'lesson3',
+    lessonName: 'Bài 3: Luyện phản xạ trả lời nhanh',
+    questions: p3Lv200L3,
+  );
+
+  // lv3
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson1',
+    lessonName: 'Bài 1: Trả lời câu hỏi trừu tượng',
+    questions: p3Lv300L1,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
+    lessonId: 'lesson2',
+    lessonName: 'Bài 2: Sử dụng thành ngữ và cấu trúc nâng cao',
+    questions: p3Lv300L2,
+  );
+  await pushLessonFull(
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Tự đặt và trả lời câu hỏi phản biện',
     questions: p3Lv300L3,

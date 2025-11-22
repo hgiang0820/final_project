@@ -45,12 +45,7 @@ Future<void> seedLRTest03() async {
       // (C) A man is cooking a meal in a kitchen.
       // (D) A man is sitting down at an empty table.
       'question': "",
-      'options': [
-        "A man is carrying a tray of food.",
-        "A man is paying his bill at a restaurant.",
-        "A man is cooking a meal in a kitchen.",
-        "A man is sitting down at an empty table.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Bức tranh cho thấy một người đàn ông (có thể là bồi bàn) đang bưng một khay có đĩa thức ăn.',
@@ -63,12 +58,7 @@ Future<void> seedLRTest03() async {
       // (C) A truck is being loaded with boxes.
       // (D) A truck is driving on a highway.
       'question': "",
-      'options': [
-        "A truck is being repaired by a mechanic.",
-        "A truck is parked in a garage.",
-        "A truck is being loaded with boxes.",
-        "A truck is driving on a highway.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'Bức tranh cho thấy cửa sau của xe tải đang mở và các thùng hàng đang được đưa lên xe.',
@@ -81,12 +71,7 @@ Future<void> seedLRTest03() async {
       // (C) People are boarding a crowded bus.
       // (D) People are sitting on a park bench.
       'question': "",
-      'options': [
-        "People are walking through an outdoor market.",
-        "People are watching a street performance.",
-        "People are boarding a crowded bus.",
-        "People are sitting on a park bench.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Bức tranh cho thấy nhiều người và các quầy hàng (hoa quả, rau củ) ở bên ngoài, mô tả chính xác một khu chợ ngoài trời.',
@@ -99,12 +84,7 @@ Future<void> seedLRTest03() async {
       // (C) She's writing on a whiteboard.
       // (D) She's putting on safety glasses.
       'question': "",
-      'options': [
-        "She's cleaning the laboratory equipment.",
-        "She's looking into a microscope.",
-        "She's writing on a whiteboard.",
-        "She's putting on safety glasses.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Người phụ nữ đang cúi xuống và nhìn qua thị kính của kính hiển vi.',
@@ -117,12 +97,7 @@ Future<void> seedLRTest03() async {
       // (C) Luggage is being loaded onto the plane.
       // (D) An airplane is parked at a gate.
       'question': "",
-      'options': [
-        "An airplane is on the runway.", // Thay đổi (A) để chính xác hơn
-        "Passengers are boarding the aircraft.",
-        "Luggage is being loaded onto the plane.",
-        "An airplane is parked at a gate.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 0,
       'explain':
           'Bức tranh cho thấy rõ một chiếc máy bay đang ở trên đường băng. (A) là mô tả chính xác nhất.',
@@ -135,12 +110,7 @@ Future<void> seedLRTest03() async {
       // (C) A woman is typing on a keyboard.
       // (D) The chairs are stacked in a corner.
       'question': "",
-      'options': [
-        "The office is empty and dark.",
-        "The desk is cluttered with various items.",
-        "A woman is typing on a keyboard.",
-        "The chairs are stacked in a corner.",
-      ],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'Bàn làm việc có rất nhiều đồ vật (giấy tờ, cốc, máy tính) một cách lộn xộn, được mô tả là "cluttered".',
