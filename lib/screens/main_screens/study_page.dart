@@ -1,5 +1,5 @@
 import 'package:final_project/screens/study_screens/practice_LR_page.dart';
-import 'package:final_project/widgets/card/card_widget.dart';
+import 'package:final_project/screens/study_screens/practice_SW_page.dart';
 import 'package:final_project/widgets/card/lesson_card.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/repositories/roadmap_repository.dart';
@@ -415,7 +415,7 @@ class _StudyPageState extends State<StudyPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => PracticeLRPage(
+            builder: (_) => PracticeSWPage(
               practiceId: '$materialId|$levelId|$partId|$lessonId',
               onDone: () async => _markDone(originalIndex),
             ),

@@ -196,17 +196,27 @@ class PracticeLRPageState extends State<PracticeLRPage> {
       var restoredScore = 0;
       DateTime? ts;
 
-      print(latest);
+      // print(latest?['items']);
+      print(latest?['data']['items'][widget.itemIndex ?? -1]);
 
-      if (latest != null) {
-        final saved = Map<String, dynamic>.from(latest['answers'] ?? {});
+      final item = latest != null
+          ? (latest['data']['items'] as List<dynamic>? ?? [])
+                    .asMap()
+                    .containsKey(widget.itemIndex ?? -1)
+                ? (latest['data']['items'] as List<dynamic>)[widget.itemIndex ??
+                      -1]
+                : null
+          : null;
+
+      if (item['answers'] != null) {
+        final saved = Map<String, dynamic>.from(item['answers'] ?? {});
         for (int i = 0; i < qs.length; i++) {
           final v = saved[qs[i].id];
           if (v is num) initAns[i] = v.toInt();
         }
         review = true;
-        restoredScore = (latest['score'] as num?)?.toInt() ?? 0;
-        final t = latest['createdAt'];
+        restoredScore = (item['score'] as num?)?.toInt() ?? 0;
+        final t = item['createdAt'];
         if (t is Timestamp) ts = t.toDate();
 
         // final items = latest['data']['items'] as List<dynamic>? ?? [];
