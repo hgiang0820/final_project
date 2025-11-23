@@ -411,16 +411,29 @@ class _StudyPageState extends State<StudyPage> {
         );
         return;
       }
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PracticeLRPage(
-            practiceId: '$materialId|$levelId|$partId|$lessonId',
-            onDone: () async => _markDone(originalIndex),
+      if (materialId == 'SWMaterials') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PracticeLRPage(
+              practiceId: '$materialId|$levelId|$partId|$lessonId',
+              onDone: () async => _markDone(originalIndex),
+            ),
           ),
-        ),
-      );
+        );
+        return;
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PracticeLRPage(
+              itemIndex: originalIndex,
+              practiceId: '$materialId|$levelId|$partId|$lessonId',
+              onDone: () async => _markDone(originalIndex),
+            ),
+          ),
+        );
+      }
     }
   }
 

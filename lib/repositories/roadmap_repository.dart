@@ -123,6 +123,97 @@ class RoadmapRepository {
     }, SetOptions(merge: true));
   }
 
+  Future<String?> getLessonStatus({
+    required int itemIndex,
+    // required String testType,
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final lastestRoadmap = await getLatestRoadmap();
+    final roadmapId = lastestRoadmap?['roadmapId'] as String?;
+    // final practiceSetId = practiceSet['practiceSetId'] as String;
+
+    final docRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('roadmaps')
+        .doc(roadmapId);
+
+    final snap = await docRef.get();
+    if (!snap.exists) return null;
+
+    final data = snap.data() as Map<String, dynamic>;
+    final items = List<Map<String, dynamic>>.from(data['items'] ?? []);
+    if (itemIndex < 0 || itemIndex >= items.length) return null;
+
+    return (items[itemIndex]['status'] as String?) ?? 'todo';
+  }
+
+  Future<Map<String, dynamic>?> getSavedResult({
+    required int itemIndex,
+    // required String testType,
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final lastestRoadmap = await getLatestRoadmap();
+    final roadmapId = lastestRoadmap?['roadmapId'] as String?;
+
+    final docRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('roadmaps')
+        .doc(roadmapId);
+
+    final snap = await docRef.get();
+    if (!snap.exists) return null;
+
+    final data = snap.data() as Map<String, dynamic>;
+    final items = List<Map<String, dynamic>>.from(data['items'] ?? []);
+    if (itemIndex < 0 || itemIndex >= items.length) return null;
+
+    final it = items[itemIndex];
+    return {
+      'score': it['score'],
+      'answers': Map<String, dynamic>.from(it['answers'] ?? const {}),
+    };
+  }
+
+  Future<void> savePracticeLessonResult({
+    // required String testId,
+    // required int totalScore,
+    required int itemIndex,
+    required int score,
+    required int total,
+    required Map<String, int?> answersByQuestionId,
+  }) async {
+    final uid = _auth.currentUser!.uid;
+    final lastestRoadmap = await getLatestRoadmap();
+    final roadmapId = lastestRoadmap?['roadmapId'] as String?;
+
+    final docRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('roadmaps')
+        .doc(roadmapId);
+
+    final snap = await docRef.get();
+    if (!snap.exists) return;
+
+    final data = snap.data() as Map<String, dynamic>;
+    final items = List<Map<String, dynamic>>.from(data['items'] ?? []);
+    if (itemIndex < 0 || itemIndex >= items.length) return;
+
+
+    items[itemIndex]['score'] = score;
+    items[itemIndex]['total'] = total;
+    items[itemIndex]['answers'] = answersByQuestionId;
+    // items[itemIndex]['submittedAt'] = FieldValue.serverTimestamp();
+
+    await docRef.set({
+      'items': items,
+      'updatedAt': FieldValue.serverTimestamp(),
+      // 'lastestTest': testId, // lưu ý check testId là gì
+    }, SetOptions(merge: true));
+  }
+
   Future<Map<String, Map<String, int>>> getLessonsLearnedPerRoadmap() async {
     final user = _auth.currentUser;
     if (user == null) return {};

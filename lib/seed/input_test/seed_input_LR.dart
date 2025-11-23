@@ -26,7 +26,7 @@ Future<void> seedInputLR() async {
       // (C) She's erasing the whiteboard.
       // (D) She's giving a book to a colleague.
       'question': "",
-      'options': ['A', 'B', 'C'],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The woman is using her hand to point at information on a screen, which is the most accurate description among the choices.',
@@ -39,7 +39,7 @@ Future<void> seedInputLR() async {
       // (C) They're watching a movie in a theater.
       // (D) They're arranging chairs in a row.
       'question': "",
-      'options': ['A', 'B', 'C'],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 1,
       'explain':
           'The setting (table, laptop, professional attire) clearly indicates a business meeting.',
@@ -53,7 +53,7 @@ Future<void> seedInputLR() async {
       .doc('part1')
       .set({
         'type': 'Picture description',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part1/seed_LR_test4_part1.wav',
         'questionCount': 2,
       });
 

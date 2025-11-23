@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/models/question_LR_model.dart';
 import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/repositories/input_test_repository.dart';
+import 'package:final_project/repositories/roadmap_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -10,8 +11,14 @@ class PracticeLRPage extends StatefulWidget {
   /// format: materialId|levelId|partId|lessonId
   final String practiceId;
   final Future<void> Function()? onDone;
+  final int? itemIndex;
 
-  const PracticeLRPage({super.key, required this.practiceId, this.onDone});
+  const PracticeLRPage({
+    super.key,
+    required this.practiceId,
+    this.onDone,
+    this.itemIndex,
+  });
 
   @override
   State<PracticeLRPage> createState() => PracticeLRPageState();
@@ -20,6 +27,7 @@ class PracticeLRPage extends StatefulWidget {
 class PracticeLRPageState extends State<PracticeLRPage> {
   final testRepo = InputTestRepository();
   final resultRepo = ResultRepository();
+  final roadmapRepo = RoadmapRepository();
   final player = AudioPlayer();
 
   late final String materialId, levelId, partId, lessonId;
@@ -32,6 +40,9 @@ class PracticeLRPageState extends State<PracticeLRPage> {
   bool showAnswers = false;
   int correctCount = 0;
   DateTime? latestAttemptTime;
+
+  int remainingSeconds = 100;
+  int totalScore = 0;
 
   StreamSubscription<PlayerState>? _sub;
 
@@ -47,6 +58,7 @@ class PracticeLRPageState extends State<PracticeLRPage> {
 
   @override
   void initState() {
+    // checkShowAnswersMode();
     super.initState();
     final seg = widget.practiceId.split('|');
     if (seg.length != 4) {
@@ -72,6 +84,82 @@ class PracticeLRPageState extends State<PracticeLRPage> {
     super.dispose();
   }
 
+  // Future<void> checkShowAnswersMode() async {
+  //   try {
+  //     final status = await roadmapRepo.getLessonStatus(
+  //       itemIndex: widget.itemIndex ?? -1,
+  //       // testType: "LR_practice_tests",
+  //     );
+  //     if (status == 'done') {
+  //       final saved = await roadmapRepo.getSavedResult(
+  //         itemIndex: widget.itemIndex ?? -1,
+  //         // testType: "LR_practice_tests",
+  //       );
+  //       final savedTotal = (saved?['totalScore'] ?? 0) as int;
+  //       final savedAnswers = List<int?>.from(saved?['answers'] ?? {});
+
+  //       // Gán state tổng
+  //       setState(() {
+  //         showAnswers = true;
+  //         totalScore = savedTotal;
+  //         answers = savedAnswers; // có key part1..part7
+  //         remainingSeconds = 0;
+  //       });
+
+  //       // Dừng đồng hồ
+  //       // countdownTimer?.cancel();
+
+  //       // Bật chế độ hiển thị đáp án
+  //       // part1Key.currentState?.showAnswersMode();
+  //       // part2Key.currentState?.showAnswersMode();
+  //       // part3Key.currentState?.showAnswersMode();
+  //       // part4Key.currentState?.showAnswersMode();
+  //       // part5Key.currentState?.showAnswersMode();
+  //       // part6Key.currentState?.showAnswersMode();
+  //       // part7Key.currentState?.showAnswersMode();
+
+  //       // // NẠP lại các lựa chọn đã chọn trước đó (map questionId -> selectedIndex)
+  //       // part1Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part1'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part1']),
+  //       // );
+  //       // part2Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part2'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part2']),
+  //       // );
+  //       // part3Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part3'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part3']),
+  //       // );
+  //       // part4Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part4'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part4']),
+  //       // );
+  //       // part5Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part5'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part5']),
+  //       // );
+  //       // part6Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part6'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part6']),
+  //       // );
+  //       // part7Key.currentState?.loadSavedAnswers(
+  //       //   savedAnswers['part7'] == null
+  //       //       ? null
+  //       //       : Map<String, dynamic>.from(savedAnswers['part7']),
+  //       // );
+  //     }
+  //   } catch (_) {
+  //     // ignore errors
+  //   }
+  // }
+
   Future<void> _load() async {
     try {
       final meta = await testRepo.getPartMetaByLesson(
@@ -93,12 +181,13 @@ class PracticeLRPageState extends State<PracticeLRPage> {
           : testRepo.getPublicUrl('practice_tests', audioPath);
 
       // load attempt gần nhất (nếu có)
-      final latest = await resultRepo.getLatestPracticeAttempt(
-        materialId: materialId,
-        levelId: levelId,
-        partId: partId,
-        lessonId: lessonId,
-      );
+      // final latest = await resultRepo.getLatestPracticeAttempt(
+      //   materialId: materialId,
+      //   levelId: levelId,
+      //   partId: partId,
+      //   lessonId: lessonId,
+      // );
+      final latest = await roadmapRepo.getLatestRoadmap();
 
       if (!mounted) return;
 
@@ -106,6 +195,8 @@ class PracticeLRPageState extends State<PracticeLRPage> {
       var review = false;
       var restoredScore = 0;
       DateTime? ts;
+
+      print(latest);
 
       if (latest != null) {
         final saved = Map<String, dynamic>.from(latest['answers'] ?? {});
@@ -117,6 +208,17 @@ class PracticeLRPageState extends State<PracticeLRPage> {
         restoredScore = (latest['score'] as num?)?.toInt() ?? 0;
         final t = latest['createdAt'];
         if (t is Timestamp) ts = t.toDate();
+
+        // final items = latest['data']['items'] as List<dynamic>? ?? [];
+        // if (widget.itemIndex != null &&
+        //     widget.itemIndex! >= 0 &&
+        //     widget.itemIndex! < items.length) {
+        //   final item = items[widget.itemIndex!];
+        //   final result = item['result'] as Map<String, dynamic>? ?? {};
+        //   final savedAnswers = Map<String, dynamic>.from(result['answers'] ?? {});
+        //   for (int i = 0; i < qs.length; i++) {
+        //     final v = savedAnswers[qs[i].id];
+        //     if (v is num) initAns[i] = v.toInt();
       }
 
       setState(() {
@@ -161,11 +263,8 @@ class PracticeLRPageState extends State<PracticeLRPage> {
     };
 
     try {
-      await resultRepo.savePracticeAttempt(
-        materialId: materialId,
-        levelId: levelId,
-        partId: partId,
-        lessonId: lessonId,
+      await roadmapRepo.savePracticeLessonResult(
+        itemIndex: widget.itemIndex ?? -1,
         score: score,
         total: questions.length,
         answersByQuestionId: byId,

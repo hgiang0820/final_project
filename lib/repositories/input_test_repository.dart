@@ -169,6 +169,28 @@ class InputTestRepository {
     return snap.docs.map((d) => QuestionLR.fromMap(d.id, d.data())).toList();
   }
 
+  Future<List<QuestionSW>> getQuestionsSWByLesson({
+    required String materialId,
+    required String levelId,
+    required String partId,
+    required String lessonId,
+  }) async {
+    final qsRef = _firestore
+        .collection('study_materials')
+        .doc(materialId)
+        .collection('levels')
+        .doc(levelId)
+        .collection('parts')
+        .doc(partId)
+        .collection('lessons')
+        .doc(lessonId)
+        .collection('questions')
+        .orderBy('order');
+    final snap = await qsRef.get();
+    // return snap.docs.map((d) => QuestionLR.fromFirestore(d)).toList();
+    return snap.docs.map((d) => QuestionSW.fromMap(d.id, d.data())).toList();
+  }
+
   Future<Map<String, dynamic>> getPracticePart(
     String collectionId,
     String practiceTestId,

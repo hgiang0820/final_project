@@ -137,7 +137,7 @@ class SWPart1PageState extends State<SWPart1Page> {
 
   Future<Map<String, dynamic>> getResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.5:8002');
+    final api = SpeakingApiService(baseUrl: 'http://192.168.1.10:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
