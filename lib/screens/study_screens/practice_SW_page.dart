@@ -143,15 +143,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
       if (!mounted) return;
 
-      // Load latest attempt if exists
-      // final latest = await resultRepo.getLatestPracticeAttempt(
-      //   materialId: materialId,
-      //   levelId: levelId,
-      //   partId: partId,
-      //   lessonId: lessonId,
-      // );
-
-      // print(latest?['items']);
       print(latest?['data']['items'][widget.itemIndex ?? -1]);
 
       final item = latest != null
@@ -192,32 +183,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
           evaluationResults = results;
         }
       }
-
-      // if (latest != null) {
-      //   review = true;
-      //   final t = latest['createdAt'];
-      //   if (t is Timestamp) ts = t.toDate();
-      //   restoredScore = (latest['score'] as num?)?.toInt() ?? 0;
-
-      //   // Load saved answers/recordings
-      //   final saved = Map<String, dynamic>.from(latest['answers'] ?? {});
-      //   for (var q in qs) {
-      //     final v = saved[q.id];
-      //     if (v is String) {
-      //       if (v.startsWith('http')) {
-      //         remotePlayUrls[q.id] = v; // URL for speaking
-      //       } else {
-      //         answers[q.id] = v; // Text for writing
-      //       }
-      //     }
-      //   }
-
-      //   // Load evaluation results
-      //   final results = Map<String, dynamic>.from(latest['results'] ?? {});
-      //   if (results.isNotEmpty) {
-      //     evaluationResults = results;
-      //   }
-      // }
 
       // Initialize controllers for writing questions
       for (var q in qs) {
@@ -309,7 +274,8 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   }
 
   void _startQuestion(int index) {
-    if (isFinishedAll) return;
+    // ✅ Allow navigation in review mode (when showAnswers is true)
+    if (isFinishedAll && !showAnswers) return;
 
     final q = questions[index];
 
@@ -368,6 +334,13 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       isFinishedAll = true;
     });
     recordTimer?.cancel();
+
+    // ✅ Tự động submit sau khi record xong câu cuối
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _submit();
+      }
+    });
   }
 
   void _retake() {
@@ -395,6 +368,12 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   Future<void> _submit() async {
     if (!mounted) return;
 
+    // ✅ Prevent duplicate submission
+    if (showAnswers) {
+      debugPrint('Already submitted, skipping duplicate submit');
+      return;
+    }
+
     // Prepare answers based on part type
     final Map<String, dynamic> submittedAnswers = {};
     Map<String, dynamic> result = {};
@@ -405,6 +384,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
       result = await getSpeakingResult();
       print('Speaking result: $result');
+      print('Submitted answers: $submittedAnswers');
       showFeedbacksMode(result['results']);
     } else {
       for (var q in questions) {
@@ -429,7 +409,11 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         correctCount = result['score'] ?? 0;
         totalScore = result['score'] ?? 0;
       }
+      prepareTimer?.cancel();
+      recordTimer?.cancel();
+      recorder.stop();
     });
+    print('Total score: $totalScore, Correct count: $correctCount');
 
     // final byId = <String, int?>{
     //   // for (int i = 0; i < questions.length; i++) questions[i].id: answers[i],
@@ -449,14 +433,19 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       //     (k, v) => MapEntry(k, v),
       //   ), // Map<String, dynamic>
       // );
+      print(partId);
+      print('Score to save: $scoreToSave');
       await roadmapRepo.savePracticeLessonResult(
         itemIndex: widget.itemIndex ?? -1,
         score: scoreToSave,
         total: questions.length * 3,
         answersByQuestionId: submittedAnswers.map((k, v) => MapEntry(k, v)),
+        evaluationResults: result['results'] as Map<String, dynamic>?,
       ); // Map<String, dynamic>);
       print(submittedAnswers.map((k, v) => MapEntry(k, v)));
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Error saving practice result: $e');
+    }
 
     try {
       await widget.onDone?.call();
@@ -599,7 +588,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         };
       }
     }
-
     return {
       'score': results.values.fold<int>(
         0,
@@ -1219,7 +1207,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                     ],
                   ),
                 ),
-              // Question navigation
+              // Question navigation - Always show for easy switching
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

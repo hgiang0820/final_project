@@ -385,7 +385,7 @@ class PracticeLRPageState extends State<PracticeLRPage> {
                   return null;
                 }
 
-                final fwOf = (int idx) =>
+                FontWeight fwOf(int idx) =>
                     showAnswers && (answers[i] == idx || q.correctIndex == idx)
                     ? FontWeight.bold
                     : FontWeight.normal;

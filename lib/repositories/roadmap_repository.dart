@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class RoadmapRepository {
   final _db = FirebaseFirestore.instance;
@@ -182,11 +183,18 @@ class RoadmapRepository {
     required int itemIndex,
     required int score,
     required int total,
-    required Map<String, int?> answersByQuestionId,
+    required Map<String, dynamic> answersByQuestionId,
+    Map<String, dynamic>? evaluationResults,
   }) async {
     final uid = _auth.currentUser!.uid;
     final lastestRoadmap = await getLatestRoadmap();
     final roadmapId = lastestRoadmap?['roadmapId'] as String?;
+
+    // ✅ FIX: Check if roadmapId is null before using it
+    if (roadmapId == null) {
+      debugPrint('❌ No roadmap found for user $uid');
+      return;
+    }
 
     final docRef = _db
         .collection('users')
@@ -195,16 +203,24 @@ class RoadmapRepository {
         .doc(roadmapId);
 
     final snap = await docRef.get();
-    if (!snap.exists) return;
+    if (!snap.exists) {
+      debugPrint('❌ Roadmap document does not exist: $roadmapId');
+      return;
+    }
 
     final data = snap.data() as Map<String, dynamic>;
     final items = List<Map<String, dynamic>>.from(data['items'] ?? []);
-    if (itemIndex < 0 || itemIndex >= items.length) return;
-
+    if (itemIndex < 0 || itemIndex >= items.length) {
+      debugPrint(
+        '❌ Invalid itemIndex: $itemIndex (items length: ${items.length})',
+      );
+      return;
+    }
 
     items[itemIndex]['score'] = score;
     items[itemIndex]['total'] = total;
     items[itemIndex]['answers'] = answersByQuestionId;
+    items[itemIndex]['results'] = evaluationResults;
     // items[itemIndex]['submittedAt'] = FieldValue.serverTimestamp();
 
     await docRef.set({
