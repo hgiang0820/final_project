@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/models/question_SW_model.dart';
 import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/repositories/input_test_repository.dart';
+import 'package:final_project/repositories/roadmap_repository.dart';
 import 'package:final_project/services/speaking_api_service.dart';
 import 'package:final_project/services/supabase_service.dart';
 import 'package:final_project/services/writing_api_service.dart';
@@ -20,8 +21,14 @@ class PracticeSWPage extends StatefulWidget {
   /// format: materialId|levelId|partId|lessonId
   final String practiceId;
   final Future<void> Function()? onDone;
+  final int? itemIndex;
 
-  const PracticeSWPage({super.key, required this.practiceId, this.onDone});
+  const PracticeSWPage({
+    super.key,
+    required this.practiceId,
+    this.onDone,
+    this.itemIndex,
+  });
 
   @override
   State<PracticeSWPage> createState() => PracticeSWPageState();
@@ -30,6 +37,7 @@ class PracticeSWPage extends StatefulWidget {
 class PracticeSWPageState extends State<PracticeSWPage> {
   final testRepo = InputTestRepository();
   final resultRepo = ResultRepository();
+  final roadmapRepo = RoadmapRepository();
   final player = AudioPlayer();
   final recorder = AudioRecorder();
   final _supabaseService = SupabaseService(
@@ -118,7 +126,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
   Future<bool> _requestPermission() async {
     var status = await Permission.microphone.request();
-    print('Microphone permission: $status');
     return status.isGranted;
   }
 
@@ -131,28 +138,43 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         lessonId: lessonId,
       );
 
+      final latest = await roadmapRepo.getLatestRoadmap();
+      // print(latest);
+
       if (!mounted) return;
 
       // Load latest attempt if exists
-      final latest = await resultRepo.getLatestPracticeAttempt(
-        materialId: materialId,
-        levelId: levelId,
-        partId: partId,
-        lessonId: lessonId,
-      );
+      // final latest = await resultRepo.getLatestPracticeAttempt(
+      //   materialId: materialId,
+      //   levelId: levelId,
+      //   partId: partId,
+      //   lessonId: lessonId,
+      // );
+
+      // print(latest?['items']);
+      print(latest?['data']['items'][widget.itemIndex ?? -1]);
+
+      final item = latest != null
+          ? (latest['data']['items'] as List<dynamic>? ?? [])
+                    .asMap()
+                    .containsKey(widget.itemIndex ?? -1)
+                ? (latest['data']['items'] as List<dynamic>)[widget.itemIndex ??
+                      -1]
+                : null
+          : null;
 
       bool review = false;
       DateTime? ts;
       int restoredScore = 0;
 
-      if (latest != null) {
+      if (item['answer'] != null || item['status'] == 'done') {
         review = true;
-        final t = latest['createdAt'];
+        final t = item['createdAt'];
         if (t is Timestamp) ts = t.toDate();
-        restoredScore = (latest['score'] as num?)?.toInt() ?? 0;
+        restoredScore = (item['score'] as num?)?.toInt() ?? 0;
 
         // Load saved answers/recordings
-        final saved = Map<String, dynamic>.from(latest['answers'] ?? {});
+        final saved = Map<String, dynamic>.from(item['answers'] ?? {});
         for (var q in qs) {
           final v = saved[q.id];
           if (v is String) {
@@ -165,11 +187,37 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         }
 
         // Load evaluation results
-        final results = Map<String, dynamic>.from(latest['results'] ?? {});
+        final results = Map<String, dynamic>.from(item['results'] ?? {});
         if (results.isNotEmpty) {
           evaluationResults = results;
         }
       }
+
+      // if (latest != null) {
+      //   review = true;
+      //   final t = latest['createdAt'];
+      //   if (t is Timestamp) ts = t.toDate();
+      //   restoredScore = (latest['score'] as num?)?.toInt() ?? 0;
+
+      //   // Load saved answers/recordings
+      //   final saved = Map<String, dynamic>.from(latest['answers'] ?? {});
+      //   for (var q in qs) {
+      //     final v = saved[q.id];
+      //     if (v is String) {
+      //       if (v.startsWith('http')) {
+      //         remotePlayUrls[q.id] = v; // URL for speaking
+      //       } else {
+      //         answers[q.id] = v; // Text for writing
+      //       }
+      //     }
+      //   }
+
+      //   // Load evaluation results
+      //   final results = Map<String, dynamic>.from(latest['results'] ?? {});
+      //   if (results.isNotEmpty) {
+      //     evaluationResults = results;
+      //   }
+      // }
 
       // Initialize controllers for writing questions
       for (var q in qs) {
@@ -383,23 +431,32 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       }
     });
 
+    // final byId = <String, int?>{
+    //   // for (int i = 0; i < questions.length; i++) questions[i].id: answers[i],
+    // };
+
     // Save to Firestore
     try {
       final scoreToSave = _isSpeakingPart(partId) ? totalScore : correctCount;
-      await resultRepo.savePracticeAttempt(
-        materialId: materialId,
-        levelId: levelId,
-        partId: partId,
-        lessonId: lessonId,
+      // await resultRepo.savePracticeAttempt(
+      //   materialId: materialId,
+      //   levelId: levelId,
+      //   partId: partId,
+      //   lessonId: lessonId,
+      //   score: scoreToSave,
+      //   total: questions.length,
+      //   answersByQuestionId: submittedAnswers.map(
+      //     (k, v) => MapEntry(k, v),
+      //   ), // Map<String, dynamic>
+      // );
+      await roadmapRepo.savePracticeLessonResult(
+        itemIndex: widget.itemIndex ?? -1,
         score: scoreToSave,
-        total: questions.length,
-        answersByQuestionId: submittedAnswers.map(
-          (k, v) => MapEntry(k, v),
-        ), // Map<String, dynamic>
-      );
-    } catch (e) {
-      debugPrint('Error saving attempt: $e');
-    }
+        total: questions.length * 3,
+        answersByQuestionId: submittedAnswers.map((k, v) => MapEntry(k, v)),
+      ); // Map<String, dynamic>);
+      print(submittedAnswers.map((k, v) => MapEntry(k, v)));
+    } catch (_) {}
 
     try {
       await widget.onDone?.call();
@@ -905,7 +962,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                   child: Column(
                     children: [
                       Text(
-                        'Score: $totalScore / ${questions.length}',
+                        'Score: $totalScore / ${questions.length * 3}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

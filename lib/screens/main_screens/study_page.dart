@@ -416,6 +416,7 @@ class _StudyPageState extends State<StudyPage> {
           context,
           MaterialPageRoute(
             builder: (_) => PracticeSWPage(
+              itemIndex: originalIndex,
               practiceId: '$materialId|$levelId|$partId|$lessonId',
               onDone: () async => _markDone(originalIndex),
             ),

@@ -180,13 +180,6 @@ class PracticeLRPageState extends State<PracticeLRPage> {
           ? null
           : testRepo.getPublicUrl('practice_tests', audioPath);
 
-      // load attempt gần nhất (nếu có)
-      // final latest = await resultRepo.getLatestPracticeAttempt(
-      //   materialId: materialId,
-      //   levelId: levelId,
-      //   partId: partId,
-      //   lessonId: lessonId,
-      // );
       final latest = await roadmapRepo.getLatestRoadmap();
 
       if (!mounted) return;
@@ -208,7 +201,7 @@ class PracticeLRPageState extends State<PracticeLRPage> {
                 : null
           : null;
 
-      if (item['answers'] != null) {
+      if (item['answers'] != null || item['status'] == 'done') {
         final saved = Map<String, dynamic>.from(item['answers'] ?? {});
         for (int i = 0; i < qs.length; i++) {
           final v = saved[qs[i].id];
@@ -218,17 +211,6 @@ class PracticeLRPageState extends State<PracticeLRPage> {
         restoredScore = (item['score'] as num?)?.toInt() ?? 0;
         final t = item['createdAt'];
         if (t is Timestamp) ts = t.toDate();
-
-        // final items = latest['data']['items'] as List<dynamic>? ?? [];
-        // if (widget.itemIndex != null &&
-        //     widget.itemIndex! >= 0 &&
-        //     widget.itemIndex! < items.length) {
-        //   final item = items[widget.itemIndex!];
-        //   final result = item['result'] as Map<String, dynamic>? ?? {};
-        //   final savedAnswers = Map<String, dynamic>.from(result['answers'] ?? {});
-        //   for (int i = 0; i < qs.length; i++) {
-        //     final v = savedAnswers[qs[i].id];
-        //     if (v is num) initAns[i] = v.toInt();
       }
 
       setState(() {

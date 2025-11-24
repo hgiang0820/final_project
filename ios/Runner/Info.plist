@@ -46,8 +46,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSMicrophoneUsageDescription</key>
-<string>Ứng dụng cần truy cập micro để ghi âm cho phần Speaking test.</string>
+	<key>NSMicrophoneUsageDescription</key>	
+	<string>Ứng dụng cần truy cập micro để ghi âm cho phần Speaking test.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Ứng dụng cần truy cập camera để chụp ảnh đại diện.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ứng dụng cần truy cập thư viện ảnh để chọn ảnh đại diện.</string>
 
 </dict> 
 </plist>

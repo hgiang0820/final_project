@@ -99,7 +99,8 @@ class SWPart1PageState extends State<SWPart1Page> {
 
     recordTimer?.cancel();
     recordTimer = Timer.periodic(const Duration(seconds: 1), (t) async {
-      if (!mounted || isFinishedAll) { // ✅ guard
+      if (!mounted || isFinishedAll) {
+        // ✅ guard
         t.cancel();
         return;
       }
@@ -287,7 +288,8 @@ class SWPart1PageState extends State<SWPart1Page> {
     // Nếu có thời gian chuẩn bị
     if (q.prepareTime! > 0) {
       prepareTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-        if (!mounted || isFinishedAll) { // ✅ guard
+        if (!mounted || isFinishedAll) {
+          // ✅ guard
           t.cancel();
           return;
         }
@@ -340,8 +342,12 @@ class SWPart1PageState extends State<SWPart1Page> {
 
   Future<void> forceStopAll() async {
     // Hủy mọi timer
-    try { prepareTimer?.cancel(); } catch (_) {}
-    try { recordTimer?.cancel(); } catch (_) {}
+    try {
+      prepareTimer?.cancel();
+    } catch (_) {}
+    try {
+      recordTimer?.cancel();
+    } catch (_) {}
 
     // Stop recorder immediately if recording
     try {
