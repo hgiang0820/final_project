@@ -125,8 +125,7 @@ Future<void> seedLRTest01() async {
       .doc('part1')
       .set({
         'type': 'Picture Description',
-        'audioPath':
-            'LR_practice_tests/$testId/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'LR_practice_tests/$testId/part1/LR_test1_part1.wav',
         'questionCount': 6,
       });
 
@@ -482,7 +481,7 @@ Future<void> seedLRTest01() async {
       .doc('part2')
       .set({
         'type': 'Question & Response',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part1/LR_test1_part2.wav',
         'questionCount': 25,
       });
 
@@ -493,7 +492,7 @@ Future<void> seedLRTest01() async {
     await db
         .collection('practice_tests')
         .doc('LR_practice_tests')
-      .collection('test_number')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part2')
@@ -1100,7 +1099,7 @@ Future<void> seedLRTest01() async {
       .set({
         'type': 'Conversations',
         'audioPath':
-            'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3', // Make sure you have the audio file for this part
+            'input_tests/testLR/part1/LR_test1_part3.wav', // Make sure you have the audio file for this part
         'questionCount': 39,
       });
 
@@ -1545,7 +1544,7 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
       .doc('part4')
       .set({
         'type': 'Talks',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part1/LR_test1_part4.wav',
         'questionCount': 30,
       });
 
@@ -1817,7 +1816,7 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
     await db
         .collection('practice_tests')
         .doc('LR_practice_tests')
-      .collection('test_number')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part5')
@@ -2057,7 +2056,7 @@ ____(146)____. We apologize for any inconvenience and thank you for your patienc
     await db
         .collection('practice_tests')
         .doc('LR_practice_tests')
-      .collection('test_number')
+        .collection('test_number')
         .doc(testId)
         .collection('parts')
         .doc('part6')
@@ -2280,7 +2279,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
   final fullPart7Questions = [
     // Passage 1 (Q147-148)
     {
-      'question': passage147_148 + "\n\n147. What is the special offer?",
+      'question': "$passage147_148\n\n147. What is the special offer?",
       'options': [
         "A discount on cleaning two coats",
         "Free cleaning for new customers",
@@ -2293,8 +2292,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage147_148 +
-          "\n\n148. When is Franklin Green Dry Cleaners closed?",
+          "$passage147_148\n\n148. When is Franklin Green Dry Cleaners closed?",
       'options': ["Monday", "Wednesday", "Saturday", "Sunday"],
       'correctIndex': 3,
       'explain':
@@ -2302,8 +2300,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     // Passage 2 (Q149-150)
     {
-      'question':
-          passage149_150 + "\n\n149. What is the purpose of the e-mail?",
+      'question': "$passage149_150\n\n149. What is the purpose of the e-mail?",
       'options': [
         "To announce a new company policy",
         "To ask employees to set new goals",
@@ -2316,8 +2313,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage149_150 +
-          "\n\n150. What must employees do before their meeting?",
+          "$passage149_150\n\n150. What must employees do before their meeting?",
       'options': [
         "Schedule a follow-up appointment",
         "Complete a self-assessment form",
@@ -2331,8 +2327,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Passage 3 (Q151-152)
     {
       'question':
-          passage151_152 +
-          "\n\n151. What did Maria leave in the conference room?",
+          "$passage151_152\n\n151. What did Maria leave in the conference room?",
       'options': ["Her phone", "Her notes", "Her laptop", "A laptop accessory"],
       'correctIndex': 3,
       'explain':
@@ -2340,8 +2335,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage151_152 +
-          "\n\n152. At 3:10 P.M., what does Kenji offer to do?",
+          "$passage151_152\n\n152. At 3:10 P.M., what does Kenji offer to do?",
       'options': [
         "Bring the charger to Maria's home",
         "Wait for Maria at the office",
@@ -2354,8 +2348,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     // Passage 4 (Q153-154)
     {
-      'question':
-          passage153_154 + "\n\n153. What is the purpose of the notice?",
+      'question': "$passage153_154\n\n153. What is the purpose of the notice?",
       'options': [
         "To advertise an apartment for rent",
         "To announce a rent increase",
@@ -2367,7 +2360,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
           "The notice informs residents that 'the water in the building will be shut off for scheduled maintenance'.",
     },
     {
-      'question': passage153_154 + "\n\n154. What are residents advised to do?",
+      'question': "$passage153_154\n\n154. What are residents advised to do?",
       'options': [
         "Avoid using the elevators",
         "Store some water beforehand",
@@ -2381,7 +2374,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Passage 5 (Q155-157)
     {
       'question':
-          passage155_157 + "\n\n155. What is the main topic of the article?",
+          "$passage155_157\n\n155. What is the main topic of the article?",
       'options': [
         "A new mobile application",
         "A city-wide sustainability plan",
@@ -2394,8 +2387,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage155_157 +
-          "\n\n156. How much does a monthly pass for the program cost?",
+          "$passage155_157\n\n156. How much does a monthly pass for the program cost?",
       'options': ["\$2", "\$25", "\$30", "\$200"],
       'correctIndex': 2,
       'explain':
@@ -2403,8 +2395,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage155_157 +
-          "\n\n157. What might happen if the program is successful?",
+          "$passage155_157\n\n157. What might happen if the program is successful?",
       'options': [
         "The price of a ride will decrease.",
         "More bicycles will be added.",
@@ -2418,8 +2409,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Passage 6 (Q158-160)
     {
       'question':
-          passage158_160 +
-          "\n\n158. Why is David Miller returning the printer ink?",
+          "$passage158_160\n\n158. Why is David Miller returning the printer ink?",
       'options': [
         "It was damaged.",
         "It was the wrong color.",
@@ -2432,8 +2422,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage158_160 +
-          "\n\n159. What problem did Mr. Miller have with the pens?",
+          "$passage158_160\n\n159. What problem did Mr. Miller have with the pens?",
       'options': [
         "He received the wrong quantity.",
         "The ink smudges.",
@@ -2445,8 +2434,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage158_160 +
-          "\n\n160. What does Mr. Miller want the company to do?",
+          "$passage158_160\n\n160. What does Mr. Miller want the company to do?",
       'options': [
         "Send him a replacement",
         "Give him store credit",
@@ -2463,10 +2451,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Double Passage 1 (Q176-180)
     {
       'question':
-          passage176_180_1 +
-          "\n\n" +
-          passage176_180_2 +
-          "\n\n176. What is the purpose of Mr. Carter's e-mail?",
+          "$passage176_180_1\n\n$passage176_180_2\n\n176. What is the purpose of Mr. Carter's e-mail?",
       'options': [
         "To apply for a job",
         "To request catering prices",
@@ -2479,10 +2464,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage176_180_1 +
-          "\n\n" +
-          passage176_180_2 +
-          "\n\n177. How many people are expected to attend the main presentation?",
+          "$passage176_180_1\n\n$passage176_180_2\n\n177. How many people are expected to attend the main presentation?",
       'options': ["45", "50", "400", "500"],
       'correctIndex': 2,
       'explain':
@@ -2490,10 +2472,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage176_180_1 +
-          "\n\n" +
-          passage176_180_2 +
-          "\n\n178. In the webpage, which room will TechCorp likely book for its main presentation?",
+          "$passage176_180_1\n\n$passage176_180_2\n\n178. In the webpage, which room will TechCorp likely book for its main presentation?",
       'options': [
         "Grand Ballroom",
         "Executive Suite A",
@@ -2506,10 +2485,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage176_180_1 +
-          "\n\n" +
-          passage176_180_2 +
-          "\n\n179. What facilities will be needed in the afternoon?",
+          "$passage176_180_1\n\n$passage176_180_2\n\n179. What facilities will be needed in the afternoon?",
       'options': [
         "The Tech Lab",
         "The Grand Ballroom",
@@ -2522,10 +2498,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage176_180_1 +
-          "\n\n" +
-          passage176_180_2 +
-          "\n\n180. What additional service does Mr. Carter require?",
+          "$passage176_180_1\n\n$passage176_180_2\n\n180. What additional service does Mr. Carter require?",
       'options': [
         "Computer access",
         "Specialized menus",
@@ -2540,10 +2513,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Double Passage 2 (Q181-185)
     {
       'question':
-          passage181_185_1 +
-          "\n\n" +
-          passage181_185_2 +
-          "\n\n181. What is the purpose of the text message?",
+          "$passage181_185_1\n\n$passage181_185_2\n\n181. What is the purpose of the text message?",
       'options': [
         "To schedule a new service",
         "To dispute a charge",
@@ -2556,10 +2526,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage181_185_1 +
-          "\n\n" +
-          passage181_185_2 +
-          "\n\n182. In the invoice, which service was the most expensive?",
+          "$passage181_185_1\n\n$passage181_185_2\n\n182. In the invoice, which service was the most expensive?",
       'options': [
         "Weekly Lawn Maintenance",
         "Tree Pruning",
@@ -2572,20 +2539,14 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage181_185_1 +
-          "\n\n" +
-          passage181_185_2 +
-          "\n\n183. When was the tree pruning service performed?",
+          "$passage181_185_1\n\n$passage181_185_2\n\n183. When was the tree pruning service performed?",
       'options': ["June 30", "July 5", "July 7", "July 12"],
       'correctIndex': 1,
       'explain': "The invoice lists the date for 'Tree Pruning' as July 5.",
     },
     {
       'question':
-          passage181_185_1 +
-          "\n\n" +
-          passage181_185_2 +
-          "\n\n184. What does Julia indicate has already been paid for?",
+          "$passage181_185_1\n\n$passage181_185_2\n\n184. What does Julia indicate has already been paid for?",
       'options': [
         "The entire invoice amount",
         "The flower bed installation",
@@ -2598,10 +2559,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage181_185_1 +
-          "\n\n" +
-          passage181_185_2 +
-          "\n\n185. What will the revised invoice total likely be?",
+          "$passage181_185_1\n\n$passage181_185_2\n\n185. What will the revised invoice total likely be?",
       'options': ["\$350.00", "\$450.00", "\$800.00", "\$1400.00"],
       'correctIndex': 2,
       'explain':
@@ -2611,12 +2569,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     // Triple Passage 1 (Q186-190)
     {
       'question':
-          passage186_190_1 +
-          "\n\n" +
-          passage186_190_2 +
-          "\n\n" +
-          passage186_190_3 +
-          "\n\n186. What is the purpose of the first e-mail?",
+          "$passage186_190_1\n\n$passage186_190_2\n\n$passage186_190_3\n\n186. What is the purpose of the first e-mail?",
       'options': [
         "To provide feedback on a training",
         "To confirm a job offer",
@@ -2629,12 +2582,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage186_190_1 +
-          "\n\n" +
-          passage186_190_2 +
-          "\n\n" +
-          passage186_190_3 +
-          "\n\n187. In the schedule, who presents the session on company history?",
+          "$passage186_190_1\n\n$passage186_190_2\n\n$passage186_190_3\n\n187. In the schedule, who presents the session on company history?",
       'options': ["David Chen", "Kevin White", "The HR Team", "Maria Rossi"],
       'correctIndex': 3,
       'explain':
@@ -2642,12 +2590,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage186_190_1 +
-          "\n\n" +
-          passage186_190_2 +
-          "\n\n" +
-          passage186_190_3 +
-          "\n\n188. At what time did the IT training end?",
+          "$passage186_190_1\n\n$passage186_190_2\n\n$passage186_190_3\n\n188. At what time did the IT training end?",
       'options': ["1:00 PM", "2:30 PM", "4:00 PM", "5:00 PM"],
       'correctIndex': 2,
       'explain':
@@ -2655,12 +2598,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage186_190_1 +
-          "\n\n" +
-          passage186_190_2 +
-          "\n\n" +
-          passage186_190_3 +
-          "\n\n189. What is suggested in Laura Fernandez's feedback?",
+          "$passage186_190_1\n\n$passage186_190_2\n\n$passage186_190_3\n\n189. What is suggested in Laura Fernandez's feedback?",
       'options': [
         "The lunch caterer should be changed.",
         "The orientation should be longer than one day.",
@@ -2673,12 +2611,7 @@ Welcome to the TalentFirst team! We are excited to have you. Your one-day orient
     },
     {
       'question':
-          passage186_190_1 +
-          "\n\n" +
-          passage186_190_2 +
-          "\n\n" +
-          passage186_190_3 +
-          "\n\n190. Which session did Laura Fernandez rate the lowest?",
+          "$passage186_190_1\n\n$passage186_190_2\n\n$passage186_190_3\n\n190. Which session did Laura Fernandez rate the lowest?",
       'options': [
         "Company History & Values",
         "Departmental Overviews",

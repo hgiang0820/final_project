@@ -86,7 +86,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       // (D) The man is repairing a vehicle.
       'type': 'Picture description',
       'question': "",
-     'options': ['A', 'B', 'C', 'D'],
+      'options': ['A', 'B', 'C', 'D'],
       'correctIndex': 2,
       'explain':
           'The man is at a construction site and holding blueprints, which are architectural plans.',
@@ -223,7 +223,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       .doc('lisPart')
       .set({
         'type': 'Listening',
-        'audioPath': 'input_tests/testFull/lisPart/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testFull/lisPart/input_Full_lisPart.mp3',
         'questionCount': 12,
       });
 
@@ -480,7 +480,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
         .doc(id)
         .set({
           'type': q['type'],
-          'imagePath': q['imagePath'] ?? null,
+          'imagePath': q['imagePath'],
           'text': q['text'],
           'prepare_time': q['prepare_time'],
           'record_time': q['record_time'],
@@ -555,7 +555,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
         .doc(id)
         .set({
           'type': q['type'],
-          'imagePath': q['imagePath'] ?? null,
+          'imagePath': q['imagePath'],
           'text': q['text'],
           // 'record_time': q['record_time'],
           'sample_answer': q['sample_answer'],

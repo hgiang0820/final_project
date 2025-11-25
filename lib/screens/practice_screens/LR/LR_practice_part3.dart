@@ -245,31 +245,27 @@ class LRPracticePart3State extends State<LRPracticePart3> {
                       ),
                       if (showAnswers)
                         Card(
-                          elevation: 2,
-                          color: Colors.blue[100],
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          elevation: 1.5,
+                          color: Colors.blue[50],
                           child: ExpansionTile(
-                            initiallyExpanded: false,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.lightbulb_outline,
-                                  color: Colors.blue[700],
-                                ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                  'Explain',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                            title: const Text(
+                              'Explain',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
                             ),
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Row(children: [Text(q.explain)]),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(q.explain),
+                                ),
                               ),
                             ],
                           ),

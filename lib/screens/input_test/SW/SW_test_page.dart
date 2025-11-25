@@ -251,7 +251,7 @@ class _SWTestPage extends State<SWTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Quick Test S&W'),
+            const Text('Quick S&W Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),

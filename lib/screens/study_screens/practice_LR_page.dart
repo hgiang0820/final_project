@@ -84,82 +84,6 @@ class PracticeLRPageState extends State<PracticeLRPage> {
     super.dispose();
   }
 
-  // Future<void> checkShowAnswersMode() async {
-  //   try {
-  //     final status = await roadmapRepo.getLessonStatus(
-  //       itemIndex: widget.itemIndex ?? -1,
-  //       // testType: "LR_practice_tests",
-  //     );
-  //     if (status == 'done') {
-  //       final saved = await roadmapRepo.getSavedResult(
-  //         itemIndex: widget.itemIndex ?? -1,
-  //         // testType: "LR_practice_tests",
-  //       );
-  //       final savedTotal = (saved?['totalScore'] ?? 0) as int;
-  //       final savedAnswers = List<int?>.from(saved?['answers'] ?? {});
-
-  //       // Gán state tổng
-  //       setState(() {
-  //         showAnswers = true;
-  //         totalScore = savedTotal;
-  //         answers = savedAnswers; // có key part1..part7
-  //         remainingSeconds = 0;
-  //       });
-
-  //       // Dừng đồng hồ
-  //       // countdownTimer?.cancel();
-
-  //       // Bật chế độ hiển thị đáp án
-  //       // part1Key.currentState?.showAnswersMode();
-  //       // part2Key.currentState?.showAnswersMode();
-  //       // part3Key.currentState?.showAnswersMode();
-  //       // part4Key.currentState?.showAnswersMode();
-  //       // part5Key.currentState?.showAnswersMode();
-  //       // part6Key.currentState?.showAnswersMode();
-  //       // part7Key.currentState?.showAnswersMode();
-
-  //       // // NẠP lại các lựa chọn đã chọn trước đó (map questionId -> selectedIndex)
-  //       // part1Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part1'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part1']),
-  //       // );
-  //       // part2Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part2'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part2']),
-  //       // );
-  //       // part3Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part3'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part3']),
-  //       // );
-  //       // part4Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part4'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part4']),
-  //       // );
-  //       // part5Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part5'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part5']),
-  //       // );
-  //       // part6Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part6'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part6']),
-  //       // );
-  //       // part7Key.currentState?.loadSavedAnswers(
-  //       //   savedAnswers['part7'] == null
-  //       //       ? null
-  //       //       : Map<String, dynamic>.from(savedAnswers['part7']),
-  //       // );
-  //     }
-  //   } catch (_) {
-  //     // ignore errors
-  //   }
-  // }
-
   Future<void> _load() async {
     try {
       final meta = await testRepo.getPartMetaByLesson(
@@ -256,6 +180,10 @@ class PracticeLRPageState extends State<PracticeLRPage> {
 
     try {
       await roadmapRepo.savePracticeLessonResult(
+        materialId: materialId,
+        levelId: levelId,
+        partId: partId,
+        lessonId: lessonId,
         itemIndex: widget.itemIndex ?? -1,
         score: score,
         total: questions.length,

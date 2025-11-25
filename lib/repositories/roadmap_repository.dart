@@ -180,6 +180,10 @@ class RoadmapRepository {
   Future<void> savePracticeLessonResult({
     // required String testId,
     // required int totalScore,
+    required String materialId,
+    required String levelId,
+    required String partId,
+    required String lessonId,
     required int itemIndex,
     required int score,
     required int total,
@@ -187,8 +191,8 @@ class RoadmapRepository {
     Map<String, dynamic>? evaluationResults,
   }) async {
     final uid = _auth.currentUser!.uid;
-    final lastestRoadmap = await getLatestRoadmap();
-    final roadmapId = lastestRoadmap?['roadmapId'] as String?;
+    final latestRoadmap = await getLatestRoadmap();
+    final roadmapId = latestRoadmap?['roadmapId'] as String?;
 
     // ✅ FIX: Check if roadmapId is null before using it
     if (roadmapId == null) {
@@ -226,6 +230,11 @@ class RoadmapRepository {
     await docRef.set({
       'items': items,
       'updatedAt': FieldValue.serverTimestamp(),
+      'latestLesson': lessonId,
+      'latestMaterial': materialId,
+      'latestLevel': levelId,
+      'latestPart': partId,
+      'latestIndex': itemIndex,
       // 'lastestTest': testId, // lưu ý check testId là gì
     }, SetOptions(merge: true));
   }

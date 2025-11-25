@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/models/question_LR_model.dart';
 import 'package:final_project/models/question_SW_model.dart';
 import 'package:final_project/repositories/result_repository.dart';
 import 'package:final_project/repositories/input_test_repository.dart';
@@ -17,13 +18,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class PracticeSWPage extends StatefulWidget {
+class PracticeFullPage extends StatefulWidget {
   /// format: materialId|levelId|partId|lessonId
   final String practiceId;
   final Future<void> Function()? onDone;
   final int? itemIndex;
 
-  const PracticeSWPage({
+  const PracticeFullPage({
     super.key,
     required this.practiceId,
     this.onDone,
@@ -31,10 +32,10 @@ class PracticeSWPage extends StatefulWidget {
   });
 
   @override
-  State<PracticeSWPage> createState() => PracticeSWPageState();
+  State<PracticeFullPage> createState() => PracticeFullPageState();
 }
 
-class PracticeSWPageState extends State<PracticeSWPage> {
+class PracticeFullPageState extends State<PracticeFullPage> {
   final testRepo = InputTestRepository();
   final resultRepo = ResultRepository();
   final roadmapRepo = RoadmapRepository();
@@ -46,7 +47,13 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
   late final String materialId, levelId, partId, lessonId;
 
-  List<QuestionSW> questions = [];
+  // Listening & Reading specific
+  List<QuestionLR> questionsLR = [];
+  List<int?> answersLR = [];
+  String? audioUrlLR;
+
+  // Speaking & Writing specific
+  List<QuestionSW> questionsSW = [];
   int currentIndex = 0;
 
   bool isPlaying = false;
@@ -78,14 +85,26 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   Map<String, dynamic> evaluationResults = {};
 
   static const _partName = {
-    'part1': 'Speaking - Read a text aloud',
-    'part2': 'Speaking - Description a picture',
-    'part3': 'Speaking - Respond to questions',
-    'part4': 'Speaking - Respond to questions using information provided',
-    'part5': 'Speaking - Express an opinion',
-    'part6': 'Writing - Write a sentence based on picture',
-    'part7': 'Writing - Respond to a written request',
-    'part8': 'Writing - Write an opinion essay',
+    // Listening
+    'lis1': 'Listening - Part 1: Picture Description',
+    'lis2': 'Listening - Part 2: Question & Response',
+    'lis3': 'Listening - Part 3: Conversations',
+    'lis4': 'Listening - Part 4: Talks',
+    // Reading
+    'read1': 'Reading - Part 5: Incomplete Sentences',
+    'read2': 'Reading - Part 6: Text Completion',
+    'read3': 'Reading - Part 7: Reading Comprehension',
+    // Speaking
+    'speak1': 'Speaking - Part 1: Read a text aloud',
+    'speak2': 'Speaking - Part 2: Description a picture',
+    'speak3': 'Speaking - Part 3: Respond to questions',
+    'speak4':
+        'Speaking - Part 4: Respond to questions using information provided',
+    'speak5': 'Speaking - Part 5: Express an opinion',
+    // Writing
+    'write1': 'Writing - Part 6: Write a sentence based on picture',
+    'write2': 'Writing - Part 7: Respond to a written request',
+    'write3': 'Writing - Part 8: Write an opinion essay',
   };
 
   @override
@@ -129,82 +148,29 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     return status.isGranted;
   }
 
+  bool _isListeningPart() {
+    return partId.startsWith('lis');
+  }
+
+  bool _isReadingPart() {
+    return partId.startsWith('read');
+  }
+
+  bool _isSpeakingPart() {
+    return partId.startsWith('speak');
+  }
+
+  bool _isWritingPart() {
+    return partId.startsWith('write');
+  }
+
   Future<void> _load() async {
     try {
-      final qs = await testRepo.getQuestionsSWByLesson(
-        materialId: materialId,
-        levelId: levelId,
-        partId: partId,
-        lessonId: lessonId,
-      );
-
-      final latest = await roadmapRepo.getLatestRoadmap();
-      // print(latest);
-
-      if (!mounted) return;
-
-      print(latest?['data']['items'][widget.itemIndex ?? -1]);
-
-      final item = latest != null
-          ? (latest['data']['items'] as List<dynamic>? ?? [])
-                    .asMap()
-                    .containsKey(widget.itemIndex ?? -1)
-                ? (latest['data']['items'] as List<dynamic>)[widget.itemIndex ??
-                      -1]
-                : null
-          : null;
-
-      bool review = false;
-      DateTime? ts;
-      int restoredScore = 0;
-
-      if (item['answer'] != null || item['status'] == 'done') {
-        review = true;
-        final t = item['createdAt'];
-        if (t is Timestamp) ts = t.toDate();
-        restoredScore = (item['score'] as num?)?.toInt() ?? 0;
-
-        // Load saved answers/recordings
-        final saved = Map<String, dynamic>.from(item['answers'] ?? {});
-        for (var q in qs) {
-          final v = saved[q.id];
-          if (v is String) {
-            if (v.startsWith('http')) {
-              remotePlayUrls[q.id] = v; // URL for speaking
-            } else {
-              answers[q.id] = v; // Text for writing
-            }
-          }
-        }
-
-        // Load evaluation results
-        final results = Map<String, dynamic>.from(item['results'] ?? {});
-        if (results.isNotEmpty) {
-          evaluationResults = results;
-        }
+      if (_isListeningPart() || _isReadingPart()) {
+        await _loadListeningReading();
+      } else if (_isSpeakingPart() || _isWritingPart()) {
+        await _loadSpeakingWriting();
       }
-
-      // Initialize controllers for writing questions
-      for (var q in qs) {
-        if (_isSpeakingPart(partId)) {
-          playerKeys[q.id] = GlobalKey<AudioPlayerWidgetState>();
-        } else {
-          textControllers[q.id] = TextEditingController(
-            text: answers[q.id] ?? '',
-          );
-          answers[q.id] = answers[q.id] ?? '';
-        }
-      }
-
-      setState(() {
-        questions = qs;
-        showAnswers = review;
-        latestAttemptTime = ts;
-        isFinishedAll = review;
-        isStarted = review; // Không show dialog Start khi review mode
-        totalScore = restoredScore;
-        correctCount = restoredScore;
-      });
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -213,13 +179,199 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     }
   }
 
-  bool _isSpeakingPart(String part) {
-    return part == 'part1' ||
-        part == 'part2' ||
-        part == 'part3' ||
-        part == 'part4' ||
-        part == 'part5';
+  Future<void> _loadListeningReading() async {
+    final meta = await testRepo.getPartMetaByLesson(
+      materialId: materialId,
+      levelId: levelId,
+      partId: partId,
+      lessonId: lessonId,
+    );
+    final qs = await testRepo.getQuestionsLRByLesson(
+      materialId: materialId,
+      levelId: levelId,
+      partId: partId,
+      lessonId: lessonId,
+    );
+
+    final audioPath = meta['audioPath'] as String?;
+    final url = (audioPath == null || audioPath.isEmpty)
+        ? null
+        : testRepo.getPublicUrl('practice_tests', audioPath);
+
+    final latest = await roadmapRepo.getLatestRoadmap();
+
+    if (!mounted) return;
+
+    final initAns = List<int?>.filled(qs.length, null);
+    var review = false;
+    var restoredScore = 0;
+    DateTime? ts;
+
+    final item = latest != null
+        ? (latest['data']['items'] as List<dynamic>? ?? []).asMap().containsKey(
+                widget.itemIndex ?? -1,
+              )
+              ? (latest['data']['items'] as List<dynamic>)[widget.itemIndex ??
+                    -1]
+              : null
+        : null;
+
+    if (item['answers'] != null || item['status'] == 'done') {
+      final saved = Map<String, dynamic>.from(item['answers'] ?? {});
+      for (int i = 0; i < qs.length; i++) {
+        final v = saved[qs[i].id];
+        if (v is num) initAns[i] = v.toInt();
+      }
+      review = true;
+      restoredScore = (item['score'] as num?)?.toInt() ?? 0;
+      final t = item['createdAt'];
+      if (t is Timestamp) ts = t.toDate();
+    }
+
+    setState(() {
+      questionsLR = qs;
+      answersLR = initAns;
+      audioUrlLR = url;
+      showAnswers = review;
+      correctCount = review ? restoredScore : 0;
+      latestAttemptTime = ts;
+      isStarted = review;
+      isFinishedAll = review;
+    });
+
+    if (url != null) await player.setUrl(url);
   }
+
+  Future<void> _loadSpeakingWriting() async {
+    final qs = await testRepo.getQuestionsSWByLesson(
+      materialId: materialId,
+      levelId: levelId,
+      partId: partId,
+      lessonId: lessonId,
+    );
+
+    final latest = await roadmapRepo.getLatestRoadmap();
+
+    if (!mounted) return;
+
+    final item = latest != null
+        ? (latest['data']['items'] as List<dynamic>? ?? []).asMap().containsKey(
+                widget.itemIndex ?? -1,
+              )
+              ? (latest['data']['items'] as List<dynamic>)[widget.itemIndex ??
+                    -1]
+              : null
+        : null;
+
+    bool review = false;
+    DateTime? ts;
+    int restoredScore = 0;
+
+    if (item['answer'] != null || item['status'] == 'done') {
+      review = true;
+      final t = item['createdAt'];
+      if (t is Timestamp) ts = t.toDate();
+      restoredScore = (item['score'] as num?)?.toInt() ?? 0;
+
+      // Load saved answers/recordings
+      final saved = Map<String, dynamic>.from(item['answers'] ?? {});
+      for (var q in qs) {
+        final v = saved[q.id];
+        if (v is String) {
+          if (v.startsWith('http')) {
+            remotePlayUrls[q.id] = v; // URL for speaking
+          } else {
+            answers[q.id] = v; // Text for writing
+          }
+        }
+      }
+
+      // Load evaluation results
+      final results = Map<String, dynamic>.from(item['results'] ?? {});
+      if (results.isNotEmpty) {
+        evaluationResults = results;
+      }
+    }
+
+    // Initialize controllers for writing questions
+    for (var q in qs) {
+      if (_isSpeakingPart()) {
+        playerKeys[q.id] = GlobalKey<AudioPlayerWidgetState>();
+      } else {
+        textControllers[q.id] = TextEditingController(
+          text: answers[q.id] ?? '',
+        );
+        answers[q.id] = answers[q.id] ?? '';
+      }
+    }
+
+    setState(() {
+      questionsSW = qs;
+      showAnswers = review;
+      latestAttemptTime = ts;
+      isFinishedAll = review;
+      isStarted = review;
+      totalScore = restoredScore;
+      correctCount = restoredScore;
+    });
+  }
+
+  // ========== Listening & Reading Methods ==========
+
+  int _calcScoreLR() {
+    var s = 0;
+    for (int i = 0; i < questionsLR.length; i++) {
+      final a = answersLR[i];
+      if (a != null && a == questionsLR[i].correctIndex) s++;
+    }
+    return s;
+  }
+
+  Future<void> _submitLR() async {
+    if (!mounted) return;
+
+    final score = _calcScoreLR();
+    setState(() {
+      showAnswers = true;
+      correctCount = score;
+      latestAttemptTime = DateTime.now();
+    });
+
+    final byId = <String, int?>{
+      for (int i = 0; i < questionsLR.length; i++)
+        questionsLR[i].id: answersLR[i],
+    };
+
+    try {
+      await roadmapRepo.savePracticeLessonResult(
+        materialId: materialId,
+        levelId: levelId,
+        partId: partId,
+        lessonId: lessonId,
+        itemIndex: widget.itemIndex ?? -1,
+        score: score,
+        total: questionsLR.length,
+        answersByQuestionId: byId,
+      );
+    } catch (e) {
+      debugPrint('Error saving practice result: $e');
+    }
+
+    try {
+      await widget.onDone?.call();
+    } catch (_) {}
+  }
+
+  void _retakeLR() {
+    if (!mounted) return;
+    setState(() {
+      answersLR = List<int?>.filled(questionsLR.length, null);
+      showAnswers = false;
+      correctCount = 0;
+    });
+  }
+
+  // ========== Speaking & Writing Methods ==========
 
   Future<void> _startRecording(String questionId, int recordTime) async {
     if (isFinishedAll) return;
@@ -247,7 +399,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         await _stopRecording(questionId);
         t.cancel();
 
-        if (currentIndex < questions.length - 1) {
+        if (currentIndex < questionsSW.length - 1) {
           _startQuestion(currentIndex + 1);
         } else {
           _onTestFinished();
@@ -277,9 +429,9 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     // ✅ Allow navigation in review mode (when showAnswers is true)
     if (isFinishedAll && !showAnswers) return;
 
-    final q = questions[index];
+    final q = questionsSW[index];
 
-    if (_isSpeakingPart(partId)) {
+    if (_isSpeakingPart()) {
       setState(() {
         currentIndex = index;
         remainingPrepareSeconds = q.prepareTime ?? 0;
@@ -311,8 +463,8 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     } else {
       // Writing part
       FocusScope.of(context).unfocus();
-      if (questions.isNotEmpty && currentIndex < questions.length) {
-        final currentQuestionId = questions[currentIndex].id;
+      if (questionsSW.isNotEmpty && currentIndex < questionsSW.length) {
+        final currentQuestionId = questionsSW[currentIndex].id;
         answers[currentQuestionId] =
             textControllers[currentQuestionId]?.text ?? '';
       }
@@ -321,8 +473,8 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         currentIndex = index;
       });
 
-      if (index < questions.length) {
-        final newQuestionId = questions[index].id;
+      if (index < questionsSW.length) {
+        final newQuestionId = questionsSW[index].id;
         final savedAnswer = answers[newQuestionId] ?? '';
         textControllers[newQuestionId]?.text = savedAnswer;
       }
@@ -338,12 +490,12 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     // ✅ Tự động submit sau khi record xong câu cuối
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _submit();
+        _submitSW();
       }
     });
   }
 
-  void _retake() {
+  void _retakeSW() {
     if (!mounted) return;
     FocusScope.of(context).unfocus();
 
@@ -365,7 +517,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     _startQuestion(0);
   }
 
-  Future<void> _submit() async {
+  Future<void> _submitSW() async {
     if (!mounted) return;
 
     // ✅ Prevent duplicate submission
@@ -378,7 +530,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     final Map<String, dynamic> submittedAnswers = {};
     Map<String, dynamic> result = {};
 
-    if (_isSpeakingPart(partId)) {
+    if (_isSpeakingPart()) {
       final uploadedUrls = await _ensureRecordingsUploaded();
       submittedAnswers.addAll(uploadedUrls);
 
@@ -387,7 +539,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       print('Submitted answers: $submittedAnswers');
       showFeedbacksMode(result['results']);
     } else {
-      for (var q in questions) {
+      for (var q in questionsSW) {
         final txt = textControllers[q.id]?.text ?? '';
         answers[q.id] = txt;
         submittedAnswers[q.id] = txt;
@@ -402,7 +554,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       isFinishedAll = true;
       isStarted = true;
       latestAttemptTime = DateTime.now();
-      if (_isSpeakingPart(partId)) {
+      if (_isSpeakingPart()) {
         totalScore = result['score'] ?? 0;
         correctCount = result['score'] ?? 0;
       } else {
@@ -415,26 +567,9 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     });
     print('Total score: $totalScore, Correct count: $correctCount');
 
-    // final byId = <String, int?>{
-    //   // for (int i = 0; i < questions.length; i++) questions[i].id: answers[i],
-    // };
-
     // Save to Firestore
     try {
-      final scoreToSave = _isSpeakingPart(partId) ? totalScore : correctCount;
-      // await resultRepo.savePracticeAttempt(
-      //   materialId: materialId,
-      //   levelId: levelId,
-      //   partId: partId,
-      //   lessonId: lessonId,
-      //   score: scoreToSave,
-      //   total: questions.length,
-      //   answersByQuestionId: submittedAnswers.map(
-      //     (k, v) => MapEntry(k, v),
-      //   ), // Map<String, dynamic>
-      // );
-      print(partId);
-      print('Score to save: $scoreToSave');
+      final scoreToSave = _isSpeakingPart() ? totalScore : correctCount;
       await roadmapRepo.savePracticeLessonResult(
         materialId: materialId,
         levelId: levelId,
@@ -442,10 +577,12 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         lessonId: lessonId,
         itemIndex: widget.itemIndex ?? -1,
         score: scoreToSave,
-        total: questions.length * 3,
+        total: _isSpeakingPart()
+            ? questionsSW.length * 3
+            : questionsSW.length * 3,
         answersByQuestionId: submittedAnswers.map((k, v) => MapEntry(k, v)),
         evaluationResults: result['results'] as Map<String, dynamic>?,
-      ); // Map<String, dynamic>);
+      );
       print(submittedAnswers.map((k, v) => MapEntry(k, v)));
     } catch (e) {
       debugPrint('Error saving practice result: $e');
@@ -499,7 +636,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         debugPrint('✅ Uploaded $questionId -> $publicUrl');
       } catch (e, st) {
         debugPrint('❌ Failed to upload $questionId: $e\n$st');
-        // show snackbar cho user (không throw, để có thể submit phần khác)
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Không upload được audio $questionId: $e')),
@@ -535,7 +671,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     setState(() {
       evaluationResults = normalized;
       isFinishedAll = true;
-      isStarted = true; // ✅ bỏ dialog Start khi review
+      isStarted = true;
     });
   }
 
@@ -546,14 +682,12 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     Map<String, dynamic> results = {};
     var imageUrl = '';
 
-    for (var q in questions) {
-      // final answer = answers[q.id] ?? '';
+    for (var q in questionsSW) {
       final audioUrl = uploadedUrls[q.id];
       debugPrint('Audio URL for ${q.id}: $audioUrl');
       if (q.type == 'Describe a picture' ||
           q.type == "Respond to questions using information provided") {
         imageUrl =
-            // "${q.imagePath}";
             "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/practice_tests/${q.imagePath}";
       } else {
         imageUrl = '';
@@ -570,13 +704,11 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       }
       try {
         final resp = await api.submitSpeaking(
-          // requirement: "${q.requirement} ${q.directions}  ${q.text} ",
           question: "${q.type} ${q.text} $imageUrl",
           audio_url: audioUrl,
           max_score: q.maxScore,
         );
 
-        // Lưu đủ data cho từng câu
         results[q.id] = {
           "score": resp['score'] ?? 0,
           "transcript": resp['transcript'] ?? "No transcript.",
@@ -597,11 +729,10 @@ class PracticeSWPageState extends State<PracticeSWPage> {
         0,
         (sum, r) => sum + ((r['score'] ?? 0) as int),
       ),
-      // 'score': 100, //// CẦN CHỈNH LẠI SCORE
       'total': 18,
       'answerAudioUrls': uploadedUrls,
       'answers': uploadedUrls,
-      'results': results, // chứa thông tin chi tiết từng câu
+      'results': results,
     };
   }
 
@@ -611,24 +742,21 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     Map<String, dynamic> results = {};
     var imageUrl = '';
 
-    for (var q in questions) {
+    for (var q in questionsSW) {
       final answer = answers[q.id] ?? '';
       if (q.type == 'Write a sentence based on a picture') {
         imageUrl =
-            // "${q.imagePath}";
             "https://ewycqwtiuttrvpubkwgm.supabase.co/storage/v1/object/public/practice_tests/${q.imagePath}";
       } else {
         imageUrl = '';
       }
       try {
         final resp = await api.submitWriting(
-          // requirement: "${q.requirement} ${q.directions}  ${q.text} ",
           requirement: "${q.type} ${q.text} ${q.directions} $imageUrl",
           answer: answer,
           max_score: q.maxScore,
         );
 
-        // Lưu đủ data cho từng câu
         results[q.id] = {
           "score": resp['score'] ?? 0,
           "grammar_feedback": resp['grammar_feedback'] ?? "No grammar feedback",
@@ -650,7 +778,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       ),
       'total': 12,
       'answers': answers,
-      'results': results, // chứa thông tin chi tiết từng câu
+      'results': results,
     };
   }
 
@@ -678,12 +806,12 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
         title: Text(
-          _isSpeakingPart(partId) ? 'Speaking Practice' : 'Writing Practice',
+          _isSpeakingPart() ? 'Speaking Practice' : 'Writing Practice',
         ),
         content: Text(
-          _isSpeakingPart(partId)
-              ? 'You have ${questions.length} questions. You will have time to prepare before recording your answer.'
-              : 'You have ${questions.length} questions to answer. Good luck!',
+          _isSpeakingPart()
+              ? 'You have ${questionsSW.length} questions. You will have time to prepare before recording your answer.'
+              : 'You have ${questionsSW.length} questions to answer. Good luck!',
         ),
         actions: [
           TextButton(
@@ -718,7 +846,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
     final url = remotePlayUrls[questionId];
     if (url == null) return const SizedBox();
 
-    // Tạo key nếu chưa có
     netPlayerKeys.putIfAbsent(
       questionId,
       () => GlobalKey<NetworkAudioPlayerWidgetState>(),
@@ -738,29 +865,230 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   Widget build(BuildContext context) {
     final titlePart = _partName[partId] ?? partId.toUpperCase();
 
-    if (questions.isEmpty) {
+    // ========== Listening & Reading Build ==========
+    if (_isListeningPart() || _isReadingPart()) {
+      if (questionsLR.isEmpty) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Practice • $titlePart • ${lessonId.toUpperCase()}'),
+          ),
+          body: const Center(child: CircularProgressIndicator()),
+        );
+      }
+
       return Scaffold(
         appBar: AppBar(
           title: Text('Practice • $titlePart • ${lessonId.toUpperCase()}'),
+          actions: [
+            if (!showAnswers)
+              TextButton.icon(
+                onPressed: _submitLR,
+                icon: const Icon(Icons.check, color: Colors.white),
+                label: const Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+              )
+            else ...[
+              TextButton.icon(
+                onPressed: _retakeLR,
+                icon: const Icon(Icons.replay, color: Colors.white),
+                label: const Text(
+                  'Retake',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(backgroundColor: Colors.orange),
+              ),
+              const SizedBox(width: 8),
+              TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close, color: Colors.white),
+                label: const Text(
+                  'Close',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(backgroundColor: Colors.grey),
+              ),
+            ],
+            const SizedBox(width: 8),
+          ],
         ),
-        body: const Center(child: CircularProgressIndicator()),
+        body: Column(
+          children: [
+            if (showAnswers)
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    Text(
+                      'Score: $correctCount / ${questionsLR.length}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    if (latestAttemptTime != null)
+                      Text(
+                        'Latest: $latestAttemptTime',
+                        style: TextStyle(color: Colors.grey[700], fontSize: 12),
+                      ),
+                  ],
+                ),
+              ),
+            if (audioUrlLR != null)
+              Card(
+                margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                color: Colors.grey[200],
+                child: ListTile(
+                  title: const Text(
+                    'Lesson Audio',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                    onPressed: () async =>
+                        isPlaying ? player.pause() : player.play(),
+                  ),
+                ),
+              ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 12),
+                itemCount: questionsLR.length,
+                itemBuilder: (context, i) {
+                  final q = questionsLR[i];
+                  final imageUrl =
+                      (q.imagePath != null && q.imagePath!.isNotEmpty)
+                      ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+                      : null;
+
+                  Color? colorOf(int idx) {
+                    if (!showAnswers) return null;
+                    final isSel = answersLR[i] == idx;
+                    final isCor = q.correctIndex == idx;
+                    if (isCor) return Colors.green;
+                    if (isSel && !isCor) return Colors.red;
+                    return null;
+                  }
+
+                  FontWeight fwOf(int idx) =>
+                      showAnswers &&
+                          (answersLR[i] == idx || q.correctIndex == idx)
+                      ? FontWeight.bold
+                      : FontWeight.normal;
+
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Text(
+                            'Question ${i + 1}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle:
+                              (q.question != null && q.question!.isNotEmpty)
+                              ? Text(q.question!)
+                              : null,
+                        ),
+                        if (imageUrl != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                imageUrl,
+                                height: 200,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  height: 200,
+                                  color: Colors.grey[300],
+                                  alignment: Alignment.center,
+                                  child: const Text('Không tải được ảnh'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Column(
+                            children: List.generate(q.options.length, (opt) {
+                              return RadioListTile<int>(
+                                value: opt,
+                                groupValue: answersLR[i],
+                                onChanged: showAnswers
+                                    ? null
+                                    : (v) => setState(() => answersLR[i] = v),
+                                title: Text(
+                                  q.options[opt],
+                                  style: TextStyle(
+                                    color: colorOf(opt),
+                                    fontWeight: fwOf(opt),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        if (showAnswers && q.explain.isNotEmpty)
+                          Card(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            elevation: 1.5,
+                            color: Colors.blue[50],
+                            child: ExpansionTile(
+                              title: const Text(
+                                'Explain',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(q.explain),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       );
     }
 
-    // Show start dialog
-    if (!isStarted) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showStartDialog();
-      });
-    }
+    // ========== Speaking Build ==========
+    if (_isSpeakingPart()) {
+      if (questionsSW.isEmpty) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Practice • $titlePart • ${lessonId.toUpperCase()}'),
+          ),
+          body: const Center(child: CircularProgressIndicator()),
+        );
+      }
 
-    final q = questions[currentIndex];
-    final imageUrl = q.imagePath != null
-        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
-        : null;
-
-    // Speaking Part UI
-    if (_isSpeakingPart(partId)) {
       if (!isFinishedAll) {
         return Scaffold(
           appBar: AppBar(
@@ -768,7 +1096,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
             actions: [
               if (!showAnswers)
                 TextButton.icon(
-                  onPressed: _submit,
+                  onPressed: _submitSW,
                   icon: const Icon(Icons.check, color: Colors.white),
                   label: const Text(
                     'Submit',
@@ -778,7 +1106,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                 )
               else ...[
                 TextButton.icon(
-                  onPressed: _retake,
+                  onPressed: _retakeSW,
                   icon: const Icon(Icons.replay, color: Colors.white),
                   label: const Text(
                     'Retake',
@@ -806,30 +1134,40 @@ class PracticeSWPageState extends State<PracticeSWPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Question ${currentIndex + 1}/${questions.length}',
+                  'Question ${currentIndex + 1}/${questionsSW.length}',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(q.type, style: const TextStyle(fontSize: 16)),
+                Text(
+                  questionsSW[currentIndex].type,
+                  style: const TextStyle(fontSize: 16),
+                ),
                 const SizedBox(height: 8),
                 Text(
-                  q.directions,
+                  questionsSW[currentIndex].directions,
                   style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 16),
-                if (q.text != null && q.text!.isNotEmpty)
+                if (questionsSW[currentIndex].text != null &&
+                    questionsSW[currentIndex].text!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(q.text!, style: const TextStyle(fontSize: 14)),
+                    child: Text(
+                      questionsSW[currentIndex].text!,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ),
-                if (imageUrl != null)
+                if (questionsSW[currentIndex].imagePath != null)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      imageUrl,
+                      testRepo.getPublicUrl(
+                        'practice_tests',
+                        questionsSW[currentIndex].imagePath!,
+                      ),
                       height: 250,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Container(
@@ -924,7 +1262,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
             title: Text('Practice • $titlePart • ${lessonId.toUpperCase()}'),
             actions: [
               TextButton.icon(
-                onPressed: _retake,
+                onPressed: _retakeSW,
                 icon: const Icon(Icons.replay, color: Colors.white),
                 label: const Text(
                   'Retake',
@@ -954,7 +1292,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                   child: Column(
                     children: [
                       Text(
-                        'Score: $totalScore / ${questions.length * 3}',
+                        'Score: $totalScore / ${questionsSW.length * 3}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -975,9 +1313,9 @@ class PracticeSWPageState extends State<PracticeSWPage> {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(12),
-                  itemCount: questions.length,
+                  itemCount: questionsSW.length,
                   itemBuilder: (context, index) {
-                    final q = questions[index];
+                    final q = questionsSW[index];
                     final imageUrl = q.imagePath != null
                         ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
                         : null;
@@ -1027,7 +1365,6 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                                 style: TextStyle(color: Colors.red),
                               ),
                             ),
-
                           Card(
                             elevation: 2,
                             color: Colors.orange[100],
@@ -1094,9 +1431,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                               ],
                             ),
                           ),
-
                           const SizedBox(height: 10),
-
                           Card(
                             elevation: 2,
                             color: Colors.blue[100],
@@ -1122,7 +1457,10 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(16),
-                                  child: Row(children: [Text(q.sampleAnswer)]),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(q.sampleAnswer),
+                                  ),
                                 ),
                               ],
                             ),
@@ -1140,16 +1478,38 @@ class PracticeSWPageState extends State<PracticeSWPage> {
       }
     }
 
-    // Writing Part UI
+    // ========== Writing Build ==========
+    if (!isStarted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showStartDialog();
+      });
+    }
+
+    if (questionsSW.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Practice • $titlePart • ${lessonId.toUpperCase()}'),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final q = questionsSW[currentIndex];
+    final imageUrl = q.imagePath != null
+        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+        : null;
+
     return GestureDetector(
       onTap: _dismissKeyboard,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('$titlePart • Q${currentIndex + 1}/${questions.length}'),
+          title: Text(
+            '$titlePart • Q${currentIndex + 1}/${questionsSW.length}',
+          ),
           actions: [
             if (!showAnswers)
               TextButton.icon(
-                onPressed: _submit,
+                onPressed: _submitSW,
                 icon: const Icon(Icons.check, color: Colors.white),
                 label: const Text(
                   'Submit',
@@ -1159,7 +1519,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
               )
             else ...[
               TextButton.icon(
-                onPressed: _retake,
+                onPressed: _retakeSW,
                 icon: const Icon(Icons.replay, color: Colors.white),
                 label: const Text(
                   'Retake',
@@ -1217,7 +1577,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: List.generate(questions.length, (index) {
+                    children: List.generate(questionsSW.length, (index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 2),
                         child: SizedBox(

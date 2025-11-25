@@ -53,7 +53,7 @@ Future<void> seedInputLR() async {
       .doc('part1')
       .set({
         'type': 'Picture description',
-        'audioPath': 'input_tests/testLR/part1/seed_LR_test4_part1.wav',
+        'audioPath': 'input_tests/testLR/part1/input_LR_part1.mp3',
         'questionCount': 2,
       });
 
@@ -151,7 +151,7 @@ Future<void> seedInputLR() async {
       .doc('part2')
       .set({
         'type': 'Question & Response',
-        'audioPath': 'input_tests/testLR/part2/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part2/input_LR_part2.mp3',
         'questionCount': 5,
       });
 
@@ -278,7 +278,7 @@ Future<void> seedInputLR() async {
       .doc('part3')
       .set({
         'type': 'Conversations',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part3/input_LR_part3.mp3',
         'questionCount': 6,
       });
 
@@ -399,7 +399,7 @@ May I have your attention, please. This is a final boarding call for flight AZ-7
       .doc('part4')
       .set({
         'type': 'Talks',
-        'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+        'audioPath': 'input_tests/testLR/part4/input_LR_part4.mp3',
         'questionCount': 6,
       });
 

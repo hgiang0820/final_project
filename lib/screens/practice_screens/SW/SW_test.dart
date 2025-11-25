@@ -5,6 +5,7 @@ import 'package:final_project/repositories/input_test_repository.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_practice_part1.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_practice_part2.dart';
 import 'package:final_project/widgets/small_button.dart';
+import 'package:final_project/utils/toeic_score_converter.dart';
 // import 'package:final_project/services/writing_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -85,50 +86,53 @@ class _SWTestPage extends State<SWTestPage> {
   }
 
   Future<void> checkShowAnswersMode() async {
-  try {
-    final status = await practiceRepo.getTestStatus(
-      itemIndex: widget.itemIndex,
-      testType: "SW_practice_tests",
-    );
-    if (status == 'done') {
-      final saved = await practiceRepo.getSavedResult(
+    try {
+      final status = await practiceRepo.getTestStatus(
         itemIndex: widget.itemIndex,
         testType: "SW_practice_tests",
       );
+      if (status == 'done') {
+        final saved = await practiceRepo.getSavedResult(
+          itemIndex: widget.itemIndex,
+          testType: "SW_practice_tests",
+        );
 
-      final savedTotal   = (saved?['totalScore'] ?? 0) as int;
-      final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
+        final savedTotal = (saved?['totalScore'] ?? 0) as int;
+        final savedAnswers = Map<String, dynamic>.from(saved?['answers'] ?? {});
 
-      setState(() {
-        showAnswers      = true;
-        totalScore       = savedTotal;
-        answers          = savedAnswers;
-        remainingSeconds = 0;
-      });
+        setState(() {
+          showAnswers = true;
+          totalScore = savedTotal;
+          answers = savedAnswers;
+          remainingSeconds = 0;
+        });
 
-      countdownTimer?.cancel();
+        countdownTimer?.cancel();
 
-      // ✅ Để mỗi part tự "normalize" feedback (list -> map theo questionId)
-      part1Key.currentState?.showFeedbacksMode(savedAnswers['feedback_part1']);
-      part2Key.currentState?.showFeedbacksMode(savedAnswers['feedback_part2']);
+        // ✅ Để mỗi part tự "normalize" feedback (list -> map theo questionId)
+        part1Key.currentState?.showFeedbacksMode(
+          savedAnswers['feedback_part1'],
+        );
+        part2Key.currentState?.showFeedbacksMode(
+          savedAnswers['feedback_part2'],
+        );
 
-      // ✅ Load lại câu trả lời đã nộp
-      part1Key.currentState?.loadSavedAnswers(
-        savedAnswers['part1'] == null
-            ? null
-            : Map<String, dynamic>.from(savedAnswers['part1']),
-      );
-      part2Key.currentState?.loadSavedAnswers(
-        savedAnswers['part2'] == null
-            ? null
-            : Map<String, dynamic>.from(savedAnswers['part2']),
-      );
+        // ✅ Load lại câu trả lời đã nộp
+        part1Key.currentState?.loadSavedAnswers(
+          savedAnswers['part1'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part1']),
+        );
+        part2Key.currentState?.loadSavedAnswers(
+          savedAnswers['part2'] == null
+              ? null
+              : Map<String, dynamic>.from(savedAnswers['part2']),
+        );
+      }
+    } catch (_) {
+      // ignore
     }
-  } catch (_) {
-    // ignore
   }
-}
-
 
   // Đặt trong class _SWTestPage (ví dụ ngay dưới dispose)
   List<Map<String, dynamic>> _normalizeResults(dynamic results) {
@@ -233,9 +237,21 @@ class _SWTestPage extends State<SWTestPage> {
     }
 
     setState(() {
-      totalScore =
-          (partScores['part1']?['score'] ?? 0) +
-          (partScores['part2']?['score'] ?? 0);
+      final speakingScore = partScores['part1']?['score'] ?? 0;
+      final writingScore = partScores['part2']?['score'] ?? 0;
+
+      // ✅ Chuyển đổi điểm API sang điểm TOEIC
+      final speakingTOEIC = TOEICScoreConverter.convertSpeakingFromScore(
+        speakingScore,
+      );
+      final writingTOEIC = TOEICScoreConverter.convertWritingFromScore(
+        writingScore,
+      );
+
+      totalScore = speakingTOEIC + writingTOEIC;
+      debugPrint(
+        '✅ SW Test: Speaking $speakingScore → $speakingTOEIC, Writing $writingScore → $writingTOEIC, Total = $totalScore điểm TOEIC',
+      );
     });
 
     if (totalScore <= 15) {
@@ -297,7 +313,7 @@ class _SWTestPage extends State<SWTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('TOEIC Speaking & Writing Test'),
+            const Text('TOEIC S&W Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),

@@ -42,11 +42,21 @@ class LRPart1PageState extends State<LRPart1Page> {
 
   Future<void> _load() async {
     try {
-      final partMeta = await repo.getPartMeta('input_tests', widget.testId, 'part1');
-      final qs = await repo.getQuestionsLR('input_tests', widget.testId, 'part1');
+      final partMeta = await repo.getPartMeta(
+        'input_tests',
+        widget.testId,
+        'part1',
+      );
+      final qs = await repo.getQuestionsLR(
+        'input_tests',
+        widget.testId,
+        'part1',
+      );
 
       final audioPath = partMeta['audioPath'] as String?;
-      final url = audioPath != null ? repo.getPublicUrl('toeic-assets', audioPath) : null;
+      final url = audioPath != null
+          ? repo.getPublicUrl('toeic-assets', audioPath)
+          : null;
 
       if (!mounted) return; // ✅ widget có thể đã dispose sau await
       setState(() {
@@ -223,31 +233,27 @@ class LRPart1PageState extends State<LRPart1Page> {
                       ),
                       if (showAnswers)
                         Card(
-                          elevation: 2,
-                          color: Colors.blue[100],
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          elevation: 1.5,
+                          color: Colors.blue[50],
                           child: ExpansionTile(
-                            initiallyExpanded: false,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.lightbulb_outline,
-                                  color: Colors.blue[700],
-                                ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                  'Explain',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                            title: const Text(
+                              'Explain',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
                             ),
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Row(children: [Text(q.explain)]),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(q.explain),
+                                ),
                               ),
                             ],
                           ),

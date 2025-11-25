@@ -125,7 +125,7 @@ Future<void> seedLRTest02() async {
       .doc('part1')
       .set({
         'type': 'Picture Description',
-        'audioPath': 'LR_practice_tests/$testId/part1/audio.mp3',
+        'audioPath': 'LR_practice_tests/$testId/part1/LR_test2_part1.wav',
         'questionCount': 6,
       });
 
@@ -434,7 +434,7 @@ Future<void> seedLRTest02() async {
       .doc('part2')
       .set({
         'type': 'Question & Response',
-        'audioPath': 'LR_practice_tests/$testId/part2/audio.mp3',
+        'audioPath': 'LR_practice_tests/$testId/part2/LR_test2_part2.wav',
         'questionCount': 25,
       });
 
@@ -1066,7 +1066,7 @@ Future<void> seedLRTest02() async {
       .doc('part3')
       .set({
         'type': 'Conversations',
-        'audioPath': 'LR_practice_tests/$testId/part3/audio.mp3',
+        'audioPath': 'LR_practice_tests/$testId/part3/LR_test2_part3.wav',
         'questionCount': 39,
       });
 
@@ -1523,7 +1523,7 @@ And now for your weekend weather. If you have outdoor plans for Saturday, you're
       .doc('part4')
       .set({
         'type': 'Talks',
-        'audioPath': 'LR_practice_tests/$testId/part4/audio.mp3',
+        'audioPath': 'LR_practice_tests/$testId/part4/LR_test2_part4.wav',
         'questionCount': 30,
       });
 

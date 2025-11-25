@@ -445,10 +445,9 @@ class _VocabPracticePageState extends State<VocabPracticePage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Row(
-                                  children: [
-                                    Expanded(child: Text(q.explanation!)),
-                                  ],
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(q.explanation!),
                                 ),
                               ),
                             ],

@@ -8,6 +8,7 @@ import 'package:final_project/screens/practice_screens/LR/LR_practice_part4.dart
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part5.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part6.dart';
 import 'package:final_project/screens/practice_screens/LR/LR_practice_part7.dart';
+import 'package:final_project/utils/toeic_score_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/widgets/small_button.dart';
 
@@ -277,19 +278,25 @@ class _LRTestPage extends State<LRTestPage> {
     }
 
     setState(() {
-      totalScore =
-          (partScores['part1']?['score'] ?? 0) +
-          (partScores['part2']?['score'] ?? 0) +
-          (partScores['part3']?['score'] ?? 0) +
-          (partScores['part4']?['score'] ?? 0) +
-          (partScores['part5']?['score'] ?? 0) +
-          (partScores['part6']?['score'] ?? 0) +
-          (partScores['part7']?['score'] ?? 0);
+      final correctCount =
+          (result1?['score'] ?? 0) +
+          (result2?['score'] ?? 0) +
+          (result3?['score'] ?? 0) +
+          (result4?['score'] ?? 0) +
+          (result5?['score'] ?? 0) +
+          (result6?['score'] ?? 0) +
+          (result7?['score'] ?? 0);
+
+      // ✅ Chuyển đổi số câu đúng sang điểm TOEIC
+      totalScore = TOEICScoreConverter.convertTotalListeningReading(
+        correctCount,
+      );
+      debugPrint('✅ LR Test: $correctCount/100 câu = $totalScore điểm TOEIC');
     });
 
-    if (totalScore <= 20) {
-      testLevel = "TOEIC LR 1-295";
-    } else if (totalScore <= 40) {
+    if (totalScore <= 295) {
+      testLevel = "TOEIC LR 10-295";
+    } else if (totalScore <= 595) {
       testLevel = "TOEIC LR 300-595";
     } else {
       testLevel = "TOEIC LR 600-650";
@@ -353,7 +360,7 @@ class _LRTestPage extends State<LRTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('TOEIC Listening & Reading Test'),
+            const Text('TOEIC L&R Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),

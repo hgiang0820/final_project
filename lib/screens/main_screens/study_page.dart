@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:final_project/screens/study_screens/practice_LR_page.dart';
 import 'package:final_project/screens/study_screens/practice_SW_page.dart';
+import 'package:final_project/screens/study_screens/practice_full_page.dart';
 import 'package:final_project/widgets/card/lesson_card.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project/repositories/roadmap_repository.dart';
@@ -423,11 +426,22 @@ class _StudyPageState extends State<StudyPage> {
           ),
         );
         return;
-      } else {
+      } else if (materialId == 'LRMaterials') {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => PracticeLRPage(
+              itemIndex: originalIndex,
+              practiceId: '$materialId|$levelId|$partId|$lessonId',
+              onDone: () async => _markDone(originalIndex),
+            ),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PracticeFullPage(
               itemIndex: originalIndex,
               practiceId: '$materialId|$levelId|$partId|$lessonId',
               onDone: () async => _markDone(originalIndex),
@@ -569,7 +583,7 @@ class _StudyPageState extends State<StudyPage> {
     ];
 
     return DropdownButtonFormField<String?>(
-      value: value,
+      initialValue: value,
       isExpanded: true,
       decoration: InputDecoration(
         labelText: label,

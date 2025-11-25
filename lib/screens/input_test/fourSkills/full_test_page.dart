@@ -421,7 +421,7 @@ class _FullTestPage extends State<FullTestPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Quick Test 4 Skills'),
+            const Text('Quick 4 Skills Test'),
             if (!showAnswers)
               Text(
                 formatTime(remainingSeconds),

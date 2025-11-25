@@ -82,7 +82,7 @@ class PracticeTestRepository {
     await docRef.set({
       'items': items,
       'updatedAt': FieldValue.serverTimestamp(),
-      'lastestTest': testId, // lưu ý check testId là gì
+      'latestTest': testId, // lưu ý check testId là gì
     }, SetOptions(merge: true));
   }
 
