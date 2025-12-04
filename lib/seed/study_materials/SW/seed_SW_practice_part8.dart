@@ -405,8 +405,6 @@ Future<void> seedSWPracticePart8() async {
     questions: p8Lv300L3,
   );
 
-
-
   // lv1
   await pushLessonFull(
     levelId: 'lv1',
@@ -414,13 +412,13 @@ Future<void> seedSWPracticePart8() async {
     lessonName: 'Bài 1: Viết mở bài nêu rõ quan điểm',
     questions: p8Lv100L1,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv1',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Viết thân bài với lý do và ví dụ',
     questions: p8Lv100L2,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv1',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết kết bài nhấn mạnh lại quan điểm',
@@ -428,19 +426,19 @@ Future<void> seedSWPracticePart8() async {
   );
 
   // lv2
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv2',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Viết thân bài có 2 lý do và ví dụ',
     questions: p8Lv200L1,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv2',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng từ nối học thuật để tăng độ mạch lạc',
     questions: p8Lv200L2,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv2',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết bài luận hoàn chỉnh (mở bài – thân bài – kết bài)',
@@ -448,19 +446,19 @@ Future<void> seedSWPracticePart8() async {
   );
 
   // lv3
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv3',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Phản biện ý kiến đối lập trong thân bài',
     questions: p8Lv300L1,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv3',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Sử dụng cấu trúc học thuật nâng cao',
     questions: p8Lv300L2,
   );
-  await pushLessonSW(
+  await pushLessonFull(
     levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Viết bài luận nâng cao có phản biện và kết luận mạnh',

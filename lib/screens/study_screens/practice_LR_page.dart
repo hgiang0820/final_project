@@ -102,7 +102,7 @@ class PracticeLRPageState extends State<PracticeLRPage> {
       final audioPath = meta['audioPath'] as String?;
       final url = (audioPath == null || audioPath.isEmpty)
           ? null
-          : testRepo.getPublicUrl('practice_tests', audioPath);
+          : testRepo.getPublicUrl('study_materials', audioPath);
 
       final latest = await roadmapRepo.getLatestRoadmap();
 
@@ -301,7 +301,7 @@ class PracticeLRPageState extends State<PracticeLRPage> {
                 final q = questions[i];
                 final imageUrl =
                     (q.imagePath != null && q.imagePath!.isNotEmpty)
-                    ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+                    ? testRepo.getPublicUrl('study_materials', q.imagePath!)
                     : null;
 
                 Color? colorOf(int idx) {
@@ -343,15 +343,17 @@ class PracticeLRPageState extends State<PracticeLRPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              imageUrl,
-                              height: 200,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(
+                            child: Center(
+                              child: Image.network(
+                                imageUrl,
                                 height: 200,
-                                color: Colors.grey[300],
-                                alignment: Alignment.center,
-                                child: const Text('Không tải được ảnh'),
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  height: 200,
+                                  color: Colors.grey[300],
+                                  alignment: Alignment.center,
+                                  child: const Text('Không tải được ảnh'),
+                                ),
                               ),
                             ),
                           ),

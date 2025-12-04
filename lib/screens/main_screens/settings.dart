@@ -2,6 +2,9 @@ import 'package:final_project/screens/authentication/signin.dart';
 import 'package:final_project/screens/settings_screens/about_page.dart';
 import 'package:final_project/screens/settings_screens/help_support_page.dart';
 import 'package:final_project/screens/settings_screens/profile_page.dart';
+import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
+import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
+import 'package:final_project/widgets/small_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -170,6 +173,10 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
         ],
       ),
     );

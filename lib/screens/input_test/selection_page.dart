@@ -103,20 +103,20 @@ class _SelectionState extends State<SelectionPage> {
               title: "Xem lộ trình học",
             ),
 
-            const SizedBox(height: 20),
-            SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
+            // const SizedBox(height: 20),
+            // SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
 
-            const SizedBox(height: 20),
-            SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
+            // const SizedBox(height: 20),
+            // SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
 
-            const SizedBox(height: 20),
-            SmallButton(
-              onPressed: seedInputFull,
-              title: "Seed Full Input Test",
-            ),
+            // const SizedBox(height: 20),
+            // SmallButton(
+            //   onPressed: seedInputFull,
+            //   title: "Seed Full Input Test",
+            // ),
 
-            const SizedBox(height: 20),
-            SmallButton(onPressed: seedInputLR, title: "Seed LR Input Test"),
+            // const SizedBox(height: 20),
+            // SmallButton(onPressed: seedInputLR, title: "Seed LR Input Test"),
           ],
         ),
       ),

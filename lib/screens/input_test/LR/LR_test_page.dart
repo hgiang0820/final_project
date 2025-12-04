@@ -241,7 +241,7 @@ class _LRTestPage extends State<LRTestPage> {
           "Total score: $totalScore\n"
           "Your level: $testLevel\n"
           "You did quite well on the following types of questions: "
-          "${strongPointsStr.isEmpty ? '—' : strongPointsStr}"
+          "${strongPointsStr.isEmpty ? '—' : strongPointsStr}\n"
           "But you need to improve the following types of questions: "
           "${weakPointsStr.isEmpty ? '—' : weakPointsStr}",
         ),
