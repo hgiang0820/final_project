@@ -280,11 +280,8 @@ class _SWTestPage extends State<SWTestPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Your Result"),
-        content: Text(
-          "Total score: $totalScore\n"
-          "Your level: $testLevel\n",
-        ),
+        title: const Text("Kết quả bài thi"),
+        content: Text("Tổng điểm: $totalScore\n"),
         actions: [
           TextButton(
             onPressed: () {
@@ -325,7 +322,7 @@ class _SWTestPage extends State<SWTestPage> {
               )
             else
               Text(
-                'Score: $totalScore',
+                'Điểm: $totalScore',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,

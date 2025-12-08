@@ -998,7 +998,7 @@ Future<void> seedLRTest08() async {
       .doc('part3')
       .set({
         'type': 'Conversations',
-        'audioPath': 'LR_practice_tests/$testId/part3/LR_test8_part3.wav',
+        'audioPath': 'LR_practice_tests/$testId/part3/LR_test8_part3.mp3',
         'questionCount': 39,
       });
 

@@ -19,7 +19,7 @@ class VocabSelectionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Vocabulary Practice Selection',
+          'Ôn luyện Từ vựng',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -32,7 +32,7 @@ class VocabSelectionPage extends StatelessWidget {
             Icon(Icons.book, size: 100, color: Colors.blue[300]),
             const SizedBox(height: 20),
             Text(
-              'Vocab Practice Level',
+              'Mức độ Từ vựng',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -41,8 +41,9 @@ class VocabSelectionPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Choose your vocabulary practice level.\nRecommended to start from Easy level.',
+              'Chọn mức độ từ vựng bạn muốn ôn luyện.\nKhuyến khích bắt đầu từ Easy nếu bạn mới học.',
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
             Row(

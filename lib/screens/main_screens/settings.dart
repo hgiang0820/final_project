@@ -2,6 +2,7 @@ import 'package:final_project/screens/authentication/signin.dart';
 import 'package:final_project/screens/settings_screens/about_page.dart';
 import 'package:final_project/screens/settings_screens/help_support_page.dart';
 import 'package:final_project/screens/settings_screens/profile_page.dart';
+import 'package:final_project/seed/practice_test/LR_test/seed_all_LR_test.dart';
 import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
 import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
 import 'package:final_project/widgets/small_button.dart';
@@ -15,8 +16,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
-          'SETTINGS',
+          'CÀI ĐẶT',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -32,7 +34,7 @@ class SettingsPage extends StatelessWidget {
                 Icon(Icons.settings, size: 80, color: Colors.purple[300]),
                 const SizedBox(height: 16),
                 Text(
-                  'Settings',
+                  'Cài đặt',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -52,8 +54,8 @@ class SettingsPage extends StatelessWidget {
                 backgroundColor: Colors.purple[100],
                 child: Icon(Icons.person, color: Colors.purple[600]),
               ),
-              title: const Text('Profile'),
-              subtitle: const Text('Manage your account'),
+              title: const Text('Hồ sơ cá nhân'),
+              subtitle: const Text('Xem và chỉnh sửa thông tin cá nhân'),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 Navigator.push(
@@ -66,40 +68,6 @@ class SettingsPage extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Preferences
-          Card(
-            elevation: 2,
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.notifications, color: Colors.orange[600]),
-                  title: const Text('Notifications'),
-                  subtitle: const Text('Manage notifications'),
-                  trailing: Switch(
-                    value: true,
-                    onChanged: (value) {
-                      // Toggle notifications
-                    },
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: Icon(Icons.dark_mode, color: Colors.grey[600]),
-                  title: const Text('Dark Mode'),
-                  subtitle: const Text('Toggle dark theme'),
-                  trailing: Switch(
-                    value: false,
-                    onChanged: (value) {
-                      // Toggle dark mode
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
           // About
           Card(
             elevation: 2,
@@ -107,7 +75,7 @@ class SettingsPage extends StatelessWidget {
               children: [
                 ListTile(
                   leading: Icon(Icons.help, color: Colors.green[600]),
-                  title: const Text('Help & Support'),
+                  title: const Text('Trung tâm hỗ trợ'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
@@ -121,7 +89,7 @@ class SettingsPage extends StatelessWidget {
                 const Divider(height: 1),
                 ListTile(
                   leading: Icon(Icons.info, color: Colors.blue[600]),
-                  title: const Text('About'),
+                  title: const Text('Giới thiệu'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.push(
@@ -132,23 +100,40 @@ class SettingsPage extends StatelessWidget {
                     );
                   },
                 ),
-                const Divider(height: 1),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // About
+          Card(
+            elevation: 2,
+            child: Column(
+              children: [
                 ListTile(
-                  leading: Icon(Icons.logout, color: Colors.red[600]),
-                  title: const Text('Sign Out'),
+                  tileColor: Colors.red[300],
+                  leading: Icon(Icons.logout, color: Colors.white),
+                  title: const Text(
+                    'Đăng xuất',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                   onTap: () {
                     // Show logout confirmation
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Sign Out'),
+                        title: const Text('Đăng xuất'),
                         content: const Text(
-                          'Are you sure you want to sign out?',
+                          'Bạn có chắc chắn muốn đăng xuất không?',
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
+                            child: const Text('Huỷ'),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -160,7 +145,7 @@ class SettingsPage extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: const Text('Sign Out'),
+                            child: const Text('Đăng xuất'),
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.red,
                             ),
@@ -173,10 +158,13 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 20),
           SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
           const SizedBox(height: 20),
           SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedAllLRTest, title: "Seed LR Tests"),
         ],
       ),
     );

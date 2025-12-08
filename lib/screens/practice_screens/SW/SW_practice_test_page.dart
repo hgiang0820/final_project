@@ -93,7 +93,7 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Reset practice tests?'),
+        title: const Text('Tạo bộ đề luyện tập mới'),
         content: const Text(
           'Hành động này sẽ tạo một bộ đề luyện tập mới (practiceSetId mới). '
           'Bộ cũ sẽ được giữ lại để xem lịch sử.',
@@ -161,8 +161,8 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Speaking & Writing Tests',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'TOEIC Speaking & Writing',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.purple[50],
         elevation: 1,
@@ -170,7 +170,7 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
           TextButton.icon(
             onPressed: _confirmAndReset,
             icon: const Icon(Icons.replay, color: Colors.white),
-            label: const Text('Reset', style: TextStyle(color: Colors.white)),
+            label: const Text('Tạo mới', style: TextStyle(color: Colors.white)),
             style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
           ),
         ],
@@ -225,8 +225,8 @@ class _SwPracticeTestPageState extends State<SwPracticeTestPage> {
 
         // hiển thị meta: thời gian & số part
         final partsLabel = it.parts.isEmpty
-            ? 'parts: 2 (TOEIC SW)'
-            : 'parts: ${it.parts.length}';
+            ? 'Parts: 2 (TOEIC SW)'
+            : 'Parts: ${it.parts.length}';
         final timeLabel = '${it.timeLimitMinutes} phút';
         final status = (it.status);
         final isDone = status == 'done';

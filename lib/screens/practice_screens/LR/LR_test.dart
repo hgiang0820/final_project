@@ -372,7 +372,7 @@ class _LRTestPage extends State<LRTestPage> {
               )
             else
               Text(
-                'Score: $totalScore',
+                'Điểm: $totalScore',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,

@@ -56,7 +56,6 @@ class LRPracticePart1State extends State<LRPracticePart1> {
       );
 
       final audioPath = partMeta['audioPath'] as String?;
-      print(audioPath);
       final url = audioPath != null
           ? repo.getPublicUrl('practice_tests', audioPath)
           : null;
@@ -73,11 +72,7 @@ class LRPracticePart1State extends State<LRPracticePart1> {
         await player.setUrl(url);
       }
     } catch (e) {
-      // (Tuỳ chọn) hiển thị lỗi nhẹ nhàng
       if (!mounted) return;
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Không tải được dữ liệu Part 1: $e')),
-      // );
     }
   }
 

@@ -1,0 +1,10 @@
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/logo_app.png"
+  
+  # iOS specific settings
+  ios_icon_rounded: true  # Optional: adds rounded corners
+
+  # Remove old icons before generating new ones
+  remove_alpha_ios: true

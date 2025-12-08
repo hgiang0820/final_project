@@ -481,7 +481,7 @@ Future<void> seedLRTest01() async {
       .doc('part2')
       .set({
         'type': 'Question & Response',
-        'audioPath': 'input_tests/testLR/part1/LR_test1_part2.wav',
+        'audioPath': 'LR_practice_tests/$testId/part2/LR_test1_part2.wav',
         'questionCount': 25,
       });
 
@@ -1099,7 +1099,7 @@ Future<void> seedLRTest01() async {
       .set({
         'type': 'Conversations',
         'audioPath':
-            'input_tests/testLR/part1/LR_test1_part3.wav', // Make sure you have the audio file for this part
+            'LR_practice_tests/$testId/part3/LR_test1_part3.mp3', // Make sure you have the audio file for this part
         'questionCount': 39,
       });
 
@@ -1544,7 +1544,7 @@ Before we begin our tour of the bottling plant, I need to go over a few safety g
       .doc('part4')
       .set({
         'type': 'Talks',
-        'audioPath': 'input_tests/testLR/part1/LR_test1_part4.wav',
+        'audioPath': 'LR_practice_tests/$testId/part4/LR_test1_part4.wav',
         'questionCount': 30,
       });
 

@@ -1,5 +1,4 @@
 import 'package:final_project/screens/input_test/selection_page.dart';
-import 'package:final_project/screens/main_navigation.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingWrapper extends StatefulWidget {
@@ -17,17 +16,30 @@ class _OnboardingWrapperState extends State<OnboardingWrapper> {
   final List<Widget> _pages = [
     _OnboardingPage(
       title: 'Chào mừng đến với MY TOEIC',
-      subtitle: 'Luyện nghe, đọc, từ vựng và test.\n Ôn luyện mọi lúc mọi nơi.',
+      subtitle:
+          'Luyện nghe, đọc, từ vựng và thi thử.\n Ôn luyện mọi lúc mọi nơi.',
       icon: Icons.emoji_people,
     ),
     _OnboardingPage(
+      title: 'Cá nhân hoá lộ trình học',
+      subtitle: 'Lộ trình học được thiết kế riêng dựa trên trình độ của bạn.',
+      icon: Icons.map_outlined,
+    ),
+    _OnboardingPage(
+      title: 'Chấm điểm bằng AI',
+      subtitle:
+          'Nâng cao kỹ năng nói và viết với hệ thống chấm điểm tự động bằng AI.',
+      icon: Icons.check_box_outlined,
+    ),
+    _OnboardingPage(
       title: 'Theo dõi tiến độ',
-      subtitle: 'Xem lại bài đã học và lịch các bài test.',
+      subtitle: 'Xem lại bài đã học và lịch các bài thi.',
       icon: Icons.track_changes,
     ),
     _OnboardingPage(
       title: 'Bắt đầu học ngay',
-      subtitle: 'Bấm vào nút Bắt đầu để thiết kế lộ trình học cho riêng mình.',
+      subtitle:
+          'Bấm vào nút Bắt đầu để bắt đầu hành trình chinh phục TOEIC của bạn!',
       icon: Icons.play_circle,
     ),
   ];
@@ -36,8 +48,9 @@ class _OnboardingWrapperState extends State<OnboardingWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
-          'WELCOME',
+          'Giới thiệu',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],

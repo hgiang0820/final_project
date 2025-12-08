@@ -1,10 +1,6 @@
 import 'package:final_project/screens/practice_screens/LR/LR_practice_test_page.dart';
 import 'package:final_project/screens/practice_screens/SW/SW_practice_test_page.dart';
 import 'package:final_project/screens/practice_screens/vocab/vocab_selection_page.dart';
-import 'package:final_project/seed/practice_test/LR_test/seed_all_LR_test.dart';
-import 'package:final_project/seed/practice_test/SW_test/seed_all_SW_test.dart';
-import 'package:final_project/seed/practice_vocab/seed_all_vocab_practice.dart';
-import 'package:final_project/seed/vocabulary/seed_all_vocab.dart';
 import 'package:final_project/widgets/icon_and_button.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +11,9 @@ class PracticePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
-          'PRACTICE',
+          'ÔN LUYỆN',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -29,7 +26,7 @@ class PracticePage extends StatelessWidget {
             Icon(Icons.fitness_center, size: 100, color: Colors.purple[300]),
             const SizedBox(height: 20),
             Text(
-              'Practice Tests',
+              'Phòng ôn luyện',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -38,8 +35,9 @@ class PracticePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Test your knowledge and skills',
+              'Đây là phòng ôn luyện.\nHãy chọn kĩ năng bạn muốn ôn luyện nhé!',
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
             Row(
@@ -77,38 +75,10 @@ class PracticePage extends StatelessWidget {
                   MaterialPageRoute(builder: (_) => VocabSelectionPage()),
                 );
               },
-              title: "Vocab \nPractice",
+              title: "Ôn luyện\nTừ vựng",
               icon: Icon(Icons.book),
               color: Colors.blue[300],
             ),
-            // const SizedBox(height: 30),
-            // IconAndButton(
-            //   onPressed: seedAllLRTest,
-            //   title: "Seed LR Test",
-            //   icon: Icon(Icons.edit),
-            //   color: Colors.orange[400],
-            // ),
-            // const SizedBox(height: 30),
-            // IconAndButton(
-            //   onPressed: seedAllSWTest,
-            //   title: "Seed SW Test",
-            //   icon: Icon(Icons.edit),
-            //   color: Colors.orange[400],
-            // ),
-            // const SizedBox(height: 30),
-            // IconAndButton(
-            //   onPressed: seedAllVocabPractice,
-            //   title: "Seed Vocab Practice",
-            //   icon: Icon(Icons.edit),
-            //   color: Colors.orange[400],
-            // ),
-            // const SizedBox(height: 30),
-            // IconAndButton(
-            //   onPressed: seedAllVocab,
-            //   title: "Seed Vocabulary",
-            //   icon: Icon(Icons.edit),
-            //   color: Colors.green[400],
-            // ),
           ],
         ),
       ),

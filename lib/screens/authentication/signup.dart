@@ -26,11 +26,6 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // BasicAppBar(),
-          // Align(
-          //   alignment: Alignment.bottomRight,
-          //   child: Image.asset('assets/images/cat_1.png', height: 300),
-          // ),
           SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
             child: Padding(
@@ -42,31 +37,31 @@ class _SignupPageState extends State<SignupPage> {
                   SizedBox(height: 40),
                   TextfieldWidget(
                     // fullName
-                    textHint: "Enter full name...",
+                    textHint: "Nhập họ và tên...",
                     controller: _fullName,
                   ),
                   SizedBox(height: 10),
                   TextfieldWidget(
-                    // fullName
-                    textHint: "Enter phone...",
+                    // phone
+                    textHint: "Nhập số điện thoại...",
                     controller: _phoneNumber,
                   ),
                   SizedBox(height: 10),
                   TextfieldWidget(
                     // email
-                    textHint: "Enter email...",
+                    textHint: "Nhập email...",
                     controller: _email,
                   ),
                   SizedBox(height: 10),
                   TextfieldWidget(
                     // password
-                    textHint: "Enter password...",
+                    textHint: "Nhập mật khẩu...",
                     controller: _password,
                   ),
                   SizedBox(height: 10),
                   TextfieldWidget(
-                    // password
-                    textHint: "Confirm password...",
+                    // confirm password
+                    textHint: "Xác nhận lại mật khẩu...",
                     controller: _confirmPassword,
                   ),
                   SizedBox(height: 10),
@@ -79,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                     onPressed: () {
                       signUp();
                     },
-                    title: 'Sign Up',
+                    title: 'Đăng kí',
                   ),
                   _signinText(context),
                 ],
@@ -93,7 +88,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _signupText() {
     return const Text(
-      'Sign Up',
+      'Đăng kí',
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
       textAlign: TextAlign.center,
     );
@@ -106,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'You have an account?',
+            'Bạn đã có tài khoản?',
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
           ),
           TextButton(
@@ -118,7 +113,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               );
             },
-            child: const Text('Sign In'),
+            child: const Text('Đăng nhập'),
           ),
         ],
       ),
@@ -128,7 +123,7 @@ class _SignupPageState extends State<SignupPage> {
   void signUp() async {
     if (_password.text != _confirmPassword.text) {
       setState(() {
-        errorMessage = "Password and Confirm Password do not match.";
+        errorMessage = "Mật khẩu và Xác nhận mật khẩu không khớp.";
       });
       return;
     }

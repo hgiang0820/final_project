@@ -1070,7 +1070,7 @@ Future<void> seedLRTest03() async {
       .doc('part3')
       .set({
         'type': 'Conversations',
-        'audioPath': 'LR_practice_tests/$testId/part3/LR_test3_part3.wav  ',
+        'audioPath': 'LR_practice_tests/$testId/part3/LR_test3_part3.mp3',
         'questionCount': 39,
       });
 
@@ -1500,7 +1500,7 @@ May I have your attention, please. The store will be closing in 15 minutes. Plea
       .doc('part4')
       .set({
         'type': 'Talks',
-        'audioPath': 'LR_practice_tests/$testId/part4/LR_test3_part4.wav  ',
+        'audioPath': 'LR_practice_tests/$testId/part4/LR_test3_part4.wav',
         'questionCount': 30,
       });
 

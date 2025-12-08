@@ -43,12 +43,12 @@ class _SigninState extends State<SigninPage> {
                   _signinText(),
                   SizedBox(height: 40),
                   TextfieldWidget(
-                    textHint: "Enter email...",
+                    textHint: "Nhập email...",
                     controller: _email,
                   ),
                   SizedBox(height: 20),
                   TextfieldWidget(
-                    textHint: "Enter password...",
+                    textHint: "Nhập password...",
                     controller: _password,
                   ),
                   SizedBox(height: 10),
@@ -62,7 +62,7 @@ class _SigninState extends State<SigninPage> {
                     onPressed: () {
                       signIn();
                     },
-                    title: 'Sign In',
+                    title: 'Đăng nhập',
                   ),
                   _signupText(context),
                 ],
@@ -76,7 +76,7 @@ class _SigninState extends State<SigninPage> {
 
   Widget _signinText() {
     return const Text(
-      'Sign In',
+      'Đăng nhập',
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
       textAlign: TextAlign.center,
     );
@@ -89,7 +89,7 @@ class _SigninState extends State<SigninPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Not A Member?',
+            'Bạn chưa có tài khoản?',
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
           ),
           TextButton(
@@ -101,7 +101,7 @@ class _SigninState extends State<SigninPage> {
                 ),
               );
             },
-            child: const Text('Register Now'),
+            child: const Text('Đăng kí ngay!'),
           ),
         ],
       ),
@@ -121,7 +121,7 @@ class _SigninState extends State<SigninPage> {
               ),
             );
           },
-          child: const Text('Forgot Password?'),
+          child: const Text('Quên mật khẩu?'),
         ),
       ],
     );

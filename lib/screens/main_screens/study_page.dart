@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:final_project/screens/study_screens/practice_LR_page.dart';
 import 'package:final_project/screens/study_screens/practice_SW_page.dart';
 import 'package:final_project/screens/study_screens/practice_full_page.dart';
@@ -103,8 +101,9 @@ class _StudyPageState extends State<StudyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
-          'STUDY',
+          'HỌC TẬP',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -239,25 +238,6 @@ class _StudyPageState extends State<StudyPage> {
                     final status = (it['status'] ?? 'todo') as String;
                     final isDone = status == 'done';
                     final lessonName = (it['lessonName'] ?? 'Lesson') as String;
-
-                    // String part;
-                    // if (it['partId'] == 'part1') {
-                    //   part = 'Part 1';
-                    // } else if (it['partId'] == 'part2') {
-                    //   part = 'Part 2';
-                    // } else if (it['partId'] == 'part3') {
-                    //   part = 'Part 3';
-                    // } else if (it['partId'] == 'part4') {
-                    //   part = 'Part 4';
-                    // } else if (it['partId'] == 'part5') {
-                    //   part = 'Part 5';
-                    // } else if (it['partId'] == 'part6') {
-                    //   part = 'Part 6';
-                    // } else if (it['partId'] == 'part7') {
-                    //   part = 'Part 7';
-                    // } else {
-                    //   part = 'Part 8';
-                    // }
 
                     String material;
                     if (it['materialId'] == 'LRMaterials') {

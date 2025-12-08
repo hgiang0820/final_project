@@ -8,7 +8,7 @@ final supabase = Supabase.instance.client;
 Future<void> seedLRPracticePart2() async {
   final db = FirebaseFirestore.instance;
   // final materialId = 'LRMaterials';
-  const audioDemo = 'input_tests/testLR/part2/01%20Test%201_LC_Voca.mp3';
+  // const audioDemo = 'input_tests/testLR/part2/01%20Test%201_LC_Voca.mp3';
 
   // Root doc
   await db.collection('study_materials').doc('LRMaterials').set({
@@ -37,7 +37,7 @@ Future<void> seedLRPracticePart2() async {
     await lessonRef.set({
       'type': 'Question & Response',
       'lessonName': lessonName,
-      'audioPath': audioDemo,
+      'audioPath': 'LR/$levelId/part2/$lessonId/audio.wav',
       'questionCount': questions.length,
     }, SetOptions(merge: true));
 
@@ -74,7 +74,7 @@ Future<void> seedLRPracticePart2() async {
     await lessonRef.set({
       'type': 'Question & Response',
       'lessonName': lessonName,
-      'audioPath': audioDemo,
+      'audioPath': 'Full/$levelId/lis2/$lessonId/audio.wav',
       'questionCount': questions.length,
     }, SetOptions(merge: true));
 

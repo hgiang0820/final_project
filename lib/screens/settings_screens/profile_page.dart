@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading profile: ${e.toString()}'),
+            content: Text('Lỗi tải hồ sơ người dùng: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -113,14 +113,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Profile updated successfully'),
+          content: Text('Cập nhật hồ sơ thành công.'),
           backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error updating profile: ${e.toString()}'),
+          content: Text('Lỗi cập nhật hồ sơ: ${e.toString()}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -133,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'PROFILE',
+            'Hồ sơ cá nhân',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.purple[50],
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'PROFILE',
+          'Hồ sơ cá nhân',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: user == null
-          ? const Center(child: Text('No user logged in'))
+          ? const Center(child: Text('Bạn cần đăng nhập để xem hồ sơ cá nhân.'))
           : RefreshIndicator(
               onRefresh: _loadUserData,
               child: ListView(
@@ -245,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          userData?['fullName'] ?? 'User',
+                          userData?['fullName'] ?? 'Người dùng',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -273,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(width: 12),
                               const Text(
-                                'Account Information',
+                                'Thông tin tài khoản',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -285,7 +285,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           // Full Name
                           _buildProfileField(
-                            'Full Name',
+                            'Họ và tên',
                             _isEditing
                                 ? null
                                 : (userData?['fullName'] ?? 'Not set'),
@@ -309,7 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           // Phone Number
                           _buildProfileField(
-                            'Phone Number',
+                            'Số điện thoại',
                             _isEditing
                                 ? null
                                 : (userData?['phoneNumber'] ?? 'Not set'),
@@ -321,7 +321,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           // User ID
                           _buildProfileField(
-                            'User ID',
+                            'Mã người dùng',
                             userData?['uid'] ?? user?.uid ?? 'Not available',
                             Icons.fingerprint,
                             null,
@@ -343,7 +343,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icons.security,
                             color: Colors.blue[600],
                           ),
-                          title: const Text('Change Password'),
+                          title: const Text('Đổi mật khẩu'),
                           trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () async {
                             if (user?.email != null) {
@@ -354,7 +354,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Password reset email sent'),
+                                    content: Text(
+                                      'Email đổi mật khẩu đã được gửi',
+                                    ),
                                     backgroundColor: Colors.green,
                                   ),
                                 );
@@ -372,7 +374,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Divider(height: 1),
                         ListTile(
                           leading: Icon(Icons.email, color: Colors.orange[600]),
-                          title: const Text('Verify Email'),
+                          title: const Text('Xác minh email'),
                           trailing: const Icon(Icons.arrow_forward_ios),
                           enabled: user?.emailVerified != true,
                           onTap: user?.emailVerified == true
@@ -383,7 +385,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Verification email sent',
+                                          'Email xác minh đã được gửi',
                                         ),
                                         backgroundColor: Colors.green,
                                       ),
@@ -404,7 +406,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icons.delete_forever,
                             color: Colors.red[600],
                           ),
-                          title: const Text('Delete Account'),
+                          title: const Text('Xoá tài khoản'),
                           trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             _showDeleteAccountDialog();
@@ -465,9 +467,9 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Account'),
+        title: const Text('Xoá tài khoản'),
         content: const Text(
-          'Are you sure you want to delete your account? This will also delete all your data from our servers. This action cannot be undone.',
+          'Bạn có chắc chắn muốn xoá tài khoản của mình? Hành động này không thể hoàn tác.',
         ),
         actions: [
           TextButton(
@@ -537,24 +539,10 @@ class _ProfilePageState extends State<ProfilePage> {
       final storagePath =
           '${user!.uid}/avatar/avatar_${DateTime.now().millisecondsSinceEpoch}$fileExtension';
 
-      // final previousStoragePath = userData?['avatarStoragePath'] as String?;
-      // if (previousStoragePath != null &&
-      //     previousStoragePath.isNotEmpty &&
-      //     previousStoragePath != storagePath) {
-      //   try {
-      //     await Supabase.instance.client.storage.from(userBucket).remove([
-      //       previousStoragePath,
-      //     ]);
-      //   } catch (_) {}
-      // }
-
       final publicUrl = await _avatarStorageService.uploadAndGetPublicUrl(
         localPath: pickedFile.path,
         storagePath: storagePath,
       );
-
-      // final cacheBuster = DateTime.now().millisecondsSinceEpoch;
-      // final displayUrl = '$publicUrl?cb=$cacheBuster';
 
       if (!mounted) return;
 
@@ -568,7 +556,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
       await db.collection('users').doc(user!.uid).set({
         'avatarUrl': publicUrl,
-        // 'avatarStoragePath': storagePath,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
@@ -585,7 +572,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Avatar is updated successfully.'),
+          content: Text('Avatar đã được cập nhật thành công.'),
           backgroundColor: Colors.green,
         ),
       );
@@ -596,7 +583,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Cannot update avatar: ${e.toString()}'),
+            content: Text('Không thể cập nhật avatar: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );

@@ -28,7 +28,7 @@ class HelpSupportPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'HELP & SUPPORT',
+          'Trung tâm hỗ trợ',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -46,7 +46,7 @@ class HelpSupportPage extends StatelessWidget {
                 Icon(Icons.help_center, size: 80, color: Colors.purple[300]),
                 const SizedBox(height: 16),
                 Text(
-                  'How can we help you?',
+                  'Tôi có thể giúp gì cho bạn?',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -55,7 +55,7 @@ class HelpSupportPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Find answers to common questions or get in touch with our support team',
+                  'Tìm câu trả lời hoặc liên hệ với bộ phận hỗ trợ của chúng tôi',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
@@ -71,29 +71,29 @@ class HelpSupportPage extends StatelessWidget {
             child: ExpansionTile(
               leading: Icon(Icons.quiz, color: Colors.blue[600]),
               title: const Text(
-                'Frequently Asked Questions',
+                'Câu hỏi thường gặp',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               children: [
                 _buildFAQItem(
-                  'How do I reset my password?',
-                  'Go to Settings > Profile > Change Password. We will send a reset link to your email address.',
+                  'Làm thế nào để đặt lại mật khẩu?',
+                  'Vào Cài đặt > Tài khoản > Đặt lại mật khẩu. Bạn sẽ nhận được email với hướng dẫn đặt lại.',
                 ),
                 _buildFAQItem(
-                  'How do I verify my email?',
-                  'Go to Settings > Profile > Verify Email. Check your inbox and spam folder for the verification email.',
+                  'Làm thế nào để xác minh địa chỉ email của tôi?',
+                  'Vào Cài đặt > Tài khoản > Xác minh email và làm theo hướng dẫn để xác minh địa chỉ email của bạn.',
                 ),
                 _buildFAQItem(
-                  'How do I update my profile information?',
-                  'Go to Settings > Profile, tap the edit icon, make your changes, and tap save.',
+                  'Làm thế nào để cập nhật thông tin hồ sơ của tôi?',
+                  'Vào Cài đặt > Hồ sơ và chỉnh sửa thông tin cá nhân của bạn như tên, ảnh đại diện, v.v.',
                 ),
                 _buildFAQItem(
-                  'How do I delete my account?',
-                  'Go to Settings > Profile > Delete Account. This action cannot be undone and will remove all your data.',
+                  'Làm thế nào để xoá tài khoản của tôi?',
+                  'Vào Cài đặt > Tài khoản > Xoá tài khoản và làm theo hướng dẫn để xoá tài khoản của bạn.',
                 ),
                 _buildFAQItem(
-                  'I\'m not receiving emails from the app',
-                  'Check your spam folder. Add our email to your contacts. Ensure your email address is correct in your profile.',
+                  'Tôi không nhận được email xác nhận, tôi nên làm gì?',
+                  'Kiểm tra thư mục spam hoặc quảng cáo của bạn. Nếu vẫn không thấy, hãy liên hệ với bộ phận hỗ trợ của chúng tôi.',
                 ),
               ],
             ),
@@ -114,7 +114,7 @@ class HelpSupportPage extends StatelessWidget {
                       Icon(Icons.support_agent, color: Colors.purple[600]),
                       const SizedBox(width: 12),
                       const Text(
-                        'Contact Support',
+                        'Liên hệ hỗ trợ',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class HelpSupportPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Can\'t find what you\'re looking for? Our support team is here to help!',
+                    'Nếu bạn cần thêm trợ giúp, vui lòng liên hệ với chúng tôi qua các kênh sau:',
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 20),
@@ -136,23 +136,17 @@ class HelpSupportPage extends StatelessWidget {
                       backgroundColor: Colors.red[100],
                       child: Icon(Icons.email, color: Colors.red[600]),
                     ),
-                    title: const Text('Email Support'),
-                    subtitle: const Text('support@yourapp.com'),
+                    title: const Text('Email hỗ trợ'),
+                    subtitle: const Text('support@mytoeic.com'),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () async {
-                      try {
-                        await _sendEmail(
-                          'support@yourapp.com',
-                          'Support Request',
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Could not open email client'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
+                    onTap: () {
+                      // Implement live chat
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email hỗ trợ sẽ có mặt sớm!'),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
                     },
                   ),
 
@@ -166,13 +160,15 @@ class HelpSupportPage extends StatelessWidget {
                       child: Icon(Icons.chat, color: Colors.green[600]),
                     ),
                     title: const Text('Live Chat'),
-                    subtitle: const Text('Available 24/7'),
+                    subtitle: const Text(
+                      'Bắt đầu trò chuyện với bộ phận hỗ trợ',
+                    ),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       // Implement live chat
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Live chat will be available soon!'),
+                          content: Text('Live chat sẽ có mặt sớm!'),
                           backgroundColor: Colors.blue,
                         ),
                       );
@@ -188,20 +184,17 @@ class HelpSupportPage extends StatelessWidget {
                       backgroundColor: Colors.blue[100],
                       child: Icon(Icons.phone, color: Colors.blue[600]),
                     ),
-                    title: const Text('Phone Support'),
-                    subtitle: const Text('+1 (555) 123-4567'),
+                    title: const Text('Số điện thoại hỗ trợ'),
+                    subtitle: const Text('+84 966 125 944'),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () async {
-                      try {
-                        await _launchUrl('tel:+15551234567');
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Could not make phone call'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
+                    onTap: () {
+                      // Implement live chat
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Số điện thoại hỗ trợ sẽ có mặt sớm!'),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -220,15 +213,17 @@ class HelpSupportPage extends StatelessWidget {
                 child: Icon(Icons.bug_report, color: Colors.orange[600]),
               ),
               title: const Text(
-                'Report a Bug',
+                'Báo cáo lỗi',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: const Text('Help us improve by reporting issues'),
+              subtitle: const Text(
+                'Giúp chúng tôi cải thiện ứng dụng bằng cách báo cáo lỗi',
+              ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () async {
                 try {
                   await _sendEmail(
-                    'bugs@yourapp.com',
+                    'bugs@mytoeic.com',
                     'Bug Report - ${DateTime.now().toString().split(' ')[0]}',
                   );
                 } catch (e) {
@@ -254,15 +249,17 @@ class HelpSupportPage extends StatelessWidget {
                 child: Icon(Icons.lightbulb, color: Colors.cyan[600]),
               ),
               title: const Text(
-                'Feature Request',
+                'Yêu cầu tính năng',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: const Text('Suggest new features or improvements'),
+              subtitle: const Text(
+                'Gửi ý tưởng để cải thiện ứng dụng của chúng tôi',
+              ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () async {
                 try {
                   await _sendEmail(
-                    'feedback@yourapp.com',
+                    'feedback@mytoeic.com',
                     'Feature Request - ${DateTime.now().toString().split(' ')[0]}',
                   );
                 } catch (e) {
@@ -284,7 +281,7 @@ class HelpSupportPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Response Time',
+                  'Thời gian phản hồi',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -293,31 +290,8 @@ class HelpSupportPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'We typically respond within 24 hours',
+                  'Chúng tôi cố gắng phản hồi trong vòng 24 giờ.',
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info, color: Colors.blue[600]),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'For urgent issues, please contact phone support',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue[800],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),

@@ -96,7 +96,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Reset practice tests?'),
+        title: const Text('Tạo bộ đề luyện tập mới?'),
         content: const Text(
           'Hành động này sẽ tạo một bộ đề luyện tập mới (practiceSetId mới). '
           'Bộ cũ sẽ được giữ lại để xem lịch sử.',
@@ -104,11 +104,11 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const Text('Huỷ'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Create new set'),
+            child: const Text('Tạo mới'),
           ),
         ],
       ),
@@ -164,8 +164,8 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Listening & Reading Tests',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'TOEIC Listening & Reading',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.purple[50],
         elevation: 1,
@@ -173,7 +173,7 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
           TextButton.icon(
             onPressed: _confirmAndReset,
             icon: const Icon(Icons.replay, color: Colors.white),
-            label: const Text('Reset', style: TextStyle(color: Colors.white)),
+            label: const Text('Tạo mới', style: TextStyle(color: Colors.white)),
             style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
           ),
         ],
@@ -225,8 +225,8 @@ class _LrPracticeTestPageState extends State<LrPracticeTestPage> {
 
         final orderLabel = (index + 1).toString().padLeft(2, '0');
         final partsLabel = it.parts.isEmpty
-            ? 'parts: 7 (TOEIC LR)'
-            : 'parts: ${it.parts.length}';
+            ? 'Parts: 7 (TOEIC LR)'
+            : 'Parts: ${it.parts.length}';
         final timeLabel = '${it.timeLimitMinutes} phút';
         final status = (it.status);
         final isDone = status == 'done';

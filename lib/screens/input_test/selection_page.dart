@@ -1,8 +1,5 @@
-import 'package:final_project/screens/main_screens/study_page.dart';
-import 'package:final_project/seed/input_test/seed_input_LR.dart';
-import 'package:final_project/seed/input_test/seed_input_full.dart';
-import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
-import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
+import 'package:final_project/screens/main_navigation.dart';
+import 'package:final_project/screens/main_screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 // Repositories & Services
@@ -44,7 +41,7 @@ class _SelectionState extends State<SelectionPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'TOEIC Input Selection',
+          'Kiểm tra trình độ & Chọn mục tiêu',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.purple[50],
@@ -55,7 +52,7 @@ class _SelectionState extends State<SelectionPage> {
         child: Column(
           children: [
             Text(
-              '• Hãy lựa chọn bài test kĩ năng bạn muốn để kiểm tra trình độ hiện tại và chọn mục tiêu của bạn.\n• Nếu bạn đã biết chính xác trình độ của mình thì hãy điền form dưới đây',
+              '• Hãy lựa chọn bài test kĩ năng bạn muốn để kiểm tra trình độ hiện tại và chọn mục tiêu của bạn.\n• Nếu bạn đã biết chính xác trình độ của mình thì hãy điền form dưới đây.\n• Khuyến khích bạn nên làm bài test để có lộ trình học phù hợp nhất.',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.red[500],
@@ -102,21 +99,6 @@ class _SelectionState extends State<SelectionPage> {
               onPressed: _handleShowStudyRoadmap,
               title: "Xem lộ trình học",
             ),
-
-            // const SizedBox(height: 20),
-            // SmallButton(onPressed: seedAllLR, title: "Seed LR Materials"),
-
-            // const SizedBox(height: 20),
-            // SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
-
-            // const SizedBox(height: 20),
-            // SmallButton(
-            //   onPressed: seedInputFull,
-            //   title: "Seed Full Input Test",
-            // ),
-
-            // const SizedBox(height: 20),
-            // SmallButton(onPressed: seedInputLR, title: "Seed LR Input Test"),
           ],
         ),
       ),
@@ -129,6 +111,52 @@ class _SelectionState extends State<SelectionPage> {
     1 => 'testSW',
     _ => 'testFull',
   };
+
+  List<dynamic> _defaultWeakPointsFor(int index) {
+    switch (index) {
+      case 0: // LR
+        return [
+          "Picture description",
+          "Question & Response",
+          "Conversations",
+          "Talks",
+          "Incomplete sentences",
+          "Text completion",
+          "Reading comprehension",
+        ];
+      case 1: // SW
+        return [
+          "Read a text aloud",
+          "Describe a picture",
+          "Respond to questions",
+          "Respond to questions using information provided",
+          "Express an opinion",
+          "Write a sentence based on a picture",
+          "Respond to a written request",
+          "Write an opinion essay",
+        ];
+      case 2: // 4 Skills
+        return [
+          "Picture description",
+          "Question & Response",
+          "Conversations",
+          "Talks",
+          "Incomplete sentences",
+          "Text completion",
+          "Reading comprehension",
+          "Read a text aloud",
+          "Describe a picture",
+          "Respond to questions",
+          "Respond to questions using information provided",
+          "Express an opinion",
+          "Write a sentence based on a picture",
+          "Respond to a written request",
+          "Write an opinion essay",
+        ];
+      default:
+        return [];
+    }
+  }
 
   List<dynamic> _extractWeakPoints(dynamic raw) {
     if (raw == null) return [];
@@ -160,17 +188,24 @@ class _SelectionState extends State<SelectionPage> {
     final latest = await _resultRepo.getLatestResult(
       testId: _testIdFor(_selectedIndex),
     );
-    final data = (latest?['data'] as Map<String, dynamic>?) ?? {};
-    final weakPoints = _extractWeakPoints(data['weakPoints']);
 
-    // 2) Build roadmap (goal + weakPoints + tab)
+    // 2) Nếu latest == null => dùng default weakPoints theo testId
+    List<dynamic> weakPoints;
+    if (latest == null || latest['data'] == null) {
+      weakPoints = _defaultWeakPointsFor(_selectedIndex);
+    } else {
+      final data = latest['data'] as Map<String, dynamic>;
+      weakPoints = _extractWeakPoints(data['weakPoints']);
+    }
+
+    // 3) Build roadmap (goal + weakPoints + tab)
     final items = await _roadmapService.buildRoadmap(
       selectedIndex: _selectedIndex,
       goalText: _selectedGoal!,
       weakPoints: weakPoints,
     );
 
-    // 3) Save vào Firestore (cá nhân hoá theo user)
+    // 4) Save vào Firestore (cá nhân hoá theo user)
     final roadmapId = await _roadmapRepo.saveRoadmap(
       goal: _selectedGoal!,
       weakPoints: weakPoints,
@@ -180,7 +215,7 @@ class _SelectionState extends State<SelectionPage> {
 
     if (!mounted) return;
 
-    // 4) Show preview
+    // 5) Show preview
     final preview = items
         .take(8)
         .map((it) {
@@ -195,18 +230,20 @@ class _SelectionState extends State<SelectionPage> {
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Study Roadmap (saved: $roadmapId)'),
+        title: Text('Study roadmap saved successfully!'),
         content: Text(
           preview.isEmpty
               ? 'Không tìm thấy bài phù hợp. Hãy kiểm tra cấu trúc materials trong DB.'
-              : ("Your roadmap is saved"),
+              : 'Lộ trình của bạn đã được tạo: (ID: $roadmapId)\n\nĐi tới trang Học tập để bắt đầu học ngay!',
         ),
         actions: [
           TextButton(
             // onPressed: () => Navigator.pop(context),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => StudyPage()),
+              MaterialPageRoute(
+                builder: (_) => MainNavigationPage(pageIndex: 1),
+              ),
             ),
             child: const Text('OK'),
           ),

@@ -31,8 +31,6 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
             ); // Back to SigninPage
           },
         ),
-        // title: const Text('Forgot Password'),
-        // centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
@@ -47,7 +45,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text(
-                          'Reset Password',
+                          'Khôi phục mật khẩu',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 35,
@@ -61,7 +59,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                         ),
                         const SizedBox(height: 40),
                         TextfieldWidget(
-                          textHint: "Enter email...",
+                          textHint: "Nhập email...",
                           controller: _email,
                         ),
                         const SizedBox(height: 20),
@@ -81,7 +79,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                 onPressed: () {
                   resetPassword();
                 },
-                title: 'Reset password',
+                title: 'Khôi phục mật khẩu',
               ),
             ],
           ),
@@ -109,7 +107,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Please check your email!',
+          'Vui lòng kiểm tra email của bạn!',
           style: TextStyle(color: Colors.green),
         ),
       ),

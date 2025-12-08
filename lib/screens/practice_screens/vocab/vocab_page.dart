@@ -155,19 +155,18 @@ class _VocabPageState extends State<VocabPage> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Reset vocabulary practice?'),
+        title: const Text('Tạo bộ đề luyện tập từ vựng mới?'),
         content: const Text(
-          'Hành động này sẽ tạo một bộ đề luyện tập từ vựng mới (vocabPracticeSetId mới). '
-          'Bộ cũ sẽ được giữ lại để xem lịch sử.',
+          'Hành động này sẽ tạo một bộ đề luyện tập từ vựng mới (vocabPracticeSetId mới).',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const Text('Huỷ'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Create new set'),
+            child: const Text('Tạo mới'),
           ),
         ],
       ),
@@ -248,7 +247,7 @@ class _VocabPageState extends State<VocabPage> {
           TextButton.icon(
             onPressed: _confirmAndReset,
             icon: const Icon(Icons.replay, color: Colors.white),
-            label: const Text('Reset', style: TextStyle(color: Colors.white)),
+            label: const Text('Tạo mới', style: TextStyle(color: Colors.white)),
             style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
           ),
         ],

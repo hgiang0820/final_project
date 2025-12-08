@@ -35,7 +35,7 @@ Future<void> seedLRPracticePart1() async {
     await lessonRef.set({
       'type': 'Picture description',
       'lessonName': lessonName,
-      'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+      'audioPath': 'LR/$levelId/part1/$lessonId/audio.mp3',
       'questionCount': questions.length,
     }, SetOptions(merge: true));
 
@@ -85,7 +85,7 @@ Future<void> seedLRPracticePart1() async {
     await lessonRef.set({
       'type': 'Picture description',
       'lessonName': lessonName,
-      'audioPath': 'input_tests/testLR/part1/01%20Test%201_LC_Voca.mp3',
+      'audioPath': 'Full/$levelId/lis1/$lessonId/audio.mp3',
       'questionCount': questions.length,
     }, SetOptions(merge: true));
 
