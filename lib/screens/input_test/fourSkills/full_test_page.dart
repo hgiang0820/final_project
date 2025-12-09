@@ -32,7 +32,7 @@ class _FullTestPage extends State<FullTestPage> {
   List<String> strongPoints = [];
   List<String> weakPoints = [];
 
-  int remainingSeconds = 1000;
+  int remainingSeconds = 2400;
   Timer? countdownTimer;
 
   bool _countdownStarted = false;

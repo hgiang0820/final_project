@@ -1760,31 +1760,31 @@ Future<void> seedLRPracticePart4() async {
 
   // lv3
   await pushLessonFull(
-    levelId: 'lv2',
+    levelId: 'lv3',
     lessonId: 'lesson1',
     lessonName: 'Bài 1: Bài phát biểu dài – Speech',
     questions: p4Lv800L1,
   );
   await pushLessonFull(
-    levelId: 'lv2',
+    levelId: 'lv3',
     lessonId: 'lesson2',
     lessonName: 'Bài 2: Báo cáo tài chính / công ty – Business Report',
     questions: p4Lv800L2,
   );
   await pushLessonFull(
-    levelId: 'lv2',
+    levelId: 'lv3',
     lessonId: 'lesson3',
     lessonName: 'Bài 3: Thông báo khẩn cấp / xử lý sự cố',
     questions: p4Lv800L3,
   );
   await pushLessonFull(
-    levelId: 'lv2',
+    levelId: 'lv3',
     lessonId: 'lesson4',
     lessonName: 'Bài 4: Bài diễn thuyết truyền cảm hứng – Motivational Talk',
     questions: p4Lv800L4,
   );
   await pushLessonFull(
-    levelId: 'lv2',
+    levelId: 'lv3',
     lessonId: 'lesson5',
     lessonName: 'Bài 5: Ôn tập tổng hợp',
     questions: p4Lv800L5,

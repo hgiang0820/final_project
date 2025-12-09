@@ -291,7 +291,8 @@ class _StudyPageState extends State<StudyPage> {
                           it['partId'] == 'read3') {
                         part = 'Reading comprehension';
                       }
-                    } else if (material == 'Speaking & Writing' ||
+                    }
+                    if (material == 'Speaking & Writing' ||
                         material == 'Four Skills') {
                       if (it['partId'] == 'part1' || it['partId'] == 'speak1') {
                         part = 'Read a text aloud';

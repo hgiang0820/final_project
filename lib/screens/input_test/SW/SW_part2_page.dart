@@ -67,7 +67,7 @@ class SWPart2PageState extends State<SWPart2Page> {
   // }
 
   Future<Map<String, dynamic>> getResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.10:8000');
+    final api = WritingApiService(baseUrl: 'http://192.168.1.8:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';

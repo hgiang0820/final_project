@@ -234,12 +234,21 @@ class HomeContent extends StatelessWidget {
                 final submittedAt = _formatTimestamp(data['updatedAt']);
 
                 String? score;
-                final items = data['items'];
-                for (var i = 1; i < items.length; i++) {
-                  final picked = items[i];
-                  if (picked['lessonName'].contains(lessonName)) {
-                    score = '${picked['score']}/${picked['total']}';
-                    break;
+                final items = data['items'] as List<dynamic>? ?? [];
+                if (items.isNotEmpty) {
+                  for (var i = 0; i < items.length; i++) {
+                    final picked = items[i] as Map<String, dynamic>?;
+                    if (picked != null) {
+                      final itemName = (picked['lessonName'] ?? '').toString();
+                      if (itemName.contains(lessonName)) {
+                        final pickScore = picked['score'];
+                        final pickTotal = picked['total'];
+                        if (pickScore != null && pickTotal != null) {
+                          score = '$pickScore/$pickTotal';
+                          break;
+                        }
+                      }
+                    }
                   }
                 }
 

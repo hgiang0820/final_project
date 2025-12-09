@@ -541,7 +541,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
   Future<Map<String, dynamic>> getSpeakingResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.10:8002');
+    final api = SpeakingApiService(baseUrl: 'http://192.168.1.8:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -606,7 +606,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   }
 
   Future<Map<String, dynamic>> getWritingResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.10:8000');
+    final api = WritingApiService(baseUrl: 'http://192.168.1.8:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -756,7 +756,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
     final q = questions[currentIndex];
     final imageUrl = q.imagePath != null
-        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+        ? testRepo.getPublicUrl('study_materials', q.imagePath!)
         : null;
 
     // Speaking Part UI
@@ -979,7 +979,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
                   itemBuilder: (context, index) {
                     final q = questions[index];
                     final imageUrl = q.imagePath != null
-                        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+                        ? testRepo.getPublicUrl('study_materials', q.imagePath!)
                         : null;
                     final result =
                         evaluationResults[q.id] as Map<String, dynamic>?;

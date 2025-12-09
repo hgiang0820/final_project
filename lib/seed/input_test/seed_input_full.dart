@@ -31,9 +31,9 @@ Date: October 16
 
 Please be advised that we are implementing a new, more comprehensive recycling program, effective next Monday. New recycling bins will be placed in the kitchen and next to the main printers.
 
-It is now ____(4)____ for all employees to separate their waste into three categories: paper, plastics/glass, and general waste. Detailed guidelines have been posted in the kitchen area for your reference. ____(5)____. We trust that everyone will support this important initiative.
+It is now ____(16)____ for all employees to separate their waste into three categories: paper, plastics/glass, and general waste. Detailed guidelines have been posted in the kitchen area for your reference. ____(17)____. We trust that everyone will support this important initiative.
 
-Your cooperation will help us ____(6)____ our environmental impact and create a greener workplace. We ____(7)____ your commitment to making our company more sustainable. Thank you.
+Your cooperation will help us ____(18)____ our environmental impact and create a greener workplace. We ____(19)____ your commitment to making our company more sustainable. Thank you.
 """;
   final passageReadPart7 = """
 **Franklin Green Dry Cleaners – Quality Service You Can Trust**
@@ -333,7 +333,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
     //=== PART 7 ===
     {
       'type': 'Reading Comprehension',
-      'question': "$passageReadPart7\n\n147. What is the special offer?",
+      'question': "$passageReadPart7\n\n20. What is the special offer?",
       'options': [
         "A discount on cleaning two coats",
         "Free cleaning for new customers",
@@ -347,7 +347,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
     {
       'type': 'Reading Comprehension',
       'question':
-          "$passageReadPart7\n\n148. When is Franklin Green Dry Cleaners closed?",
+          "$passageReadPart7\n\n21. When is Franklin Green Dry Cleaners closed?",
       'options': ["Monday", "Wednesday", "Saturday", "Sunday"],
       'correctIndex': 3,
       'explain':

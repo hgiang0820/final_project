@@ -238,7 +238,7 @@ class _LRTestPage extends State<LRTestPage> {
       builder: (_) => AlertDialog(
         title: const Text("Your Result"),
         content: Text(
-          "Total score: $totalScore\n"
+          "Total score: $totalScore / 36\n"
           "Your level: $testLevel\n"
           "You did quite well on the following types of questions: "
           "${strongPointsStr.isEmpty ? '—' : strongPointsStr}\n"

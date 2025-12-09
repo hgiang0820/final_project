@@ -69,7 +69,7 @@ Future<void> seedSWPracticePart5() async {
         .collection('levels')
         .doc(levelId)
         .collection('parts')
-        .doc('speak3')
+        .doc('speak5')
         .collection('lessons')
         .doc(lessonId);
 

@@ -98,7 +98,7 @@ class LRPart6PageState extends State<LRPart6Page> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Question ${index + 1}:",
+                              "Question ${index + 25}:",
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

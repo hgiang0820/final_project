@@ -254,14 +254,6 @@ class _SWTestPage extends State<SWTestPage> {
       );
     });
 
-    if (totalScore <= 15) {
-      testLevel = "TOEIC SW 1-99";
-    } else if (totalScore <= 30) {
-      testLevel = "TOEIC SW 100-199";
-    } else {
-      testLevel = "TOEIC SW 200-250";
-    }
-
     await practiceRepo.savePracticeTestResult(
       testType: "SW_practice_tests",
       testId: widget.testId,

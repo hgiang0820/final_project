@@ -2,6 +2,9 @@ import 'package:final_project/screens/authentication/signin.dart';
 import 'package:final_project/screens/settings_screens/about_page.dart';
 import 'package:final_project/screens/settings_screens/help_support_page.dart';
 import 'package:final_project/screens/settings_screens/profile_page.dart';
+import 'package:final_project/seed/input_test/seed_input_LR.dart';
+import 'package:final_project/seed/input_test/seed_input_SW.dart';
+import 'package:final_project/seed/input_test/seed_input_full.dart';
 import 'package:final_project/seed/practice_test/LR_test/seed_all_LR_test.dart';
 import 'package:final_project/seed/study_materials/LR/seed_all_LR.dart';
 import 'package:final_project/seed/study_materials/SW/seed_all_SW.dart';
@@ -165,6 +168,12 @@ class SettingsPage extends StatelessWidget {
           SmallButton(onPressed: seedAllSW, title: "Seed SW Materials"),
           const SizedBox(height: 20),
           SmallButton(onPressed: seedAllLRTest, title: "Seed LR Tests"),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedInputFull, title: "Seed Input Full"),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedInputLR, title: "Seed Input LR"),
+          const SizedBox(height: 20),
+          SmallButton(onPressed: seedInputSW, title: "Seed Input SW"),
         ],
       ),
     );

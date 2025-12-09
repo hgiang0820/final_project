@@ -42,11 +42,21 @@ class LRPart2PageState extends State<LRPart2Page> {
 
   Future<void> _load() async {
     try {
-      final partMeta = await repo.getPartMeta('input_tests', widget.testId, 'part2');
-      final qs = await repo.getQuestionsLR('input_tests', widget.testId, 'part2');
+      final partMeta = await repo.getPartMeta(
+        'input_tests',
+        widget.testId,
+        'part2',
+      );
+      final qs = await repo.getQuestionsLR(
+        'input_tests',
+        widget.testId,
+        'part2',
+      );
 
       final audioPath = partMeta['audioPath'] as String?;
-      final url = audioPath != null ? repo.getPublicUrl('toeic-assets', audioPath) : null;
+      final url = audioPath != null
+          ? repo.getPublicUrl('toeic-assets', audioPath)
+          : null;
 
       if (!mounted) return; // ✅ widget có thể đã dispose sau await
       setState(() {
@@ -161,7 +171,7 @@ class LRPart2PageState extends State<LRPart2Page> {
                     children: [
                       ListTile(
                         title: Text(
-                          "Question $index:",
+                          "Question ${index + 2}:",
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

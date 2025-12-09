@@ -530,9 +530,9 @@ Date: October 16
 
 Please be advised that we are implementing a new, more comprehensive recycling program, effective next Monday. New recycling bins will be placed in the kitchen and next to the main printers.
 
-It is now ____(131)____ for all employees to separate their waste into three categories: paper, plastics/glass, and general waste. Detailed guidelines have been posted in the kitchen area for your reference. ____(132)____. We trust that everyone will support this important initiative.
+It is now ____(25)____ for all employees to separate their waste into three categories: paper, plastics/glass, and general waste. Detailed guidelines have been posted in the kitchen area for your reference. ____(26)____. We trust that everyone will support this important initiative.
 
-Your cooperation will help us ____(133)____ our environmental impact and create a greener workplace. We ____(134)____ your commitment to making our company more sustainable. Thank you.
+Your cooperation will help us ____(27)____ our environmental impact and create a greener workplace. We ____(28)____ your commitment to making our company more sustainable. Thank you.
 """;
 
   final part6Questions = [
@@ -668,7 +668,7 @@ We recommend storing some water in advance for your basic needs during this peri
 
   final part7Questions = [
     {
-      'question': passagePart7_1 + "\n\n147. What is the special offer?",
+      'question': passagePart7_1 + "\n\n29. What is the special offer?",
       'options': [
         "A discount on cleaning two coats",
         "Free cleaning for new customers",
@@ -682,7 +682,7 @@ We recommend storing some water in advance for your basic needs during this peri
     {
       'question':
           passagePart7_1 +
-          "\n\n148. When is Franklin Green Dry Cleaners closed?",
+          "\n\n30. When is Franklin Green Dry Cleaners closed?",
       'options': ["Monday", "Wednesday", "Saturday", "Sunday"],
       'correctIndex': 3,
       'explain':
@@ -690,8 +690,7 @@ We recommend storing some water in advance for your basic needs during this peri
     },
     // Passage 2 (Q149-150)
     {
-      'question':
-          passagePart7_2 + "\n\n149. What is the purpose of the e-mail?",
+      'question': passagePart7_2 + "\n\n31. What is the purpose of the e-mail?",
       'options': [
         "To announce a new company policy",
         "To ask employees to set new goals",
@@ -705,7 +704,7 @@ We recommend storing some water in advance for your basic needs during this peri
     {
       'question':
           passagePart7_2 +
-          "\n\n150. What must employees do before their meeting?",
+          "\n\n32. What must employees do before their meeting?",
       'options': [
         "Schedule a follow-up appointment",
         "Complete a self-assessment form",
@@ -720,7 +719,7 @@ We recommend storing some water in advance for your basic needs during this peri
     {
       'question':
           passagePart7_3 +
-          "\n\n151. What did Maria leave in the conference room?",
+          "\n\n33. What did Maria leave in the conference room?",
       'options': ["Her phone", "Her notes", "Her laptop", "A laptop accessory"],
       'correctIndex': 3,
       'explain':
@@ -728,8 +727,7 @@ We recommend storing some water in advance for your basic needs during this peri
     },
     {
       'question':
-          passagePart7_3 +
-          "\n\n152. At 3:10 P.M., what does Kenji offer to do?",
+          passagePart7_3 + "\n\n34. At 3:10 P.M., what does Kenji offer to do?",
       'options': [
         "Bring the charger to Maria's home",
         "Wait for Maria at the office",
@@ -742,8 +740,7 @@ We recommend storing some water in advance for your basic needs during this peri
     },
     // Passage 4 (Q153-154)
     {
-      'question':
-          passagePart7_4 + "\n\n153. What is the purpose of the notice?",
+      'question': passagePart7_4 + "\n\n35. What is the purpose of the notice?",
       'options': [
         "To advertise an apartment for rent",
         "To announce a rent increase",
@@ -755,7 +752,7 @@ We recommend storing some water in advance for your basic needs during this peri
           "The notice informs residents that 'the water in the building will be shut off for scheduled maintenance'.",
     },
     {
-      'question': passagePart7_4 + "\n\n154. What are residents advised to do?",
+      'question': passagePart7_4 + "\n\n36. What are residents advised to do?",
       'options': [
         "Avoid using the elevators",
         "Store some water beforehand",

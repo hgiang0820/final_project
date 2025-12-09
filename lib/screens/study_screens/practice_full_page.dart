@@ -196,7 +196,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
     final audioPath = meta['audioPath'] as String?;
     final url = (audioPath == null || audioPath.isEmpty)
         ? null
-        : testRepo.getPublicUrl('practice_tests', audioPath);
+        : testRepo.getPublicUrl('study_materials', audioPath);
 
     final latest = await roadmapRepo.getLatestRoadmap();
 
@@ -677,7 +677,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
 
   Future<Map<String, dynamic>> getSpeakingResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.10:8002');
+    final api = SpeakingApiService(baseUrl: 'http://192.168.1.8:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -737,7 +737,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
   }
 
   Future<Map<String, dynamic>> getWritingResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.10:8000');
+    final api = WritingApiService(baseUrl: 'http://192.168.1.8:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -962,7 +962,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
                   final q = questionsLR[i];
                   final imageUrl =
                       (q.imagePath != null && q.imagePath!.isNotEmpty)
-                      ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+                      ? testRepo.getPublicUrl('study_materials', q.imagePath!)
                       : null;
 
                   Color? colorOf(int idx) {
@@ -1006,15 +1006,17 @@ class PracticeFullPageState extends State<PracticeFullPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                imageUrl,
-                                height: 200,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Container(
+                              child: Center(
+                                child: Image.network(
+                                  imageUrl,
                                   height: 200,
-                                  color: Colors.grey[300],
-                                  alignment: Alignment.center,
-                                  child: const Text('Không tải được ảnh'),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Container(
+                                    height: 200,
+                                    color: Colors.grey[300],
+                                    alignment: Alignment.center,
+                                    child: const Text('Không tải được ảnh'),
+                                  ),
                                 ),
                               ),
                             ),
@@ -1165,7 +1167,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
                       testRepo.getPublicUrl(
-                        'practice_tests',
+                        'study_materials',
                         questionsSW[currentIndex].imagePath!,
                       ),
                       height: 250,
@@ -1317,7 +1319,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
                   itemBuilder: (context, index) {
                     final q = questionsSW[index];
                     final imageUrl = q.imagePath != null
-                        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+                        ? testRepo.getPublicUrl('study_materials', q.imagePath!)
                         : null;
                     final result =
                         evaluationResults[q.id] as Map<String, dynamic>?;
@@ -1496,7 +1498,7 @@ class PracticeFullPageState extends State<PracticeFullPage> {
 
     final q = questionsSW[currentIndex];
     final imageUrl = q.imagePath != null
-        ? testRepo.getPublicUrl('practice_tests', q.imagePath!)
+        ? testRepo.getPublicUrl('study_materials', q.imagePath!)
         : null;
 
     return GestureDetector(
