@@ -138,7 +138,7 @@ class SWPart1PageState extends State<SWPart1Page> {
 
   Future<Map<String, dynamic>> getResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.8:8002');
+    final api = SpeakingApiService(baseUrl: 'http://10.22.64.43:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -637,7 +637,12 @@ class SWPart1PageState extends State<SWPart1Page> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: Row(children: [Text(q.sampleAnswer)]),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(child: Text(q.sampleAnswer)),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

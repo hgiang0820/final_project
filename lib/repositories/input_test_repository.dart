@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class InputTestRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _supabase = Supabase.instance.client;
-  // final String _bucket = 'toeic-assets'; // bucket bạn tạo
+  // final String _bucket = 'toeic-assets'; // bucket 
 
   Future<Map<String, dynamic>> getTestMeta(String testId) async {
     final doc = await _firestore.collection('input_tests').doc(testId).get();
@@ -66,7 +66,7 @@ class InputTestRepository {
           .doc(testId)
           .collection('parts')
           .doc(partId)
-          .collection('questions') // điều chỉnh theo cấu trúc của bạn
+          .collection('questions') 
           .doc(qid)
           .get();
 

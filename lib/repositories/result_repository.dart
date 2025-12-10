@@ -40,41 +40,6 @@ class ResultRepository {
         }, SetOptions(merge: true));
   }
 
-  // Future<void> savePracticeTestResult({
-  //   required String testId,
-  //   required int totalScore,
-  //   required String testLevel,
-  //   required Map<String, dynamic> parts,
-  //   required Map<String, dynamic> answers,
-  //   required List<String> strongPoints,
-  //   required List<String> weakPoints,
-  // }) async {
-  //   final uid = _auth.currentUser!.uid;
-  //   final resultId = _db
-  //       .collection('users')
-  //       .doc(uid)
-  //       .collection('practice_test_results')
-  //       .doc()
-  //       .id;
-
-  //   await _db
-  //       .collection('users')
-  //       .doc(uid)
-  //       .collection('practice_test_results')
-  //       .doc(testId)
-  //       .collection('results')
-  //       .doc(resultId)
-  //       .set({
-  //         'totalScore': totalScore,
-  //         'testLevel': testLevel,
-  //         'parts': parts,
-  //         'answers': answers,
-  //         'strongPoints': strongPoints,
-  //         'weakPoints': weakPoints,
-  //         'submittedAt': FieldValue.serverTimestamp(),
-  //       }, SetOptions(merge: true));
-  // }
-
   Future<Map<String, dynamic>?> getLatestResult({
     required String testId,
   }) async {
@@ -98,7 +63,6 @@ class ResultRepository {
     }
   }
 
-  // result_repository.dart (thêm vào trong class ResultRepository)
   String _practiceAttemptsPath({
     required String materialId,
     required String levelId,
@@ -167,34 +131,4 @@ class ResultRepository {
     if (snap.docs.isEmpty) return null;
     return snap.docs.first.data();
   }
-
-  // Future<void> saveSWResult({
-  //   required String testId,
-  //   required int totalScore,
-  //   required Map<String, dynamic> parts,
-  //   required Map<String, dynamic> answers,
-  // }) async {
-  //   final uid = _auth.currentUser!.uid;
-  //   final resultId = _db
-  //       .collection('users')
-  //       .doc(uid)
-  //       .collection('input_test_results')
-  //       .doc()
-  //       .id;
-
-  //   await _db
-  //       .collection('users')
-  //       .doc(uid)
-  //       .collection('input_test_results')
-  //       .doc(testId)
-  //       .collection('results')
-  //       .doc(resultId)
-  //       .set({
-  //         'totalScore': totalScore,
-  //         'parts': parts,
-  //         'answers': answers,
-  //         "status": "pending", // báo cho backend là chưa chấm
-  //         'submittedAt': FieldValue.serverTimestamp(),
-  //       }, SetOptions(merge: true));
-  // }
 }

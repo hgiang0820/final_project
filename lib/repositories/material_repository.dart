@@ -8,7 +8,7 @@ class MaterialRepository {
 
   /// Ví dụ: materialId = "LRMaterials" hoặc "SWMaterials"
   /// levelId = "lv300" | "lv600" | "lv800"
-  /// Trả về meta của level (nếu bạn có tổng quan level)
+  /// Trả về meta của level
   Future<Map<String, dynamic>> getLevelMeta({
     required String materialId,
     required String levelId,
@@ -23,7 +23,7 @@ class MaterialRepository {
   }
 
   /// Lấy danh sách lesson (5 bài) của 1 part:
-  /// partId ví dụ (LR): part1..part7 | (SW): speak1..speak4 / write1..write2 (tuỳ bạn đặt)
+  /// partId ví dụ (LR): part1..part7 | (SW): speak1..speak4 / write1..write2
   Future<List<Map<String, dynamic>>> getLessons({
     required String materialId,
     required String levelId,

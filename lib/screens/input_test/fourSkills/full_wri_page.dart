@@ -57,7 +57,7 @@ class FullWriPageState extends State<FullWriPage> {
   }
 
   Future<Map<String, dynamic>> getResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.8:8000');
+    final api = WritingApiService(baseUrl: 'http://10.22.64.43:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';

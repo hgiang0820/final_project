@@ -396,7 +396,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       'type': 'Read a text aloud',
       'text':
           "Welcome to the annual City Garden Show! This weekend, you can explore beautiful garden displays, attend workshops with expert gardeners, and purchase a wide variety of plants and tools. Don't forget to visit the main pavilion to see the award-winning floral arrangements. Tickets are available at the entrance. We hope you enjoy your visit and find plenty of inspiration for your own garden.",
-      'prepare_time': 45,
+      'prepare_time': 15,
       'record_time': 45,
       'directions':
           'In this part of the test, you will read aloud the text on the screen. You will have 45 seconds to prepare. Then you will have 45 seconds to read the text aloud.',
@@ -409,7 +409,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       'imagePath': 'input_tests/testFull/speakPart/q02.jpg',
       // Image Description for sample: A group of colleagues in an office meeting room, looking at a laptop screen. One person is pointing at the screen.
       'text': "",
-      'prepare_time': 45,
+      'prepare_time': 15,
       'record_time': 30,
       'directions':
           'In this part of the test, you will describe the picture on your screen in as much detail as you can. You will have 45 seconds to prepare your response. Then you will have 30 seconds to speak about the picture.',
@@ -420,7 +420,7 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
     {
       'type': 'Respond to questions',
       'text': "What do you enjoy doing in your free time?",
-      'prepare_time': 3,
+      'prepare_time': 5,
       'record_time': 15,
       'directions':
           'In this part of the test, you will answer three questions. For each question, you will have 3 seconds to prepare. You will have 15 seconds to respond to questions 4 and 5 and 30 seconds to respond to question 6.',
@@ -433,8 +433,8 @@ Open Monday-Friday 7 A.M. - 7 P.M., Saturday 9 A.M. - 5 P.M.
       'imagePath': 'input_tests/testFull/speakPart/q04.jpg',
       'text':
           "What time does the conference start, and where is the first event held?",
-      'prepare_time': 45,
-      'record_time': 0, // This is preparation time for the whole group.
+      'prepare_time': 15,
+      'record_time': 15, // This is preparation time for the whole group.
       'directions': 'You have 15 seconds to respond.',
       'max_score': 3,
       'sample_answer':

@@ -541,7 +541,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
 
   Future<Map<String, dynamic>> getSpeakingResult() async {
     final uploadedUrls = await _ensureRecordingsUploaded();
-    final api = SpeakingApiService(baseUrl: 'http://192.168.1.8:8002');
+    final api = SpeakingApiService(baseUrl: 'http://10.22.64.43:8002');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';
@@ -606,7 +606,7 @@ class PracticeSWPageState extends State<PracticeSWPage> {
   }
 
   Future<Map<String, dynamic>> getWritingResult() async {
-    final api = WritingApiService(baseUrl: 'http://192.168.1.8:8000');
+    final api = WritingApiService(baseUrl: 'http://10.22.64.43:8000');
 
     Map<String, dynamic> results = {};
     var imageUrl = '';

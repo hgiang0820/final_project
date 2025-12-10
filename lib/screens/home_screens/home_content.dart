@@ -479,10 +479,18 @@ class HomeContent extends StatelessWidget {
           },
           backgroundColor: Colors.transparent,
           elevation: 0,
-          icon: const Icon(Icons.add_circle_outline, size: 28),
+          icon: const Icon(
+            Icons.add_circle_outline,
+            size: 28,
+            color: Colors.white,
+          ),
           label: const Text(
             'Làm bài test',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
